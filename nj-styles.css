@@ -132,55 +132,7 @@ body {
 }
 
 
-/* HEADER */
-#header-container {
-	background: $(header.background.kiri);
-    webkit-box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
-    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.2);
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	width: 100%;
-	z-index: 999;
-	height: 65px;
-}
-#header-wrapper {
-	max-width: 1068px;
-	margin: 0 auto;
-	position: relative;
-}
-.header {
-	max-width: 400px;
-	float: left;
-	margin-right: 28px;
-	overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-.header h1.title, .header p.title {
-	font: $(header.font);
-	color: $(header.title.color);
-	margin: 0;
-	text-transform: uppercase;
-	padding: 13px 0;
-}
-.header .description {
-	color: $(header.title.color);
-    margin: -10px 0 4px 0;
-    padding: 0;
-    font-size: 0.7em;
-	display: none;
-}
-.header a, .header a:hover  {
-	color: $(header.title.color);
-}
-.header img {
-	display: block;
-	width: auto;
-    margin:0;
-    max-height: 65px;
-}
+
 
 /* CSS Breaking News */
 #breakingnews {margin:0 0 20px;height:25px;line-height:25px;overflow:hidden;border:0;}
