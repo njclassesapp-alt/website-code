@@ -1,5 +1,4 @@
-<script type='text/javascript'>
-//<![CDATA[
+
 // 🌟 1. રેફરલ કેપ્ચર 🌟
 (function captureNjReferral() {
     try {
@@ -655,5 +654,3 @@ function saveNjProfileDataFinal(name, photoUrl) {
     document.getElementById('nj-save-profile-btn').innerHTML = 'સેવ કરો';
 }
 
-//]]>
-</script>
