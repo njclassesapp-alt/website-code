@@ -653,4 +653,3 @@ function saveNjProfileDataFinal(name, photoUrl) {
     document.getElementById('nj-edit-profile-modal').style.display = 'none';
     document.getElementById('nj-save-profile-btn').innerHTML = 'સેવ કરો';
 }
-
