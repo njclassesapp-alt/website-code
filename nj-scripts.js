@@ -1,5 +1,4 @@
 
-// 🌟 1. રેફરલ કેપ્ચર 🌟
 (function captureNjReferral() {
     try {
         let urlParams = new URLSearchParams(window.location.search);
