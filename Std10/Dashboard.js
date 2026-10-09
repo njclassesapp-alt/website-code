@@ -23,12 +23,11 @@ function loadStd10Dashboard() {
     <div class="nj-dashboard">
       <h2 style="text-align:center; margin-bottom:20px; color:#1e293b; font-weight:800;">ધોરણ 10 - વિષય પસંદ કરો</h2>
       <div class="nj-grid">
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 ગણિત', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Maths.js', 'loadStd10Maths')" class="nj-card s-maths">
+  <div class="nj-icon">📐</div>
+  <div class="nj-title">ગણિત</div>
+</a>
 
-        <!-- બાકીના વિષયો અત્યારે જૂની લિંકથી જ ખુલશે (જ્યાં સુધી તમે તેની નવી JS ન બનાવો) -->
-        <a href="/p/premium-app-ui-for-std-10-maths.html" class="nj-card s-maths">
-          <div class="nj-icon">📐</div>
-          <div class="nj-title">ગણિત</div>
-        </a>
 
         <a href="/p/std-10-science-all-chapters.html" class="nj-card s-sci">
           <div class="nj-icon">🔬</div>
