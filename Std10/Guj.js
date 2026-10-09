@@ -616,4 +616,118 @@ function loadStd10Gujarati() {
                     </div>
                 </div>
                 <div class="nj-actions-pro">
-             
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-P5.pdf', 'પૂરક વાચન - 5')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> પુસ્તક</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="javascript:void(0);" onclick="openNjSolutionApp(31, 'પૂરક વાચન 5 - વીરભૂમિ')" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(31)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 style="text-align:center; margin: 40px 0 20px 0; color:#1e293b; font-weight:800; font-size: 22px; border-top: 2px dashed #cbd5e1; padding-top: 20px;">
+            ગુજરાતી વ્યાકરણ (Gujarati Grammar)
+        </h2>
+
+        <div class="nj-grid-pro">
+
+            <div class="nj-card-pro">
+                <div class="nj-header-pro">
+                    <div class="nj-badge-pro" style="background: linear-gradient(135deg, #10b981, #059669);">G1</div>
+                    <div class="nj-title-box">
+                        <h3 class="nj-title-pro">ધ્વનિ શ્રેણી, જોડણી, સંધિ, સમાસ </h3>
+                        <p class="nj-subtitle-pro" style="color: #059669;">સ્વર-વ્યંજન અને જોડણીના નિયમો</p>
+                    </div>
+                </div>
+                <div class="nj-actions-pro">
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-G1.pdf', 'વ્યાકરણ - G1')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> નિયમો</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="https://www.njclasses.in/search/label/Std%2010%20Gujarati%20G1?m=1&max-results=7" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(32)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+            <div class="nj-card-pro">
+                <div class="nj-header-pro">
+                    <div class="nj-badge-pro" style="background: linear-gradient(135deg, #10b981, #059669);">G2</div>
+                    <div class="nj-title-box">
+                        <h3 class="nj-title-pro">સંજ્ઞા, વિશેષણ, ક્રિયાવિશેષણ</h3>
+                        <p class="nj-subtitle-pro" style="color: #059669;">તેમના પ્રકાર</p>
+                    </div>
+                </div>
+                <div class="nj-actions-pro">
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-G2.pdf', 'વ્યાકરણ - G2')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> નિયમો</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="#" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(33)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+            <div class="nj-card-pro">
+                <div class="nj-header-pro">
+                    <div class="nj-badge-pro" style="background: linear-gradient(135deg, #10b981, #059669);">G3</div>
+                    <div class="nj-title-box">
+                        <h3 class="nj-title-pro">વાક્ય પ્રકાર, વાક્ય રૂપાંતર</h3>
+                        <p class="nj-subtitle-pro" style="color: #059669;">કર્તરી, કર્મણી, ભાવે, પ્રેરક</p>
+                    </div>
+                </div>
+                <div class="nj-actions-pro">
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-G3.pdf', 'વ્યાકરણ - G3')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> નિયમો</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="#" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(34)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+            <div class="nj-card-pro">
+                <div class="nj-header-pro">
+                    <div class="nj-badge-pro" style="background: linear-gradient(135deg, #10b981, #059669);">G4</div>
+                    <div class="nj-title-box">
+                        <h3 class="nj-title-pro">અલંકાર</h3>
+                        <p class="nj-subtitle-pro" style="color: #059669;">દરેક પ્રકારના અલંકાર</p>
+                    </div>
+                </div>
+                <div class="nj-actions-pro">
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-G4.pdf', 'વ્યાકરણ - G4')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> નિયમો</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="#" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(35)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+            <div class="nj-card-pro">
+                <div class="nj-header-pro">
+                    <div class="nj-badge-pro" style="background: linear-gradient(135deg, #10b981, #059669);">G5</div>
+                    <div class="nj-title-box">
+                        <h3 class="nj-title-pro">છંદ</h3>
+                        <p class="nj-subtitle-pro" style="color: #059669;">છંદના નિયમો</p>
+                    </div>
+                </div>
+                <div class="nj-actions-pro">
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-G5.pdf', 'વ્યાકરણ - G5')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> નિયમો</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="#" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(36)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+            <div class="nj-card-pro">
+                <div class="nj-header-pro">
+                    <div class="nj-badge-pro" style="background: linear-gradient(135deg, #10b981, #059669);">G6</div>
+                    <div class="nj-title-box">
+                        <h3 class="nj-title-pro">લેખન વિભાગ</h3>
+                        <p class="nj-subtitle-pro" style="color: #059669;">અર્થવિસ્તાર, અહેવાલ, સંક્ષેપીકરણ, નિબંધ</p>
+                    </div>
+                </div>
+                <div class="nj-actions-pro">
+                    <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/std-10-Gujarati-G6.pdf', 'વ્યાકરણ - G6')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> નિયમો</a>
+                    <a href="#" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
+                    <a href="#" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+                    <a href="javascript:void(0);" onclick="startNjQuiz(37)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    `;
+}
