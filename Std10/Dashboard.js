@@ -46,11 +46,11 @@ function loadStd10Dashboard() {
           <div class="nj-title">અંગ્રેજી</div>
         </a>
         
-        
-        <a href="/p/blog-page_5.html" class="nj-card s-guj">
-          <div class="nj-icon">🖊️</div>
-          <div class="nj-title">ગુજરાતી </div>
-        </a>
+        <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 ગુજરાતી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Guj.js', 'loadStd10Gujarati')" class="nj-card s-guj">
+  <div class="nj-icon">🖊️</div>
+  <div class="nj-title">ગુજરાતી</div>
+</a>
+
 
         <a href="/p/premium-app-ui-for-std-10-sanskrit.html" class="nj-card s-sans">
           <div class="nj-icon">📜</div>
