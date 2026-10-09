@@ -40,11 +40,12 @@ function loadStd10Dashboard() {
           <div class="nj-title">સા. વિજ્ઞાન</div>
         </a>
 
-        <!-- અંગ્રેજી માટે નવો ડાયનેમિક ફાસ્ટ કોડ -->
+                <!-- અંગ્રેજી માટે નવો ડાયનેમિક ફાસ્ટ કોડ -->
         <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 અંગ્રેજી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Eng.js', 'loadStd10English')" class="nj-card s-eng">
           <div class="nj-icon">🔤</div>
           <div class="nj-title">અંગ્રેજી</div>
         </a>
+        
         
         <a href="/p/blog-page_5.html" class="nj-card s-guj">
           <div class="nj-icon">🖊️</div>
