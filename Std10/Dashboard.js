@@ -34,11 +34,11 @@ function loadStd10Dashboard() {
   <div class="nj-title">વિજ્ઞાન</div>
 </a>
 
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 સા. વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/SocialScience.js', 'loadStd10SocialScience')" class="nj-card s-ss">
+  <div class="nj-icon">🌍</div>
+  <div class="nj-title">સા. વિજ્ઞાન</div>
+</a>
 
-        <a href="/p/std-10-social-science.html" class="nj-card s-ss">
-          <div class="nj-icon">🌍</div>
-          <div class="nj-title">સા. વિજ્ઞાન</div>
-        </a>
 
                 <!-- અંગ્રેજી માટે નવો ડાયનેમિક ફાસ્ટ કોડ -->
         <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 અંગ્રેજી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Eng.js', 'loadStd10English')" class="nj-card s-eng">
