@@ -29,10 +29,11 @@ function loadStd10Dashboard() {
 </a>
 
 
-        <a href="/p/std-10-science-all-chapters.html" class="nj-card s-sci">
-          <div class="nj-icon">🔬</div>
-          <div class="nj-title">વિજ્ઞાન</div>
-        </a>
+        <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Science.js', 'loadStd10Science')" class="nj-card s-sci">
+  <div class="nj-icon">🔬</div>
+  <div class="nj-title">વિજ્ઞાન</div>
+</a>
+
 
         <a href="/p/std-10-social-science.html" class="nj-card s-ss">
           <div class="nj-icon">🌍</div>
