@@ -1,4 +1,4 @@
-function loadStd10Maths() {
+window.loadStd10Maths = function() {
 
     // 1. થીયરી ડેટાબેઝ
     var theoryScript = document.createElement('script');
@@ -168,7 +168,7 @@ function loadStd10Maths() {
           <div class="nj-actions-pro">
               <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-data@main/std-10-maths-ch5.pdf', 'ચેપ્ટર 5 - સમાંતર શ્રેણી')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> પુસ્તક</a>
               <a href="javascript:void(0);" onclick="openNjYoutubeApp(5, 'ચેપ્ટર 5 - સમાંતર શ્રેણી')" class="nj-btn-pro btn-video-pro"><i class="fa fa-youtube-play"></i> વિડીયો</a>
-              <a href="javascript:void(0);" onclick="openNjSolutionApp(5, 'પ્રકરણ 5 - સમાંતર શ્રેણી')" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
+              <a href="javascript:void(0)" onclick="openNjSolutionApp(5, 'પ્રકરણ 5 - સમાંતર શ્રેણી')" class="nj-btn-pro btn-samjuti-pro"><i class="fa fa-pencil-square-o"></i> સમજૂતી</a>
               <a href="javascript:void(0);" onclick="startNjQuiz(5)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
           </div>
         </div>
@@ -267,4 +267,4 @@ function loadStd10Maths() {
       </div>
     </div>
     `;
-}
+};
