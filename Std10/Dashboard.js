@@ -20,11 +20,10 @@ function loadStd10Dashboard() {
     .s-paper { background: linear-gradient(135deg, #fc4a1a, #f7b733); }
     </style>
 
-    <a href="/p/premium-app-ui-for-std-10-maths.html" class="nj-card s-maths">
-      <div class="nj-icon">📐</div>
-      <div class="nj-title">ગણિત</div>
-    </a>
-
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 9 ગણિત', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std9/Maths.js', 'loadStd9Maths')" class="nj-card s-maths">
+          <div class="nj-icon">📐</div>
+          <div class="nj-title">ગણિત</div>
+        </a
 
 
         <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Science.js', 'loadStd10Science')" class="nj-card s-sci">
