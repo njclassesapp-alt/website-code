@@ -50,10 +50,11 @@ window.loadStd10Dashboard = function() {
       <h2 style="text-align:center; margin-bottom:20px; color:#1e293b; font-weight:800; font-size:20px;">ધોરણ 10 - વિષય પસંદ કરો</h2>
       <div class="nj-grid">
 
-        <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 ગણિત', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Maths.js?v=25', 'loadStd10Maths')" class="nj-card s-maths">
-          <div class="nj-icon">📐</div>
-          <div class="nj-title">ગણિત</div>
-        </a>
+        <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 ગણિત', 'https://raw.githubusercontent.com/njclassesapp-alt/website-code/main/Std10/Maths.js', 'loadStd10Maths')" class="nj-card s-maths">
+  <div class="nj-icon">📐</div>
+  <div class="nj-title">ગણિત</div>
+</a>
+
 
         <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 10 વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std10/Science.js?v=25', 'loadStd10Science')" class="nj-card s-sci">
           <div class="nj-icon">🔬</div>
