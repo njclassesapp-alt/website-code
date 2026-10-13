@@ -23,10 +23,11 @@ function loadStd8Dashboard() {
       <h2 style="text-align:center; margin-bottom:20px; color:#1e293b; font-weight:800;">ધોરણ 8 - વિષય પસંદ કરો</h2>
       <div class="nj-grid">
 
-        <a href="/p/solutions-direct-execution-link-1.html" class="nj-card s8-maths">
-          <div class="nj-icon">📐</div>
-          <div class="nj-title">ગણિત</div>
-        </a>
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 ગણિત', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/Maths.js', 'loadStd8Maths')" class="nj-card s-maths">
+  <div class="nj-icon">📐</div>
+  <div class="nj-title">ગણિત</div>
+</a>
+
 
         <a href="/p/solutions-direct-execution-link-1_01766963133.html" class="nj-card s8-sci">
           <div class="nj-icon">🔬</div>
