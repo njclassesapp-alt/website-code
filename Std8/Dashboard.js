@@ -55,10 +55,11 @@ function loadStd8Dashboard() {
           <div class="nj-title">સંસ્કૃત</div>
         </a>
 
-        <a href="/p/solutions-direct-execution-link-1_01608381563.html" class="nj-card s8-hindi">
-          <div class="nj-icon">📙</div>
-          <div class="nj-title">હિન્દી</div>
-        </a>
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 હિન્દી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/Hindi.js', 'loadStd8Hindi')" class="nj-card s-hindi">
+  <div class="nj-icon">📙</div>
+  <div class="nj-title">હિન્દી</div>
+</a>
+
         
       </div>
     </div>
