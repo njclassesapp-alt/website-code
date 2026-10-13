@@ -49,10 +49,11 @@ function loadStd9Dashboard() {
           <div class="nj-title">ગુજરાતી </div>
         </a>
 
-        <a href="/p/blog-page_48.html" class="nj-card s-sans">
-          <div class="nj-icon">📜</div>
-          <div class="nj-title">સંસ્કૃત</div>
-        </a>
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 9 સંસ્કૃત', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std9/San.js', 'loadStd9Sanskrit')" class="nj-card s-sans">
+  <div class="nj-icon">📜</div>
+  <div class="nj-title">સંસ્કૃત</div>
+</a>
+
 
         <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 9 હિન્દી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std9/Hindi.js', 'loadStd9Hindi')" class="nj-card s-hindi">
   <div class="nj-icon">📙</div>
