@@ -38,10 +38,11 @@ function loadStd8Dashboard() {
           <div class="nj-title">સા. વિજ્ઞાન</div>
         </a>
 
-        <a href="/p/solutions-direct-execution-link-1_0364012271.html" class="nj-card s8-eng">
-          <div class="nj-icon">🔤</div>
-          <div class="nj-title">અંગ્રેજી</div>
-        </a>
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 અંગ્રેજી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/Eng.js', 'loadStd8English')" class="nj-card s-eng">
+  <div class="nj-icon">🔤</div>
+  <div class="nj-title">અંગ્રેજી</div>
+</a>
+
         
         <a href="/p/solutions-direct-execution-link-1_02133002647.html" class="nj-card s8-guj">
           <div class="nj-icon">🖊️</div>
