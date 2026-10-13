@@ -153,8 +153,7 @@ window.loadStd10Maths = function() {
               <a href="javascript:void(0);" onclick="startNjQuiz(3)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
           </div>
         </div>
-
-        <div class="nj-card-pro">
+                <div class="nj-card-pro">
           <div class="nj-header-pro"><div class="nj-badge-pro">4</div><div class="nj-title-box"><h3 class="nj-title-pro">દ્વિઘાત સમીકરણ</h3><p class="nj-subtitle-pro">Quadratic Equations</p></div></div>
           <div class="nj-actions-pro">
               <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-data@main/std-10-maths-ch4.pdf', 'ચેપ્ટર 4 - દ્વિઘાત સમીકરણ')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> પુસ્તક</a>
@@ -163,7 +162,8 @@ window.loadStd10Maths = function() {
               <a href="javascript:void(0);" onclick="startNjQuiz(4)" class="nj-btn-pro btn-mcq-pro"><i class="fa fa-check-circle"></i> MCQ</a>
           </div>
         </div>
-                <div class="nj-card-pro">
+
+        <div class="nj-card-pro">
           <div class="nj-header-pro"><div class="nj-badge-pro">5</div><div class="nj-title-box"><h3 class="nj-title-pro">સમાંતર શ્રેણી</h3><p class="nj-subtitle-pro">Arithmetic Progressions</p></div></div>
           <div class="nj-actions-pro">
               <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-data@main/std-10-maths-ch5.pdf', 'ચેપ્ટર 5 - સમાંતર શ્રેણી')" class="nj-btn-pro btn-book-pro"><i class="fa fa-book"></i> પુસ્તક</a>
