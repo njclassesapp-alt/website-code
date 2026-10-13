@@ -44,10 +44,11 @@ function loadStd8Dashboard() {
 </a>
 
         
-        <a href="/p/solutions-direct-execution-link-1_02133002647.html" class="nj-card s8-guj">
-          <div class="nj-icon">🖊️</div>
-          <div class="nj-title">ગુજરાતી </div>
-        </a>
+        <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 ગુજરાતી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/Guj.js', 'loadStd8Gujarati')" class="nj-card s-guj">
+  <div class="nj-icon">🖊️</div>
+  <div class="nj-title">ગુજરાતી</div>
+</a>
+
 
         <a href="/p/solutions-direct-execution-link-1_01296686258.html" class="nj-card s8-sans">
           <div class="nj-icon">📜</div>
