@@ -34,10 +34,11 @@ function loadStd8Dashboard() {
           <div class="nj-title">વિજ્ઞાન</div>
         </a>
 
-        <a href="/p/solutions-direct-execution-link-1_01018824711.html" class="nj-card s8-ss">
-          <div class="nj-icon">🌍</div>
-          <div class="nj-title">સા. વિજ્ઞાન</div>
-        </a>
+<a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 સા. વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/SS.js', 'loadStd8SocialScience')" class="nj-card s-ss">
+  <div class="nj-icon">🌍</div>
+  <div class="nj-title">સા. વિજ્ઞાન</div>
+</a>
+
 
 <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 અંગ્રેજી', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/Eng.js', 'loadStd8English')" class="nj-card s-eng">
   <div class="nj-icon">🔤</div>
