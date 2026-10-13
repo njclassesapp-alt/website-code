@@ -29,10 +29,11 @@ function loadStd8Dashboard() {
 </a>
 
 
-        <a href="/p/solutions-direct-execution-link-1_01766963133.html" class="nj-card s8-sci">
-          <div class="nj-icon">🔬</div>
-          <div class="nj-title">વિજ્ઞાન</div>
-        </a>
+        <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/Science.js', 'loadStd8Science')" class="nj-card s-sci">
+  <div class="nj-icon">🔬</div>
+  <div class="nj-title">વિજ્ઞાન</div>
+</a>
+
 
 <a href="javascript:void(0);" onclick="openNjDynamicPage('ધોરણ 8 સા. વિજ્ઞાન', 'https://cdn.jsdelivr.net/gh/njclassesapp-alt/website-code@main/Std8/SS.js', 'loadStd8SocialScience')" class="nj-card s-ss">
   <div class="nj-icon">🌍</div>
