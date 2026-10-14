@@ -61,13 +61,13 @@ window.loadStd10Maths = function() {
     marks4Script.src = "https://cdn.jsdelivr.net/gh/njclassesapp-alt/NJClassesAIData@main/Std10/Maths/Maths_4_Marks.js?t=" + new Date().getTime();
     document.body.appendChild(marks4Script);
 
-    // ખાલી બટનો છુપાવવાનું લોજિક
+    // 7. ખાલી બટનો છુપાવવાનું લોજિક (Syntax Error Fixed)
     setTimeout(function() {
-        var buttons = document.querySelectorAll('.nj-btn-pro, .nj-premium-board a[onclick="startNjQuiz(\\'all\\')"]');
+        var buttons = document.querySelectorAll('.nj-btn-pro, .nj-premium-board a');
         buttons.forEach(function(btn) {
             var href = btn.getAttribute('href');
             var onclick = btn.getAttribute('onclick');
-            if (!href || href === '#' || href.trim() === '') {
+            if ((!href || href === '#' || href.trim() === '') && !onclick) {
                 btn.style.display = 'none';
             } else if (href === 'javascript:void(0);' && !onclick) {
                 btn.style.display = 'none';
