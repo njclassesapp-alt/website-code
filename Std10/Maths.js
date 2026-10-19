@@ -110,11 +110,15 @@ window.loadStd10Maths = function() {
         ધોરણ 10 ગણિત (NCERT)
       </h2>
       
-      <div style="text-align: center; margin-bottom: 25px;">
-        <a href="javascript:void(0);" onclick="startNjQuiz('all')" style="display:inline-block; background: linear-gradient(135deg, #673ab7, #512da8); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration:none; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.4);">
-            <i class="fa fa-play-circle" style="margin-right: 5px;"></i> આખા વિષયની મેગા ટેસ્ટ શરૂ કરો
+            <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; flex-wrap: wrap;">
+        <a href="javascript:void(0);" onclick="startNjQuiz('all')" style="display:inline-flex; align-items:center; background: linear-gradient(135deg, #673ab7, #512da8); color: white; border: none; padding: 12px 22px; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration:none; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.4);">
+            <i class="fa fa-play-circle" style="margin-right: 6px; font-size: 18px;"></i> મેગા ટેસ્ટ
+        </a>
+        <a href="javascript:void(0);" onclick="openNjPdf('https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-pdf-data@main/Std10/std10mathsformulas.pdf', 'ધોરણ 10 ગણિત - સૂત્રો')" style="display:inline-flex; align-items:center; background: linear-gradient(135deg, #ff4b2b, #ff416c); color: white; border: none; padding: 12px 22px; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration:none; box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);">
+            <i class="fa fa-file-pdf-o" style="margin-right: 6px; font-size: 16px;"></i> સૂત્રો (PDF)
         </a>
       </div>
+      
       
       <div class="nj-grid-pro">
 
