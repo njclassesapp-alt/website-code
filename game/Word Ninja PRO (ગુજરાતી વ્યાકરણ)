@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Word Ninja PRO</title>
+<style>
+    /* 1. Basic Layout */
+    body {
+        margin: 0; padding: 0;
+        overflow-y: auto; overflow-x: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #0d0d14; color: #fff;
+        overscroll-behavior-y: none;
+    }
+
+    body.no-scroll-mode {
+        overflow: hidden !important;
+        touch-action: none !important;
+        overscroll-behavior: none !important;
+    }
+
+    .blog-content {
+        padding: 20px; text-align: center; line-height: 1.6;
+    }
+
+    /* Cover Image Styling */
+    .game-cover-wrapper {
+        width: 100%; max-width: 800px; margin: 0 auto 20px auto;
+        border-radius: 15px; overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        border: 2px solid rgba(0, 242, 254, 0.5);
+    }
+    
+    .game-cover-wrapper img {
+        width: 100%; height: auto; display: block;
+    }
+
+    /* 2. 3D Game Container */
+    #game-container {
+        position: relative; width: 100%; max-width: 800px; height: 500px;
+        margin: 0 auto 30px auto;
+        background: radial-gradient(circle at center, #1e1e2f 0%, #05050a 100%);
+        border-radius: 20px; overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 255, 255, 0.15);
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Fullscreen API Mode Styling */
+    #game-container:fullscreen, 
+    #game-container:-webkit-full-screen {
+        width: 100vw !important; height: 100vh !important;
+        max-width: none !important; margin: 0 !important;
+        border-radius: 0 !important; border: none !important;
+    }
+
+    /* --- AD BANNER CSS --- */
+    #ad-banner-container {
+        display: none; /* નોર્મલ મોડમાં છુપાયેલું રહેશે */
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 55px;
+        background-color: #000;
+        z-index: 1000;
+        text-align: center;
+        justify-content: center; align-items: center;
+      overflow: hidden;
+    }
+
+    #gameCanvas {
+        display: block; width: 100%; height: 100%; touch-action: none;
+        position: absolute; top: 0; left: 0;
+    }
+
+    /* ફુલ સ્ક્રીન મોડમાં ગેમને 55px નીચે શિફ્ટ કરવા માટે */
+    #game-container.fullscreen-mode #ad-banner-container {
+        display: flex;
+    }
+    #game-container.fullscreen-mode #gameCanvas,
+    #game-container.fullscreen-mode .ui-layer,
+    #game-container.fullscreen-mode #damage-overlay {
+        top: 55px !important;
+        height: calc(100% - 55px) !important;
+      overflow: hidden;
+    }
+
+    /* 3. High-End Glassmorphism UI */
+    .ui-layer {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; display: flex; flex-direction: column;
+        justify-content: space-between; padding: 15px; box-sizing: border-box;
+    }
+
+    .top-bar {
+        display: flex; justify-content: space-between; align-items: center;
+        pointer-events: auto; flex-wrap: wrap; gap: 10px;
+    }
+
+    .glass-panel {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 18px; border-radius: 12px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.2);
+        color: #0ff; font-weight: bold; text-shadow: 0 0 8px #0ff; font-size: 1.1rem;
+    }
+
+    .lives-panel { color: #ff416c; text-shadow: 0 0 10px #ff416c; }
+    .level-panel { color: #00ffaa; text-shadow: 0 0 10px #00ffaa; }
+
+    /* Target Word 3D Box */
+    #target-word-container {
+        position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+        pointer-events: none; text-align: center; display: none; width: 100%; z-index: 10;
+    }
+
+    .target-box {
+        display: inline-block;
+        background: linear-gradient(to bottom, #2a2a35, #101016);
+        border: 2px solid #ffeb3b;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.6), 0 0 20px #ffeb3b, inset 0 0 15px #ffeb3b;
+        color: #fff; padding: 12px 30px; border-radius: 40px;
+        font-size: 1.6rem; font-weight: 900; letter-spacing: 1px;
+    }
+
+    /* 4. 3D Animated Buttons */
+    .btn {
+        pointer-events: auto; padding: 14px 28px; font-size: 1.2rem;
+        font-weight: 900; border: none; border-radius: 50px; cursor: pointer;
+        transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1.5px;
+        position: relative; overflow: hidden;
+    }
+
+    .btn:active { transform: scale(0.92) translateY(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+
+    .btn-play {
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        color: white; border: 2px solid rgba(255,255,255,0.4);
+        box-shadow: 0 10px 20px rgba(0, 242, 254, 0.5), inset 0 -4px 0 rgba(0,0,0,0.2);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    /* Ad Button Style */
+    .btn-ad {
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        color: #fff; border: 2px solid rgba(255,255,255,0.4);
+        box-shadow: 0 10px 20px rgba(253, 160, 133, 0.5), inset 0 -4px 0 rgba(0,0,0,0.2);
+        margin-bottom: 15px; font-size: 1rem;
+    }
+
+    #exit-btn {
+        display: none; background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        color: white; box-shadow: 0 5px 15px rgba(255, 65, 108, 0.6);
+        padding: 10px 20px; font-size: 1rem; border-radius: 10px;
+    }
+
+    /* 5. Menus */
+    .center-screen {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        text-align: center; pointer-events: auto; display: flex; flex-direction: column;
+        align-items: center; gap: 15px; width: 85%; max-width: 400px;
+        background: rgba(15, 15, 25, 0.85); padding: 40px 30px; border-radius: 25px;
+        backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0, 242, 254, 0.1);
+    }
+
+    .title-neon {
+        font-size: 2.5rem; color: #fff; margin: 0; font-weight: 900;
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0055ff, 0 0 80px #0055ff;
+    }
+
+    .subtitle { color: #e0e0e0; font-size: 1.2rem; margin: 0; font-weight: bold; }
+
+    #damage-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle, rgba(255,0,0,0.3) 0%, rgba(255,0,0,0.8) 100%);
+        pointer-events: none; opacity: 0; transition: opacity 0.15s ease-out; z-index: 5;
+    }
+
+    /* Countdown Text Styling */
+    #countdown-text {
+        font-size: 6rem; color: #ffeb3b; margin: 0; font-weight: 900;
+        text-shadow: 0 0 20px #ffeb3b, 0 0 40px #ff9800;
+    }
+</style>
+</head>
+<body>
+
+<div class="blog-content">
+    <div class="game-cover-wrapper" id="game-cover">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEicrf8uf5vR19wBKTC1GFnTHjxNna-dT9n4PIUy8AH0Lc5fQ5GT2bXmHxpm9inhD9nwOhlvDTNvLhEFvsS0DCXbKeLB_r1eYHXewc5c5E9zcGeJQXhU6duM5EpDj9cnCXCNemzVckNGUCoZj4SCpW2mJcVjny0F1vzfyM0TZiKxRuEDCBd6Xy9sTSPOiRQc/s1376/1000579992.png" alt="Word Ninja PRO Cover" />
+    </div>
+    <button id="start-fullscreen-btn" class="btn btn-play">Play Now 🎮</button>
+</div>
+  <span></span>
+<div id="game-container">
+    
+    <div id="ad-banner-container">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1628441013593322" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-1628441013593322"
+             data-ad-slot="1454627676"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    <div id="damage-overlay"></div>
+    
+    <div class="ui-layer" id="ui-layer">
+        <div class="top-bar">
+            <div class="glass-panel" id="score-display">Score: 0</div>
+            <div class="glass-panel level-panel" id="level-display">Level: 1</div>
+            <div class="glass-panel lives-panel" id="lives-display">❤️❤️❤️</div>
+            <button id="exit-btn" class="btn">Exit ❌</button>
+        </div>
+        
+        <div id="target-word-container">
+            <div class="target-box">શોધો: <span id="target-word">...</span></div>
+        </div>
+
+        <div class="center-screen" id="menu-screen">
+            <h1 class="title-neon">Word Ninja PRO</h1>
+            <p class="subtitle">સાચા સમાનાર્થી શબ્દને કાપો ⚔️</p>
+            <button id="start-game-btn" class="btn btn-play">Start Game</button>
+        </div>
+
+        <div class="center-screen" id="game-over-screen" style="display: none;">
+            <h1 class="title-neon" style="color: #ff4b2b; text-shadow: 0 0 10px #ff4b2b, 0 0 20px #ff0000, 0 0 40px #aa0000;">Game Over</h1>
+            <p class="subtitle" id="final-score">Your Score: 0</p>
+            <button id="watch-ad-btn" class="btn btn-ad">Continue (Watch Ad) 📺</button>
+            <button id="restart-btn" class="btn btn-play">Play Again 🔄</button>
+        </div>
+
+        <div class="center-screen" id="countdown-screen" style="display: none; background: transparent; border: none; box-shadow: none; backdrop-filter: none;">
+            <h1 id="countdown-text">3</h1>
+        </div>
+    </div>
+</div>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d', { alpha: false });
+
+// Variables
+let width, height;
+let gameState = 'INTRO'; // INTRO, PLAYING, GAMEOVER
+let score = 0;
+let level = 1;
+let lives = 3;
+let animationId;
+let frames = 0;
+
+// Arrays for Game Objects
+let activeWords = [];
+let particles = [];
+let sliceTrail = [];
+let isDrawing = false;
+
+// DOM Elements
+const gameContainer = document.getElementById('game-container');
+const startFullscreenBtn = document.getElementById('start-fullscreen-btn');
+const exitBtn = document.getElementById('exit-btn');
+const scoreDisplay = document.getElementById('score-display');
+const levelDisplay = document.getElementById('level-display');
+const livesDisplay = document.getElementById('lives-display');
+const targetWordDisplay = document.getElementById('target-word');
+const targetContainer = document.getElementById('target-word-container');
+const menuScreen = document.getElementById('menu-screen');
+const gameOverScreen = document.getElementById('game-over-screen');
+const startGameBtn = document.getElementById('start-game-btn');
+const restartBtn = document.getElementById('restart-btn');
+const watchAdBtn = document.getElementById('watch-ad-btn');
+const countdownScreen = document.getElementById('countdown-screen');
+const countdownText = document.getElementById('countdown-text');
+const finalScoreText = document.getElementById('final-score');
+const damageOverlay = document.getElementById('damage-overlay');
+const gameCover = document.getElementById('game-cover');
+
+// --- Blogger Text Decoder ---
+function decodeHTML(html) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
+// --- Game Data (Levels & Words) ---
+const gameData = [
+    { target: "સૂર્ય", correct: ["રવિ", "ભાનુ", "દિનકર", "ભાસ્કર"], wrong: ["ચંદ્ર", "રાત્રિ", "તારો", "વાદળ"] },
+    { target: "પાણી", correct: ["જળ", "નીર", "વારિ", "સલિલ"], wrong: ["અગ્નિ", "આગ", "પવન", "માટી"] },
+    { target: "આકાશ", correct: ["ગગન", "નભ", "આભ", "વ્યોમ"], wrong: ["ધરતી", "જમીન", "પાતાળ", "ખડક"] }
+    // મેં અહીં ડેટા ટૂંકાવ્યો છે, તમે તમારો સંપૂર્ણ ડેટા અહીં મૂકી દેજો.
+];
+let currentLevelData;
+
+function getRandomLevelData() {
+    return gameData[Math.floor(Math.random() * gameData.length)];
+}
+
+// --- Web Audio API ---
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function initAudio() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playSound(type) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    
+    if (type === 'throw') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(200, now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.2);
+        gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+    } else if (type === 'slice_correct') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(1500, now + 0.1);
+        gainNode.gain.setValueAtTime(0.4, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+    } else if (type === 'bomb' || type === 'slice_wrong') {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, now); osc.frequency.exponentialRampToValueAtTime(10, now + 0.5);
+        gainNode.gain.setValueAtTime(0.7, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now); osc.stop(now + 0.5);
+    } else if (type === 'level_up') {
+        osc.type = 'square'; osc.frequency.setValueAtTime(440, now); osc.frequency.setValueAtTime(554.37, now + 0.1); osc.frequency.setValueAtTime(659.25, now + 0.2);
+        gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.6);
+        osc.start(now); osc.stop(now + 0.6);
+    }
+}
+
+// --- Classes ---
+class WordObj {
+    constructor() {
+        this.radius = Math.min(width, height) * 0.09; 
+        this.x = Math.random() * (width - this.radius * 2) + this.radius;
+        this.y = height + this.radius; 
+        this.vx = (Math.random() - 0.5) * 2; 
+        this.vy = -(Math.random() * 2.5 + 6.5 + (level * 0.1)); 
+        this.gravity = 0.06; 
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotSpeed = (Math.random() - 0.5) * 0.02;
+        this.markedForDeletion = false;
+
+        this.isCorrect = Math.random() > 0.4; 
+        let rawText = "";
+        if (this.isCorrect) {
+            rawText = currentLevelData.correct[Math.floor(Math.random() * currentLevelData.correct.length)];
+            this.baseColor = '#00ffaa'; 
+            this.darkColor = '#004422';
+        } else {
+            rawText = currentLevelData.wrong[Math.floor(Math.random() * currentLevelData.wrong.length)];
+            this.baseColor = '#ff4b2b'; 
+            this.darkColor = '#440000';
+        }
+        this.text = decodeHTML(rawText);
+    }
+
+    update() {
+        this.x += this.vx; this.y += this.vy; this.vy += this.gravity; this.rotation += this.rotSpeed;
+        if (this.x - this.radius < 0 || this.x + this.radius > width) this.vx *= -1;
+        if (this.y - this.radius > height && this.vy > 0) {
+            this.markedForDeletion = true;
+            if (this.isCorrect && gameState === 'PLAYING') takeDamage();
+        }
+    }
+
+    draw() {
+        ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
+        const gradient = ctx.createRadialGradient(-this.radius/3, -this.radius/3, this.radius/10, 0, 0, this.radius);
+        gradient.addColorStop(0, '#ffffff'); gradient.addColorStop(0.3, this.baseColor); gradient.addColorStop(1, this.darkColor); 
+        ctx.shadowBlur = 20; ctx.shadowColor = this.baseColor; ctx.fillStyle = gradient;
+        ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.shadowBlur = 5; ctx.shadowColor = '#000000'; ctx.fillStyle = '#ffffff';
+        ctx.font = `900 ${this.radius * 0.45}px 'Segoe UI', sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.strokeStyle = '#000'; ctx.lineWidth = 3; ctx.strokeText(this.text, 0, 0); ctx.fillText(this.text, 0, 0);
+        ctx.restore();
+    }
+}
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 10; this.vy = (Math.random() - 0.5) * 10;
+        this.size = Math.random() * 6 + 2; this.color = color; this.life = 1; this.decay = Math.random() * 0.03 + 0.02;
+    }
+    update() { this.x += this.vx; this.y += this.vy; this.life -= this.decay; }
+    draw() {
+        ctx.globalAlpha = this.life; ctx.fillStyle = this.color; ctx.shadowBlur = 10; ctx.shadowColor = this.color;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1.0; ctx.shadowBlur = 0;
+    }
+}
+
+// --- Game Functions ---
+function resizeCanvas() {
+    width = gameContainer.clientWidth;
+    height = gameContainer.clientHeight;
+    // જો ફુલસ્ક્રીન હોય, તો કેનવાસની ઊંચાઈ 55px ઓછી કરીશું 
+    if (gameContainer.classList.contains('fullscreen-mode')) {
+        height = height - 55;
+    }
+    canvas.width = width;
+    canvas.height = height;
+}
+
+function updateUI() {
+    scoreDisplay.innerText = `Score: ${score}`;
+    levelDisplay.innerText = `Level: ${level}`;
+    const hearts = '❤️'.repeat(Math.max(0, lives));
+    livesDisplay.innerText = decodeHTML(hearts);
+    if(currentLevelData) targetWordDisplay.innerText = decodeHTML(currentLevelData.target);
+}
+
+function createExplosion(x, y, color) {
+    for (let i = 0; i < 20; i++) particles.push(new Particle(x, y, color));
+}
+
+function takeDamage() {
+    lives--; updateUI(); playSound('bomb');
+    damageOverlay.style.opacity = '1';
+    setTimeout(() => { damageOverlay.style.opacity = '0'; }, 150);
+    if (lives <= 0) gameOver();
+}
+
+function checkLevelUp() {
+    let nextLevelReq = level * 50; 
+    if (score >= nextLevelReq) {
+        level++; currentLevelData = getRandomLevelData(); playSound('level_up'); updateUI();
+        damageOverlay.style.background = 'radial-gradient(circle, rgba(0,255,170,0.3) 0%, rgba(0,255,170,0.8) 100%)';
+        damageOverlay.style.opacity = '1';
+        setTimeout(() => { 
+            damageOverlay.style.opacity = '0'; 
+            setTimeout(() => { damageOverlay.style.background = 'radial-gradient(circle, rgba(255,0,0,0.3) 0%, rgba(255,0,0,0.8) 100%)'; }, 200);
+        }, 300);
+    }
+}
+
+function getCanvasPos(evt) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+    const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function blockScroll(e) {
+    if (document.fullscreenElement || document.body.classList.contains('no-scroll-mode')) {
+        if (e.cancelable) e.preventDefault();
+    }
+}
+gameContainer.addEventListener('touchmove', blockScroll, {passive: false});
+
+function handleStart(e) {
+    if (gameState !== 'PLAYING') return;
+    blockScroll(e); isDrawing = true; sliceTrail = [getCanvasPos(e)];
+}
+
+function handleMove(e) {
+    if (!isDrawing || gameState !== 'PLAYING') return;
+    blockScroll(e); const pos = getCanvasPos(e); sliceTrail.push(pos);
+    if (sliceTrail.length > 12) sliceTrail.shift(); 
+    activeWords.forEach(word => {
+        if (word.markedForDeletion) return;
+        const dx = pos.x - word.x; const dy = pos.y - word.y;
+        if (Math.sqrt(dx * dx + dy * dy) < word.radius) {
+            word.markedForDeletion = true;
+            if (word.isCorrect) {
+                score += 10; playSound('slice_correct'); createExplosion(word.x, word.y, '#00ffaa'); checkLevelUp(); updateUI();
+            } else {
+                createExplosion(word.x, word.y, '#ff4b2b'); takeDamage();
+            }
+        }
+    });
+}
+function handleEnd() { isDrawing = false; sliceTrail = []; }
+
+canvas.addEventListener('touchstart', handleStart, {passive: false});
+canvas.addEventListener('touchmove', handleMove, {passive: false});
+canvas.addEventListener('touchend', handleEnd);
+canvas.addEventListener('mousedown', handleStart);
+canvas.addEventListener('mousemove', handleMove);
+canvas.addEventListener('mouseup', handleEnd);
+canvas.addEventListener('mouseleave', handleEnd);
+
+function drawBackground() {
+    const gradient = ctx.createRadialGradient(width/2, height/2, 10, width/2, height/2, width);
+    gradient.addColorStop(0, '#1a1a2e'); gradient.addColorStop(1, '#05050a'); ctx.fillStyle = gradient; ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = 'rgba(0, 242, 254, 0.05)'; ctx.lineWidth = 1; ctx.beginPath();
+    for(let i=0; i<width; i+=50) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
+    for(let j=0; j<height; j+=50) { ctx.moveTo(0, j); ctx.lineTo(width, j); }
+    ctx.stroke();
+}
+
+function drawSliceTrail() {
+    if (sliceTrail.length < 2) return;
+    ctx.beginPath(); ctx.moveTo(sliceTrail[0].x, sliceTrail[0].y);
+    for (let i = 1; i < sliceTrail.length; i++) { ctx.lineTo(sliceTrail[i].x, sliceTrail[i].y); }
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 6; ctx.strokeStyle = '#ffffff';
+    ctx.shadowBlur = 20; ctx.shadowColor = '#00f2fe'; ctx.stroke();
+    ctx.lineWidth = 2; ctx.strokeStyle = '#00f2fe'; ctx.stroke(); ctx.shadowBlur = 0; 
+}
+
+function gameLoop() {
+    if (gameState !== 'PLAYING') return;
+    drawBackground(); frames++;
+    let spawnRate = Math.max(60, 120 - (level * 6)); 
+    if (frames % spawnRate === 0) { activeWords.push(new WordObj()); playSound('throw'); }
+    activeWords.forEach(word => { word.update(); word.draw(); });
+    activeWords = activeWords.filter(w => !w.markedForDeletion);
+    particles.forEach(p => { p.update(); p.draw(); });
+    particles = particles.filter(p => p.life > 0);
+    drawSliceTrail();
+    animationId = requestAnimationFrame(gameLoop);
+}
+
+// --- State Management ---
+function startGame() {
+    initAudio(); gameState = 'PLAYING'; score = 0; level = 1; lives = 3; frames = 0; activeWords = []; particles = [];
+    currentLevelData = getRandomLevelData(); 
+    if(gameCover) gameCover.style.display = 'none'; 
+    menuScreen.style.display = 'none'; gameOverScreen.style.display = 'none'; targetContainer.style.display = 'block';
+    updateUI(); gameLoop();
+}
+
+function gameOver() {
+    gameState = 'GAMEOVER'; cancelAnimationFrame(animationId);
+    targetContainer.style.display = 'none'; gameOverScreen.style.display = 'flex';
+    finalScoreText.innerText = `Final Score: ${score}`;
+}
+
+function resetToMenu() {
+    gameState = 'INTRO'; cancelAnimationFrame(animationId); activeWords = []; ctx.clearRect(0, 0, width, height); drawBackground();
+    if(gameCover) gameCover.style.display = 'block'; 
+    menuScreen.style.display = 'flex'; gameOverScreen.style.display = 'none'; targetContainer.style.display = 'none';
+    currentLevelData = getRandomLevelData(); updateUI();
+}
+
+// --- REWARDED AD LOGIC ---
+
+// 1. બટન પર ક્લિક થાય ત્યારે Android એપને સિગ્નલ મોકલવું
+window.onRewardedAdWatched = function() {
+    enterFullscreenMode(); // સ્ક્રીન પાછી ફૂલ કરી દેશે
+    gameOverScreen.style.display = 'none'; 
+    
+    startCountdown(() => {
+        lives = 3; 
+        updateUI();
+        gameState = 'PLAYING';
+        targetContainer.style.display = 'block';
+        
+        // જૂના શબ્દો સાફ કરવા જેથી ગેમ ફરીથી સ્મૂથ ચાલુ થાય
+        activeWords = []; 
+        particles = [];
+        
+        gameLoop(); 
+    });
+};
+
+// 2. આ ફંક્શન Android એપમાંથી એડ પૂરી થયા પછી બોલાવવામાં આવશે
+window.onRewardedAdWatched = function() {
+    gameOverScreen.style.display = 'none'; // ગેમ ઓવર સ્ક્રીન છુપાવો
+    startCountdown(() => {
+        // કાઉન્ટડાઉન પૂરું થયા પછી ગેમ શરૂ કરો
+        lives = 3; // યુઝરને ફરીથી 3 લાઈફ આપો (અથવા તમે 1 પણ રાખી શકો)
+        updateUI();
+        gameState = 'PLAYING';
+        targetContainer.style.display = 'block';
+        gameLoop(); // ગેમ જ્યાંથી અટકી હતી ત્યાંથી જ ચાલુ થશે
+    });
+};
+
+function startCountdown(callback) {
+    countdownScreen.style.display = 'flex';
+    let count = 3;
+    countdownText.innerText = count;
+    playSound('throw');
+
+    let interval = setInterval(() => {
+        count--;
+        if (count > 0) {
+            countdownText.innerText = count;
+            playSound('throw');
+        } else if (count === 0) {
+            countdownText.innerText = "GO!";
+            playSound('level_up');
+        } else {
+            clearInterval(interval);
+            countdownScreen.style.display = 'none';
+            callback();
+        }
+    }, 1000);
+}
+
+// --- Fullscreen API Setup ---
+function openFullscreen() {
+    if (gameContainer.requestFullscreen) { gameContainer.requestFullscreen(); }
+    else if (gameContainer.webkitRequestFullscreen) { gameContainer.webkitRequestFullscreen(); }
+    else if (gameContainer.msRequestFullscreen) { gameContainer.msRequestFullscreen(); }
+}
+
+function closeFullscreen() {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) { document.exitFullscreen(); }
+        else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+    }
+}
+
+function enterFullscreenMode() {
+    openFullscreen();
+    document.body.classList.add('no-scroll-mode');
+    gameContainer.classList.add('fullscreen-mode');
+    exitBtn.style.display = 'block';
+    setTimeout(resizeCanvas, 200);
+}
+
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+function handleFullscreenChange() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        document.body.classList.remove('no-scroll-mode');
+        gameContainer.classList.remove('fullscreen-mode');
+        exitBtn.style.display = 'none';
+        resizeCanvas();
+        
+        // જો યુઝર ખરેખર રમી રહ્યો હોય તો જ ગેમ ઓવર થાય, એડ જોતી વખતે નહીં!
+        if (gameState === 'PLAYING') {
+            gameOver(); 
+        }
+    }
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+// બંને બટનમાં Fullscreen ફંક્શન ઉમેર્યું 
+startFullscreenBtn.addEventListener('click', () => {
+    initAudio();
+    enterFullscreenMode();
+    window.scrollTo(0, 0); 
+    if(gameState === 'INTRO') resetToMenu();
+});
+
+startGameBtn.addEventListener('click', () => {
+    initAudio();
+    enterFullscreenMode(); // હવે આ બટનથી પણ ફુલ સ્ક્રીન થશે
+    startGame();
+});
+
+exitBtn.addEventListener('click', () => { closeFullscreen(); });
+restartBtn.addEventListener('click', startGame);
+
+resizeCanvas(); resetToMenu();
+</script>
+
+</body>
+</html>
