@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Virtual Chemistry Lab Ultimate</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@600;700&display=swap');
+
+    body {
+        margin: 0; padding: 0; background: transparent;
+        font-family: 'Hind Vadodara', sans-serif; text-align: center;
+        user-select: none; -webkit-user-select: none;
+    }
+
+    /* પોસ્ટ માટે ઇમેજ */
+    .post-header-img {
+        max-width: 100%; height: auto; border-radius: 10px;
+        margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* ફુલ સ્ક્રીન કન્ટેનર */
+    #gameWrapper {
+        position: relative; width: 100%; max-width: 600px; 
+        height: 70vh; min-height: 400px; max-height: 550px;
+        margin: 0 auto; background: linear-gradient(135deg, #050510, #101030);
+        border-radius: 15px; border: 3px solid #00d2ff;
+        overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        touch-action: manipulation;
+    }
+    
+    #gameWrapper:fullscreen {
+        max-width: 100%; height: 100%; border-radius: 0; border: none;
+    }
+    #gameWrapper:-webkit-full-screen {
+        max-width: 100%; height: 100%; border-radius: 0; border: none;
+    }
+
+    canvas { display: block; width: 100%; height: 100%; }
+
+    .ui-layer {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; display: flex; flex-direction: column; justify-content: space-between;
+        z-index: 20;
+    }
+
+    #topBar {
+        padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
+        background: rgba(0, 0, 0, 0.7); border-bottom: 1px solid #00d2ff;
+        color: #00d2ff; font-weight: bold; font-size: 16px;
+        pointer-events: auto;
+    }
+    
+    .top-btn {
+        background: rgba(255,255,255,0.1); color: white; border: 1px solid white;
+        padding: 5px 12px; border-radius: 20px; font-size: 14px; cursor: pointer; margin-left: 5px;
+    }
+    .top-btn.exit { background: #ff4757; border-color: #ff4757; }
+
+    /* સિલેક્શન ટ્રે */
+    #selectionTrayWrapper {
+        position: absolute; bottom: 105px; left: 0; width: 100%;
+        display: flex; justify-content: center; pointer-events: none;
+        z-index: 25;
+    }
+    #selectionTray {
+        background: rgba(0, 210, 255, 0.2); border: 1px solid #00d2ff;
+        padding: 5px 20px; border-radius: 30px; color: white;
+        font-size: 20px; font-weight: bold; text-shadow: 0 0 5px #00d2ff;
+        backdrop-filter: blur(5px); display: none;
+    }
+
+    #elementScroll {
+        pointer-events: auto; background: rgba(0,0,0,0.85); padding: 10px 0;
+        border-top: 1px solid #00d2ff; width: 100%; overflow-x: auto;
+        white-space: nowrap; -webkit-overflow-scrolling: touch;
+    }
+    #elementScroll::-webkit-scrollbar { height: 6px; }
+    #elementScroll::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 10px; }
+
+    #elementList { display: inline-flex; gap: 10px; padding: 0 15px; }
+
+    .elem-btn {
+        width: 60px; height: 60px; flex-shrink: 0; border-radius: 12px;
+        border: 2px solid rgba(255,255,255,0.3); background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+        color: white; font-size: 20px; font-weight: bold;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        cursor: pointer; position: relative; transition: transform 0.1s;
+    }
+    .elem-btn:active { transform: scale(0.9); }
+    .elem-name { font-size: 11px; color: #ccc; margin-top: 2px; }
+
+    /* MIX IT બટનનું એનિમેશન અલગ કર્યું */
+    #mixBtn {
+        position: absolute; bottom: 155px; left: 50%; transform: translateX(-50%);
+        padding: 12px 50px; border-radius: 50px; background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        color: white; font-size: 20px; font-weight: bold; border: none;
+        box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); cursor: pointer; pointer-events: auto;
+        display: none; z-index: 30; 
+        animation: pulseMix 2s infinite; /* નવું એનિમેશન નામ */
+    }
+    @keyframes pulseMix { 
+        0% { transform: translateX(-50%) scale(1); } 
+        50% { transform: translateX(-50%) scale(1.05); } 
+        100% { transform: translateX(-50%) scale(1); } 
+    }
+
+    /* સ્ક્રીન બરાબર વચ્ચે રાખવા માટે Flexbox */
+    .screen-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(5, 5, 16, 0.98); z-index: 100; pointer-events: auto;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+
+    /* PLAY NOW બટનનું એનિમેશન અલગ કર્યું */
+    .btn-main {
+        background: linear-gradient(45deg, #ff9f43, #ee5253); border: none; padding: 15px 40px; color: white;
+        font-size: 22px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 20px;
+        box-shadow: 0 0 20px rgba(255, 159, 67, 0.6); 
+        animation: pulseMain 1.5s infinite; /* નવું એનિમેશન નામ */
+    }
+    @keyframes pulseMain { 
+        0% { transform: scale(1); } 
+        50% { transform: scale(1.05); } 
+        100% { transform: scale(1); } 
+    }
+
+    #resultBox {
+        display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.95); border: 2px solid #00d2ff; border-radius: 15px;
+        padding: 25px; text-align: center; width: 85%; max-width: 400px; z-index: 50;
+        box-shadow: 0 0 50px rgba(0,210,255,0.5); pointer-events: auto;
+    }
+</style>
+</head>
+<body>
+
+<div class="separator" style="clear: both; text-align: center;">
+    <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhqh4pc7YxqKr2crTvPa2hhmQ7sweGZGzK9_86kVpxf5jfgpSdSrK2m50-NMe-2hPiEsX4y0F6apAaA2rgf5N3kaiVvG-OLw_nAwhylbXD-6R1Un3pmZTjgrL5yyNsvgtHaJJzty0rGe_vpJuVAnPqrEAULFENUej6odMD7D00DDyu7OTNJFvT-6bfCmqW9/s2752/1000573267.png" style="display: block; padding: 1em 0; text-align: center;">
+        <img alt="" border="0" width="320" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhqh4pc7YxqKr2crTvPa2hhmQ7sweGZGzK9_86kVpxf5jfgpSdSrK2m50-NMe-2hPiEsX4y0F6apAaA2rgf5N3kaiVvG-OLw_nAwhylbXD-6R1Un3pmZTjgrL5yyNsvgtHaJJzty0rGe_vpJuVAnPqrEAULFENUej6odMD7D00DDyu7OTNJFvT-6bfCmqW9/s320/1000573267.png" class="post-header-img"/>
+    </a>
+</div>
+  <span><!--more--></span>
+<div id="gameWrapper">
+    <div id="topBar" class="ui-layer">
+        <span>🧪 Chemistry Lab</span>
+        <div>
+            <span style="margin-right:10px;">⭐ <span id="scoreVal">0</span></span>
+            <button class="top-btn" onclick="resetLab()">Clear 🗑️</button>
+            <button class="top-btn exit" onclick="exitGame()">Exit ❌</button>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    
+    <div id="selectionTrayWrapper">
+        <div id="selectionTray"></div>
+    </div>
+
+    <button id="mixBtn" onclick="mixElements()">⚗️ MIX IT!</button>
+
+    <div class="ui-layer" style="justify-content: flex-end;">
+        <div id="elementScroll">
+            <div id="elementList"></div>
+        </div>
+    </div>
+
+    <div id="resultBox">
+        <div id="resultTitle" style="font-size:26px; font-weight:bold; margin-bottom:10px;"></div>
+        <div id="resultDesc"></div>
+        <button class="btn-main" onclick="closeResult()" style="padding:10px 30px; font-size:18px;">OK</button>
+    </div>
+
+    <div id="introScreen" class="screen-overlay">
+        <h1 style="color:#00d2ff; font-size:34px; margin:0; text-shadow:0 0 10px #00d2ff;">🔬 કેમેસ્ટ્રી લેબ PRO</h1>
+        <p style="color:#ccc; font-size:16px; margin: 10px 0 25px 0;">તત્વો પસંદ કરો અને નવા પદાર્થો બનાવો!<br>(આ ગેમ ફુલ સ્ક્રીનમાં ખુલશે)</p>
+        <button class="btn-main" onclick="startGame()">PLAY NOW ▶️</button>
+    </div>
+</div>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const mixBtn = document.getElementById('mixBtn');
+    const selectionTray = document.getElementById('selectionTray');
+    const wrapper = document.getElementById('gameWrapper');
+
+    // --- 1. GAME VARIABLES ---
+    let atoms = [];
+    let selectedElementNames = []; // ટ્રે માટે
+    let isAnimating = false;
+    let score = 0;
+    
+    // --- 2. AUDIO SYSTEM ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = new AudioContext();
+
+    function playSound(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'pop') { 
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.1);
+            osc.start(now); osc.stop(now + 0.1);
+        } else if (type === 'success') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(800, now + 0.4);
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 1);
+            osc.start(now); osc.stop(now + 1);
+        } else if (type === 'error') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(50, now + 0.3);
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        }
+    }
+
+    // --- 3. MASSIVE ELEMENT DATABASE (35 ELEMENTS) ---
+    const elementData = {
+        'H':  { color: '#ffffff', radius: 18, name: 'Hydrogen' },
+        'He': { color: '#ffcccc', radius: 20, name: 'Helium' },
+        'Li': { color: '#cc99ff', radius: 22, name: 'Lithium' },
+        'Be': { color: '#99ff99', radius: 23, name: 'Beryllium' },
+        'B':  { color: '#ffb3b3', radius: 24, name: 'Boron' },
+        'C':  { color: '#333333', radius: 25, name: 'Carbon' },
+        'N':  { color: '#3366ff', radius: 25, name: 'Nitrogen' },
+        'O':  { color: '#ff3333', radius: 26, name: 'Oxygen' },
+        'F':  { color: '#ffff66', radius: 25, name: 'Fluorine' },
+        'Ne': { color: '#ff6600', radius: 26, name: 'Neon' },
+        'Na': { color: '#ab83e3', radius: 28, name: 'Sodium' },
+        'Mg': { color: '#00cc00', radius: 27, name: 'Magnesium' },
+        'Al': { color: '#c0c0c0', radius: 27, name: 'Aluminium' },
+        'Si': { color: '#a0a0a0', radius: 26, name: 'Silicon' },
+        'P':  { color: '#ff9900', radius: 26, name: 'Phosphorus' },
+        'S':  { color: '#ffff00', radius: 26, name: 'Sulfur' },
+        'Cl': { color: '#00ff00', radius: 28, name: 'Chlorine' },
+        'Ar': { color: '#99ccff', radius: 28, name: 'Argon' },
+        'K':  { color: '#8f00ff', radius: 30, name: 'Potassium' },
+        'Ca': { color: '#808080', radius: 30, name: 'Calcium' },
+        'Fe': { color: '#cc6600', radius: 28, name: 'Iron' },
+        'Cu': { color: '#c87533', radius: 28, name: 'Copper' },
+        'Zn': { color: '#7d8891', radius: 28, name: 'Zinc' },
+        'Ag': { color: '#e0e0e0', radius: 29, name: 'Silver' },
+        'Au': { color: '#ffd700', radius: 29, name: 'Gold' },
+        'Hg': { color: '#b3b3b3', radius: 30, name: 'Mercury' },
+        'Pb': { color: '#4d4d4d', radius: 31, name: 'Lead' },
+        'U':  { color: '#33ff33', radius: 33, name: 'Uranium' },
+        'Br': { color: '#993300', radius: 29, name: 'Bromine' },
+        'I':  { color: '#660066', radius: 30, name: 'Iodine' }
+    };
+
+    // --- 4. RECIPE BOOK (50+ COMBINATIONS) ---
+    const recipes = [
+        // Basics & Gases
+        { elements: ['H', 'H', 'O'], result: 'H₂O', name: 'Water (પાણી)', desc: 'જીવનનો આધાર! 💧' },
+        { elements: ['C', 'O', 'O'], result: 'CO₂', name: 'Carbon Dioxide', desc: 'ઉચ્છ્વાસનો વાયુ! 🌬️' },
+        { elements: ['O', 'O'],      result: 'O₂',   name: 'Oxygen Gas', desc: 'પ્રાણવાયુ! 🫁' },
+        { elements: ['H', 'H'],      result: 'H₂',   name: 'Hydrogen Gas', desc: 'સૌથી હલકો ગેસ! 🎈' },
+        { elements: ['N', 'N'],      result: 'N₂',   name: 'Nitrogen Gas', desc: 'વાતાવરણમાં 78%! ☁️' },
+        { elements: ['O', 'O', 'O'], result: 'O₃',   name: 'Ozone', desc: 'સૂર્યના કિરણોથી રક્ષણ! 🛡️' },
+        { elements: ['Cl', 'Cl'],    result: 'Cl₂',  name: 'Chlorine Gas', desc: 'સ્વિમિંગ પૂલ સાફ કરવા! 🏊' },
+              // 🟢 હેલોજન વાયુઓ અને પ્રવાહી (Halogens)
+        { elements: ['F', 'F'], result: 'F₂', name: 'Fluorine Gas', desc: 'સૌથી વધુ સક્રિય વાયુ! 🟨' },
+        { elements: ['B', 'r', 'B', 'r'], result: 'Br₂', name: 'Bromine Liquid', desc: 'લાલ-બ્રાઉન રંગનું પ્રવાહી! 🩸' },
+        { elements: ['I', 'I'], result: 'I₂', name: 'Iodine Solid', desc: 'જાંબલી રંગનો ઘન પદાર્થ! 🟣' },
+              // 🧲 ચુંબકીય અને વિશિષ્ટ ધાતુના સંયોજનો (Magnetic & Rare Metal Compounds)
+        { elements: ['F', 'e', 'F', 'e', 'F', 'e', 'O', 'O', 'O', 'O'], result: 'Fe₃O₄', name: 'Magnetite', desc: 'કુદરતી ચુંબકીય પથ્થર (Loadstone)! 🧲' },
+        { elements: ['M', 'n', 'C', 'l', 'C', 'l'], result: 'MnCl₂', name: 'Manganese Chloride', desc: 'આછા ગુલાબી રંગનો ક્ષાર! 🌸' },
+        { elements: ['M', 'n', 'S', 'O', 'O', 'O', 'O'], result: 'MnSO₄', name: 'Manganese Sulfate', desc: 'ખેતીમાં ખાતર તરીકે વપરાય! 🌱' },
+        { elements: ['A', 'l', 'A', 'l', 'S', 'S', 'S'], result: 'Al₂S₃', name: 'Aluminium Sulfide', desc: 'પાણી અડતા જ સડેલા ઈંડા જેવી વાસ આપે! 🥚' },
+
+        // ⚛️ ન્યુક્લિયર અને ખતરનાક સંયોજનો (Nuclear & Toxic Compounds)
+        { elements: ['U', 'F', 'F', 'F', 'F', 'F', 'F'], result: 'UF₆', name: 'Uranium Hexafluoride', desc: 'ન્યુક્લિયર રિએક્ટર માટે ઈંધણ સંવર્ધન ગેસ! ☢️' },
+        { elements: ['C', 'O', 'C', 'l', 'C', 'l'], result: 'COCl₂', name: 'Phosgene', desc: 'ફોસજીન (પ્રથમ વિશ્વયુદ્ધમાં વપરાયેલો ઝેરી ગેસ)! ☠️' },
+        { elements: ['H', 'g', 'C', 'l', 'C', 'l'], result: 'HgCl₂', name: 'Mercury(II) Chloride', desc: 'અત્યંત ઝેરી પ્રવાહી! 🧪' },
+        { elements: ['P', 'H', 'H', 'H'], result: 'PH₃', name: 'Phosphine', desc: 'લસણ જેવી ગંધવાળો અત્યંત ઝેરી ગેસ! 🧄' },
+
+        // 🔥 સિગ્નલ અને ફટાકડામાં વપરાતા સંયોજનો (Signal & Pyrotechnics)
+        { elements: ['C', 'a', 'C', 'a', 'C', 'a', 'P', 'P'], result: 'Ca₃P₂', name: 'Calcium Phosphide', desc: 'દરિયામાં ધુમાડાના સિગ્નલ આપવા માટે! 🚢' },
+        { elements: ['M', 'g', 'M', 'g', 'M', 'g', 'N', 'N'], result: 'Mg₃N₂', name: 'Magnesium Nitride', desc: 'પાણી સાથે પ્રક્રિયા કરી એમોનિયા આપે! 💨' },
+        { elements: ['B', 'a', 'S'], result: 'BaS', name: 'Barium Sulfide', desc: 'અંધારામાં ચમકતો (Luminous) પાવડર! 🌟' },
+
+        // 🔋 બેટરી અને એડવાન્સ કેમિકલ્સ (Battery & Advanced Chemicals)
+        { elements: ['L', 'i', 'L', 'i', 'O'], result: 'Li₂O', name: 'Lithium Oxide', desc: 'આધુનિક બેટરી અને સિરામિક્સમાં! 🔋' },
+        { elements: ['N', 'a', 'H'], result: 'NaH', name: 'Sodium Hydride', desc: 'પ્રબળ રિડ્યુસિંગ એજન્ટ! ⚡' },
+        { elements: ['N', 'a', 'N', 'a', 'S', 'S', 'O', 'O', 'O'], result: 'Na₂S₂O₃', name: 'Sodium Thiosulfate', desc: 'હાઈપો (ફોટોગ્રાફીમાં નેગેટિવ સાફ કરવા)! 🎞️' },
+
+        // 🧪 અન્ય એસિડ અને હેલોજન સંયોજનો (Other Acids & Halogens)
+        { elements: ['H', 'N', 'O', 'O'], result: 'HNO₂', name: 'Nitrous Acid', desc: 'નાઈટ્રસ એસિડ (અસ્થિર એસિડ)! 💧' },
+        { elements: ['H', 'H', 'S', 'O', 'O', 'O'], result: 'H₂SO₃', name: 'Sulfurous Acid', desc: 'સલ્ફ્યુરસ એસિડ (એસિડ વર્ષાનો ભાગ)! 🌧️' },
+        { elements: ['P', 'C', 'l', 'C', 'l', 'C', 'l', 'C', 'l', 'C', 'l'], result: 'PCl₅', name: 'Phosphorus Pentachloride', desc: 'તીવ્ર વાસવાળો ઘન પદાર્થ! 🧊' },
+        { elements: ['S', 'C', 'l', 'C', 'l'], result: 'SCl₂', name: 'Sulfur Dichloride', desc: 'ચેરી-રેડ રંગનું પ્રવાહી! 🍒' },
+        { elements: ['I', 'C', 'l'], result: 'ICl', name: 'Iodine Monochloride', desc: 'બે હેલોજન ભેગા થઈને બનતું લાલ પ્રવાહી! 🩸' },
+        { elements: ['C', 'H', 'H', 'H', 'C', 'l'], result: 'CH₃Cl', name: 'Chloromethane', desc: 'રેફ્રિજરેટરના ગેસ તરીકે વપરાતો! ❄️' },
+
+
+        // 🟢 નવા એસિડ અને બેઝ (New Acids & Bases)
+        { elements: ['L', 'i', 'O', 'H'], result: 'LiOH', name: 'Lithium Hydroxide', desc: 'સ્પેસક્રાફ્ટમાં CO2 દૂર કરવા! 🚀' },
+        { elements: ['B', 'a', 'O', 'O', 'H', 'H'], result: 'Ba(OH)₂', name: 'Barium Hydroxide', desc: 'બેરાઈટા વોટર (Baryta Water)! 💧' },
+        { elements: ['A', 'l', 'O', 'O', 'O', 'H', 'H', 'H'], result: 'Al(OH)₃', name: 'Aluminium Hydroxide', desc: 'એન્ટાસિડ તરીકે વપરાય! 💊' },
+        { elements: ['H', 'H', 'C', 'O', 'O'], result: 'HCOOH', name: 'Formic Acid', desc: 'કીડીના ડંખમાં હોય છે! 🐜' },
+
+        // 🟢 હેલાઈડ ક્ષારો (Halide Salts)
+        { elements: ['N', 'a', 'B', 'r'], result: 'NaBr', name: 'Sodium Bromide', desc: 'દવાઓમાં વપરાતો ક્ષાર! 💊' },
+        { elements: ['N', 'a', 'I'], result: 'NaI', name: 'Sodium Iodide', desc: 'આયોડિનની ઉણપ દૂર કરવા! 🧂' },
+        { elements: ['K', 'B', 'r'], result: 'KBr', name: 'Potassium Bromide', desc: 'પશુઓની દવામાં વપરાય! 🐕' },
+        { elements: ['C', 'a', 'F', 'F'], result: 'CaF₂', name: 'Calcium Fluoride', desc: 'ફ્લોરાઈટ (Fluorite) ખનીજ! 💎' },
+        { elements: ['M', 'g', 'B', 'r', 'B', 'r'], result: 'MgBr₂', name: 'Magnesium Bromide', desc: 'દરિયાના પાણીમાંથી મળે! 🌊' },
+        { elements: ['F', 'e', 'C', 'l', 'C', 'l'], result: 'FeCl₂', name: 'Iron(II) Chloride', desc: 'લીલાશ પડતો ક્ષાર! 🟢' },
+        { elements: ['F', 'e', 'C', 'l', 'C', 'l', 'C', 'l'], result: 'FeCl₃', name: 'Iron(III) Chloride', desc: 'પાણી શુદ્ધ કરવા માટે વપરાય! 🚰' },
+        { elements: ['C', 'u', 'C', 'l', 'C', 'l'], result: 'CuCl₂', name: 'Copper(II) Chloride', desc: 'ભૂરા-લીલા રંગનો ક્ષાર! 🔵' },
+        { elements: ['Z', 'n', 'C', 'l', 'C', 'l'], result: 'ZnCl₂', name: 'Zinc Chloride', desc: 'બેટરીની પેસ્ટમાં વપરાય! 🔋' },
+        { elements: ['P', 'b', 'C', 'l', 'C', 'l'], result: 'PbCl₂', name: 'Lead(II) Chloride', desc: 'સફેદ રંગનો ભારે ક્ષાર! ⚪' },
+        { elements: ['P', 'b', 'I', 'I'], result: 'PbI₂', name: 'Lead(II) Iodide', desc: 'તેજસ્વી પીળા રંગનો અવક્ષેપ! 🟨' },
+
+        // 🟢 નાઈટ્રેટ્સ અને સલ્ફેટ્સ (Nitrates & Sulfates)
+        { elements: ['A', 'g', 'N', 'O', 'O', 'O'], result: 'AgNO₃', name: 'Silver Nitrate', desc: 'ચૂંટણીની શાહી (Voter Ink) બનાવવા! 👆' },
+        { elements: ['K', 'N', 'O', 'O', 'O'], result: 'KNO₃', name: 'Potassium Nitrate', desc: 'ગનપાવડર (દારૂખાનું) બનાવવા! 🎇' },
+        { elements: ['N', 'a', 'N', 'O', 'O', 'O'], result: 'NaNO₃', name: 'Sodium Nitrate', desc: 'ચિલી સોલ્ટપીટર (ખાતર)! 🌱' },
+        { elements: ['M', 'g', 'S', 'O', 'O', 'O', 'O'], result: 'MgSO₄', name: 'Magnesium Sulfate', desc: 'એપ્સમ સોલ્ટ (દુખાવો મટાડવા)! 🛀' },
+        { elements: ['C', 'a', 'S', 'O', 'O', 'O', 'O'], result: 'CaSO₄', name: 'Calcium Sulfate', desc: 'પ્લાસ્ટર ઓફ પેરિસનો આધાર! 🏥' },
+        { elements: ['N', 'a', 'N', 'a', 'S', 'O', 'O', 'O', 'O'], result: 'Na₂SO₄', name: 'Sodium Sulfate', desc: 'કાચ અને કાગળ ઉદ્યોગમાં! 📄' },
+        { elements: ['K', 'K', 'S', 'O', 'O', 'O', 'O'], result: 'K₂SO₄', name: 'Potassium Sulfate', desc: 'ખેતી માટે ઉત્તમ ખાતર! 🌾' },
+        
+        // 🟢 કાર્બોનેટ્સ (Carbonates)
+        { elements: ['M', 'g', 'C', 'O', 'O', 'O'], result: 'MgCO₃', name: 'Magnesium Carbonate', desc: 'જિમનાસ્ટ લોકો હાથ પર લગાવે તે પાવડર! 🏋️' },
+        { elements: ['K', 'K', 'C', 'O', 'O', 'O'], result: 'K₂CO₃', name: 'Potassium Carbonate', desc: 'પર્લ એશ (Pearl ash)! ⚪' },
+
+        // 🟢 ઓક્સાઈડ અને સલ્ફાઈડ (Other Oxides & Sulfides)
+        { elements: ['A', 'g', 'A', 'g', 'O'], result: 'Ag₂O', name: 'Silver Oxide', desc: 'બટન સેલ (ઘડિયાળની બેટરી) માં! ⌚' },
+        { elements: ['B', 'a', 'O'], result: 'BaO', name: 'Barium Oxide', desc: 'કાચની ચમક વધારવા! 🪟' },
+        { elements: ['P', 'b', 'O', 'O'], result: 'PbO₂', name: 'Lead Dioxide', desc: 'કારની બેટરી (Lead-acid) માં! 🚗' },
+        { elements: ['B', 'B', 'O', 'O', 'O'], result: 'B₂O₃', name: 'Boron Trioxide', desc: 'બોરોસિલેકેટ કાચ બનાવવા! 🧪' },
+        { elements: ['F', 'e', 'S'], result: 'FeS', name: 'Iron Sulfide', desc: 'મૂર્ખનું સોનું (Fool\'s Gold) જેવો દેખાવ! 🪙' },
+        { elements: ['C', 'u', 'S'], result: 'CuS', name: 'Copper Sulfide', desc: 'કાળા રંગનું ખનીજ! ⚫' },
+        { elements: ['N', 'a', 'N', 'a', 'S'], result: 'Na₂S', name: 'Sodium Sulfide', desc: 'ચામડા ઉદ્યોગમાં વાળ દૂર કરવા! 👞' },
+
+        // 🟢 કાર્બાઈડ, ફોસ્ફાઈડ અને અન્ય (Carbides, Nitrides)
+        { elements: ['C', 'a', 'C', 'C'], result: 'CaC₂', name: 'Calcium Carbide', desc: 'ફળો (કેળા/કેરી) પકવવા માટે! 🥭' },
+        { elements: ['S', 'i', 'C'], result: 'SiC', name: 'Silicon Carbide', desc: 'કાર્બોરન્ડમ (હીરા જેવો કઠણ પદાર્થ)! 💎' },
+        { elements: ['A', 'l', 'P'], result: 'AlP', name: 'Aluminium Phosphide', desc: 'અનાજમાં પડતા કીડા મારવાની ગોળી! 💊' },
+        { elements: ['A', 'l', 'N'], result: 'AlN', name: 'Aluminium Nitride', desc: 'LED અને ઇલેક્ટ્રોનિક્સમાં! 💡' },
+
+        // 🟢 અનોખા વાયુઓ (Unique Gases)
+        { elements: ['S', 'F', 'F', 'F', 'F', 'F', 'F'], result: 'SF₆', name: 'Sulfur Hexafluoride', desc: 'ખૂબ જ ભારે ગેસ (અવાજ બદલી નાખે)! 🗣️' },
+        { elements: ['B', 'F', 'F', 'F'], result: 'BF₃', name: 'Boron Trifluoride', desc: 'ઝેરી અને રંગવિહીન વાયુ! 💨' },
+        { elements: ['N', 'F', 'F', 'F'], result: 'NF₃', name: 'Nitrogen Trifluoride', desc: 'માઈક્રોચિપ બનાવવા વપરાતો ગેસ! 🖥️' },
+        { elements: ['C', 'H', 'H', 'O'], result: 'HCHO', name: 'Formaldehyde', desc: 'બાયોલોજી લેબમાં નમૂના સાચવવા! 🐸' },
+      
+      // 🧪 એસિડ અને બેઝ (Acids & Bases)
+        { elements: ['H', 'N', 'O', 'O', 'O'], result: 'HNO₃', name: 'Nitric Acid', desc: 'નાઈટ્રિક એસિડ (ખૂબ જલદ એસિડ)! ☢️' },
+        { elements: ['H', 'H', 'H', 'P', 'O', 'O', 'O', 'O'], result: 'H₃PO₄', name: 'Phosphoric Acid', desc: 'ફોસ્ફોરિક એસિડ! 🧪' },
+        { elements: ['H', 'H', 'C', 'O', 'O', 'O'], result: 'H₂CO₃', name: 'Carbonic Acid', desc: 'સોડા વોટર અને કોલ્ડ્રિંક્સમાં! 🥤' },
+        { elements: ['C', 'a', 'O', 'O', 'H', 'H'], result: 'Ca(OH)₂', name: 'Slaked Lime', desc: 'ફોડેલો ચૂનો (દીવાલ ધોળવા માટે)! 🧱' },
+        { elements: ['M', 'g', 'O', 'O', 'H', 'H'], result: 'Mg(OH)₂', name: 'Milk of Magnesia', desc: 'એસિડિટી મટાડવા (એન્ટાસિડ)! 💊' },
+
+        // 🧂 ધોરણ 10 ના પ્રખ્યાત ક્ષાર (Important Salts)
+        { elements: ['N', 'a', 'N', 'a', 'C', 'O', 'O', 'O'], result: 'Na₂CO₃', name: 'Sodium Carbonate', desc: 'ધોવાનો સોડા (Washing Soda)! 👕' },
+        { elements: ['N', 'H', 'H', 'H', 'H', 'C', 'l'], result: 'NH₄Cl', name: 'Ammonium Chloride', desc: 'નવસાર (ઉર્ધ્વપાતન પામતો પદાર્થ)! 🌫️' },
+        { elements: ['C', 'u', 'S', 'O', 'O', 'O', 'O'], result: 'CuSO₄', name: 'Copper Sulfate', desc: 'મોરથૂથું (ફૂગનાશક)! 🔵' },
+        { elements: ['F', 'e', 'S', 'O', 'O', 'O', 'O'], result: 'FeSO₄', name: 'Iron Sulfate', desc: 'લીલો કસીસ (Green Vitriol)! 🟢' },
+        { elements: ['Z', 'n', 'S', 'O', 'O', 'O', 'O'], result: 'ZnSO₄', name: 'Zinc Sulfate', desc: 'વ્હાઈટ વિટ્રિઓલ! ⚪' },
+        { elements: ['B', 'a', 'C', 'l', 'C', 'l'], result: 'BaCl₂', name: 'Barium Chloride', desc: 'અવક્ષેપન પ્રક્રિયામાં વપરાય! 🧪' },
+        { elements: ['B', 'a', 'S', 'O', 'O', 'O', 'O'], result: 'BaSO₄', name: 'Barium Sulfate', desc: 'સફેદ અવક્ષેપ (White precipitate)! ☁️' },
+
+        // ⚙️ ધાતુ અને અધાતુના ઓક્સાઈડ/સલ્ફાઈડ (Metal/Non-metal Oxides)
+        { elements: ['A', 'l', 'A', 'l', 'O', 'O', 'O'], result: 'Al₂O₃', name: 'Aluminium Oxide', desc: 'એલ્યુમિના (ઉભયગુણી ઓક્સાઈડ)! 🪨' },
+        { elements: ['F', 'e', 'F', 'e', 'O', 'O', 'O'], result: 'Fe₂O₃', name: 'Iron(III) Oxide', desc: 'લોખંડનો કાટ (Rust)! 🟤' },
+        { elements: ['C', 'u', 'C', 'u', 'O'], result: 'Cu₂O', name: 'Copper(I) Oxide', desc: 'લાલ રંગનો ક્યુપ્રસ ઓક્સાઈડ! 🔴' },
+        { elements: ['M', 'n', 'O', 'O'], result: 'MnO₂', name: 'Manganese Dioxide', desc: 'બેટરી અને સેલમાં વપરાય! 🔋' },
+        { elements: ['S', 'O', 'O', 'O'], result: 'SO₃', name: 'Sulfur Trioxide', desc: 'એસિડ વર્ષા માટે જવાબદાર ગેસ! 🌧️' },
+        { elements: ['N', 'N', 'O'], result: 'N₂O', name: 'Nitrous Oxide', desc: 'લાફિંગ ગેસ (હસાવતો વાયુ)! 😂' },
+        { elements: ['P', 'P', 'O', 'O', 'O', 'O', 'O'], result: 'P₂O₅', name: 'Phosphorus Pentoxide', desc: 'ભેજશોષક પદાર્થ! 🏜️' },
+        { elements: ['N', 'a', 'N', 'a', 'O'], result: 'Na₂O', name: 'Sodium Oxide', desc: 'પ્રબળ બેઝિક ઓક્સાઈડ! 🔴' },
+        { elements: ['K', 'K', 'O'], result: 'K₂O', name: 'Potassium Oxide', desc: 'પોટેશિયમ ઓક્સાઈડ! 🟠' },
+
+        // 💨 વાયુઓ અને અન્ય સંયોજનો (Gases & Others)
+        { elements: ['H', 'H', 'S'], result: 'H₂S', name: 'Hydrogen Sulfide', desc: 'સડેલા ઈંડા જેવી વાસવાળો ગેસ! 🥚' },
+        { elements: ['A', 'g', 'A', 'g', 'S'], result: 'Ag₂S', name: 'Silver Sulfide', desc: 'ચાંદી પર લાગતો કાળો કાટ! 💍' },
+        { elements: ['P', 'C', 'l', 'C', 'l', 'C', 'l'], result: 'PCl₃', name: 'Phosphorus Trichloride', desc: 'રંગવિહીન પ્રવાહી! 💧' },
+        { elements: ['A', 'l', 'C', 'l', 'C', 'l', 'C', 'l'], result: 'AlCl₃', name: 'Aluminium Chloride', desc: 'ઉદ્દીપક તરીકે વપરાય! ⚙️' },
+        { elements: ['A', 'g', 'I'], result: 'AgI', name: 'Silver Iodide', desc: 'કૃત્રિમ વરસાદ કરાવવા માટે! 🌧️' },
+
+        // 🧬 કાર્બન અને તેના સંયોજનો (Carbon Compounds - Chapter 4)
+        { elements: ['C', 'H', 'H', 'H', 'H', 'O'], result: 'CH₃OH', name: 'Methanol', desc: 'મિથેનોલ (ઝેરી આલ્કોહોલ)! ☠️' },
+        { elements: ['C', 'H', 'C', 'l', 'C', 'l', 'C', 'l'], result: 'CHCl₃', name: 'Chloroform', desc: 'ક્લોરોફોર્મ (બેભાન કરવા વપરાય)! 😴' },
+        { elements: ['C', 'H', 'H', 'C', 'l', 'C', 'l'], result: 'CH₂Cl₂', name: 'Dichloromethane', desc: 'દ્રાવક તરીકે વપરાય! 🧪' },
+        { elements: ['C', 'C', 'l', 'C', 'l', 'C', 'l', 'C', 'l'], result: 'CCl₄', name: 'Carbon Tetrachloride', desc: 'ડ્રાય-ક્લિનિંગમાં વપરાય! 👔' },
+
+        // Acids & Bases
+        { elements: ['H', 'Cl'],     result: 'HCl',  name: 'Hydrochloric Acid', desc: 'પેટમાં પાચન કરતું એસિડ! 🧪' },
+        { elements: ['N', 'H', 'H', 'H'], result: 'NH₃', name: 'Ammonia', desc: 'ખાતર બનાવવામાં ઉપયોગી! 🌱' },
+        { elements: ['Na', 'O', 'H'], result: 'NaOH', name: 'Sodium Hydroxide', desc: 'સાબુ બનાવવા વપરાય! 🧼' },
+        { elements: ['K', 'O', 'H'],  result: 'KOH',  name: 'Potassium Hydroxide', desc: 'પ્રવાહી સાબુ બનાવવા! 🧴' },
+        { elements: ['H', 'F'],      result: 'HF',   name: 'Hydrofluoric Acid', desc: 'કાચ કાપવા માટે વપરાય! 🪟' },
+        { elements: ['H', 'Br'],     result: 'HBr',  name: 'Hydrobromic Acid', desc: 'શક્તિશાળી એસિડ! ☢️' },
+        { elements: ['H', 'I'],      result: 'HI',   name: 'Hydroiodic Acid', desc: 'ખૂબ જ જલદ એસિડ! 🧪' },
+
+        // Salts & Minerals
+        { elements: ['Na', 'Cl'],    result: 'NaCl', name: 'Sodium Chloride', desc: 'રસોઈનું મીઠું! 🧂' },
+        { elements: ['K', 'Cl'],     result: 'KCl',  name: 'Potassium Chloride', desc: 'મેડિકલ સોલ્ટ! 💊' },
+        { elements: ['M', 'g', 'O'], result: 'MgO',  name: 'Magnesium Oxide', desc: 'સફેદ રાખ! ⚪' },
+        { elements: ['C', 'a', 'O'], result: 'CaO',  name: 'Calcium Oxide', desc: 'કળી ચૂનો! 🧱' },
+        { elements: ['Z', 'n', 'O'], result: 'ZnO',  name: 'Zinc Oxide', desc: 'સનસ્ક્રીન ક્રીમમાં વપરાય! ☀️' },
+        { elements: ['N', 'a', 'F'], result: 'NaF',  name: 'Sodium Fluoride', desc: 'ટૂથપેસ્ટમાં વપરાય! 🪥' },
+        { elements: ['L', 'i', 'Cl'],result: 'LiCl', name: 'Lithium Chloride', desc: 'ફટાકડામાં લાલ રંગ માટે! 🎆' },
+        { elements: ['A', 'g', 'Cl'],result: 'AgCl', name: 'Silver Chloride', desc: 'ફોટોગ્રાફીમાં વપરાય! 📸' },
+        { elements: ['A', 'g', 'Br'],result: 'AgBr', name: 'Silver Bromide', desc: 'કેમેરાની ફિલ્મ માટે! 🎞️' },
+        { elements: ['K', 'I'],      result: 'KI',   name: 'Potassium Iodide', desc: 'રેડિયેશનથી બચવા! ☢️' },
+
+        // Common Compounds & Oxides
+        { elements: ['C', 'O'],      result: 'CO',   name: 'Carbon Monoxide', desc: 'ખૂબ જ ઝેરી ગેસ! ☠️' },
+        { elements: ['S', 'O', 'O'], result: 'SO₂',  name: 'Sulfur Dioxide', desc: 'પ્રદૂષક ગેસ! 🏭' },
+        { elements: ['N', 'O'],      result: 'NO',   name: 'Nitric Oxide', desc: 'વાહનોના ધુમાડામાં! 🚗' },
+        { elements: ['N', 'O', 'O'], result: 'NO₂',  name: 'Nitrogen Dioxide', desc: 'બ્રાઉન ઝેરી ગેસ! 🟤' },
+        { elements: ['H', 'H', 'O', 'O'], result: 'H₂O₂', name: 'Hydrogen Peroxide', desc: 'ઘા સાફ કરવા વપરાય! 🩹' },
+        { elements: ['F', 'e', 'O'], result: 'FeO',  name: 'Iron Oxide', desc: 'લોખંડનો કાટ! ⚙️' },
+        { elements: ['C', 'u', 'O'], result: 'CuO',  name: 'Copper Oxide', desc: 'કાળા રંગનો પાવડર! ⚫' },
+        { elements: ['H', 'g', 'O'], result: 'HgO',  name: 'Mercury Oxide', desc: 'લાલ રંગનું ઝેરી સંયોજન! 🔴' },
+        { elements: ['P', 'b', 'O'], result: 'PbO',  name: 'Lead Oxide', desc: 'બેટરીમાં વપરાય! 🔋' },
+        { elements: ['U', 'O', 'O'], result: 'UO₂',  name: 'Uranium Dioxide', desc: 'ન્યુક્લિયર રિએક્ટરમાં વપરાય! 💥' },
+
+        // Organics & Complex
+        { elements: ['C', 'H', 'H', 'H', 'H'], result: 'CH₄', name: 'Methane', desc: 'કુદરતી ગેસ (CNG)! 🔥' },
+        { elements: ['C', 'C', 'H', 'H', 'H', 'H', 'H', 'H'], result: 'C₂H₆', name: 'Ethane', desc: 'ઇંધણ ગેસ! ⛽' },
+        { elements: ['C', 'C', 'H', 'H', 'H', 'H'], result: 'C₂H₄', name: 'Ethylene', desc: 'પ્લાસ્ટિક બનાવવા માટે! 🛍️' },
+        { elements: ['C', 'C', 'H', 'H'], result: 'C₂H₂', name: 'Acetylene', desc: 'વેલ્ડિંગ માટે વપરાય! 👨‍🏭' },
+        { elements: ['H', 'C', 'N'], result: 'HCN',  name: 'Hydrogen Cyanide', desc: 'ખૂબ જ ખતરનાક ઝેર! ☠️' },
+        { elements: ['C', 'S', 'S'], result: 'CS₂',  name: 'Carbon Disulfide', desc: 'દુર્ગંધ મારતું પ્રવાહી! 🤢' },
+
+        // Complex Salts (Requiring up to 6 atoms max to avoid screen clutter)
+        { elements: ['C', 'a', 'C', 'l', 'Cl'], result: 'CaCl₂', name: 'Calcium Chloride', desc: 'બરફ પીગળાવવા વપરાય! ❄️' },
+        { elements: ['M', 'g', 'C', 'l', 'Cl'], result: 'MgCl₂', name: 'Magnesium Chloride', desc: 'સ્વાસ્થ્ય માટે જરૂરી! 💊' },
+        { elements: ['Z', 'n', 'S'], result: 'ZnS',  name: 'Zinc Sulfide', desc: 'અંધારામાં ચમકતું કમ્પાઉન્ડ! 🌟' },
+        { elements: ['P', 'b', 'S'], result: 'PbS',  name: 'Lead Sulfide', desc: 'ગેલેના (Galena) ખનીજ! 🪨' },
+        { elements: ['H', 'g', 'S'], result: 'HgS',  name: 'Mercury Sulfide', desc: 'સિંદૂર (Cinnabar)! 🔴' },
+        { elements: ['S', 'i', 'O', 'O'], result: 'SiO₂', name: 'Silica', desc: 'રેતી અને કાચનો મુખ્ય ભાગ! 🏖️' }
+    ];
+      // --- 5. INITIALIZE ELEMENTS UI ---
+    function initElements() {
+        const list = document.getElementById('elementList');
+        list.innerHTML = '';
+        for (let key in elementData) {
+            let el = elementData[key];
+            let btn = document.createElement('div');
+            btn.className = 'elem-btn';
+            btn.onclick = () => addElement(key);
+            btn.style.borderColor = el.color;
+            btn.style.boxShadow = `0 0 5px ${el.color}`;
+            btn.innerHTML = `${key}<div class="elem-name">${el.name}</div>`;
+            list.appendChild(btn);
+        }
+    }
+
+    // --- 6. ADD ATOM & UPDATE TRAY ---
+    function updateSelectionTray() {
+        if (selectedElementNames.length > 0) {
+            selectionTray.innerHTML = selectedElementNames.join(' + ');
+            selectionTray.style.display = 'block';
+        } else {
+            selectionTray.style.display = 'none';
+        }
+    }
+
+    function addElement(type) {
+        if(atoms.length >= 8) { playSound('error'); return; } // વધુમાં વધુ 8 તત્વો
+        
+        playSound('pop');
+        
+        atoms.push({
+            type: type,
+            x: Math.random() * (canvas.width - 60) + 30,
+            y: -50,
+            vx: (Math.random() - 0.5) * 4,
+            vy: 0,
+            radius: elementData[type].radius,
+            color: elementData[type].color
+        });
+        
+        selectedElementNames.push(type); // ટ્રે માં નામ ઉમેરો
+        updateSelectionTray();
+        
+        if(atoms.length >= 2) mixBtn.style.display = 'block';
+    }
+
+    // --- 7. ANIMATION & PHYSICS ---
+    function animate() {
+        if(!isAnimating) { requestAnimationFrame(animate); isAnimating = true; }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < atoms.length; i++) {
+            let atom = atoms[i];
+            atom.vy += 0.2; // Gravity
+            
+            // Wall bounce
+            if (atom.x + atom.radius > canvas.width || atom.x - atom.radius < 0) {
+                atom.vx *= -0.8;
+                if(atom.x - atom.radius < 0) atom.x = atom.radius;
+                if(atom.x + atom.radius > canvas.width) atom.x = canvas.width - atom.radius;
+            }
+            // Floor bounce
+            if (atom.y + atom.radius > canvas.height) {
+                atom.y = canvas.height - atom.radius;
+                atom.vy *= -0.6;
+                atom.vx *= 0.95; // Friction
+            }
+            
+            atom.x += atom.vx;
+            atom.y += atom.vy;
+            drawAtom(atom);
+        }
+        requestAnimationFrame(animate);
+    }
+
+    function drawAtom(atom) {
+        let grad = ctx.createRadialGradient(atom.x - atom.radius/3, atom.y - atom.radius/3, atom.radius/4, atom.x, atom.y, atom.radius);
+        grad.addColorStop(0, '#fff');
+        grad.addColorStop(0.3, atom.color);
+        grad.addColorStop(1, '#000');
+        
+        ctx.beginPath();
+        ctx.arc(atom.x, atom.y, atom.radius, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = atom.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = "white";
+        ctx.font = "bold 18px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(atom.type, atom.x, atom.y);
+    }
+
+    // --- 8. MIXING LOGIC ---
+    function mixElements() {
+        if (atoms.length < 2) return;
+        let currentMix = atoms.map(a => a.type).sort();
+        let foundRecipe = null;
+
+        for (let recipe of recipes) {
+            let recipeMix = [...recipe.elements].sort();
+            if (JSON.stringify(currentMix) === JSON.stringify(recipeMix)) {
+                foundRecipe = recipe;
+                break;
+            }
+        }
+
+        if (foundRecipe) {
+            showResult(true, foundRecipe);
+            playSound('success');
+            score += 20;
+            document.getElementById('scoreVal').innerText = score;
+        } else {
+            showResult(false, null);
+            playSound('error');
+        }
+        resetLab(false);
+    }
+
+    // --- 9. RESULT & RESET ---
+    function showResult(success, recipe) {
+        const box = document.getElementById('resultBox');
+        const title = document.getElementById('resultTitle');
+        const desc = document.getElementById('resultDesc');
+        
+        box.style.display = 'block';
+        
+        if (success) {
+            box.style.borderColor = '#00ff00';
+            box.style.boxShadow = '0 0 50px rgba(0, 255, 0, 0.5)';
+            title.innerHTML = `🎉 \u0AB8\u0AAB\u0AB3 \u0AAA\u0ACD\u0AB0\u0AAF\u0ACB\u0A97! (Success)`; 
+            title.style.color = '#00ff00';
+            desc.innerHTML = `
+                <div style="font-size: 50px; margin: 10px;">⚗️</div>
+                <h2 style="color:white; margin:5px;">${recipe.result}</h2>
+                <h3 style="color:#00d2ff; margin:5px;">${recipe.name}</h3>
+                <p style="color:#ccc;">${recipe.desc}</p>
+            `;
+        } else {
+            box.style.borderColor = '#ff4757';
+            box.style.boxShadow = '0 0 50px rgba(255, 71, 87, 0.5)';
+            title.innerHTML = `💥 \u0AA8\u0ABF\u0AB7\u0ACD\u0AAB\u0AB3! (Failed)`; 
+            title.style.color = '#ff4757';
+            desc.innerHTML = `
+                <div style="font-size: 50px; margin: 10px;">⚠️</div>
+                <p style="color:white;">\u0A86 \u0AAE\u0ABF\u0AB6\u0ACD\u0AB0\u0AA3\u0AA5\u0AC0 \u0A95\u0A82\u0A88 \u0AAC\u0AA8\u0ACD\u0AAF\u0AC1\u0A82 \u0AA8\u0AB9\u0AC0\u0A82!</p>
+                <p style="color:#888;">\u0AAC\u0AC0\u0A9C\u0AC1\u0A82 \u0A95\u0A82\u0A88\u0A95 \u0A9F\u0ACD\u0AB0\u0ABE\u0AAF \u0A95\u0AB0\u0ACB.</p>
+            `;
+        }
+    }
+
+    function closeResult() {
+        document.getElementById('resultBox').style.display = 'none';
+    }
+
+    function resetLab(fullReset = true) {
+        atoms = [];
+        selectedElementNames = [];
+        updateSelectionTray();
+        mixBtn.style.display = 'none';
+        if(fullReset) playSound('pop');
+    }
+
+    // --- 10. FULLSCREEN & STARTUP ---
+    function resize() {
+        if(wrapper) {
+            canvas.width = wrapper.clientWidth;
+            canvas.height = wrapper.clientHeight;
+        }
+    }
+    window.addEventListener('resize', resize);
+    
+    function startGame() {
+        document.getElementById('introScreen').style.display = 'none';
+        
+        // Enter Fullscreen
+        if (wrapper.requestFullscreen) {
+            wrapper.requestFullscreen().catch(err => console.log(err));
+        } else if (wrapper.webkitRequestFullscreen) { /* Safari */
+            wrapper.webkitRequestFullscreen();
+        } else if (wrapper.msRequestFullscreen) { /* IE11 */
+            wrapper.msRequestFullscreen();
+        }
+
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        initElements();
+        setTimeout(resize, 300); // Wait for fullscreen animation
+        animate();
+    }
+
+    function exitGame() {
+        // Exit Fullscreen
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+        
+        document.getElementById('introScreen').style.display = 'flex';
+        resetLab(false);
+        setTimeout(resize, 300);
+    }
+
+    // Handle Mobile 'Back' Button for Fullscreen
+    document.addEventListener('fullscreenchange', exitHandler);
+    document.addEventListener('webkitfullscreenchange', exitHandler);
+    
+    function exitHandler() {
+        if (!document.fullscreenElement && !document.webkitIsFullScreen) {
+            document.getElementById('introScreen').style.display = 'flex';
+            resetLab(false);
+            setTimeout(resize, 200);
+        }
+    }
+
+    // Prevent random scrolling while tapping elements
+    canvas.addEventListener('touchstart', (e) => e.preventDefault(), {passive: false});
+
+</script>
+</body>
+</html>
