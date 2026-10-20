@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>જ્ઞાનની રસ્સાખેંચ PRO MAX</title>
+<style>
+    /* --- Basic Setup & Animations --- */
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
+    
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    body { 
+        margin: 0; padding: 0; color: #fff; overflow-x: hidden; 
+        background: linear-gradient(-45deg, #0b0b13, #1a1a2e, #0f2027, #203a43);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    /* ફુલસ્ક્રીન થાય ત્યારે જ પેજને લોક કરવા */
+    body.fullscreen-active { overflow: hidden !important; touch-action: none !important; overscroll-behavior: none !important; }
+
+    /* --- Smart Ad Banner --- */
+    #ad-wrapper {
+        display: none; width: 100%; height: 55px; max-height: 55px; background-color: #000; 
+        overflow: hidden; position: absolute; top: 0; left: 0; z-index: 9999;
+        justify-content: center; align-items: center; border-bottom: 2px solid rgba(0, 242, 254, 0.8);
+        box-shadow: 0 5px 25px rgba(0,242,254,0.3);
+    }
+    
+    #game-container {
+        position: relative; width: 100%; max-width: 1200px; height: 650px; 
+        margin: 0 auto; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
+        overflow: hidden; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column;
+        box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    }
+    
+    #game-container:fullscreen, #game-container:-webkit-full-screen { 
+        width: 100vw !important; height: 100vh !important; max-width: none !important; border: none !important; 
+    }
+    #game-container.fullscreen-mode #ad-wrapper { display: flex; }
+    #game-container.fullscreen-mode .screen { height: calc(100% - 55px); top: 55px; }
+
+    /* --- Screens Setup --- */
+    .screen {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        display: none; flex-direction: column; justify-content: flex-start; align-items: center;
+        background: rgba(11, 11, 19, 0.85); backdrop-filter: blur(20px); z-index: 100; padding: 20px;
+        overflow-y: auto; 
+    }
+    .screen.active { display: flex; animation: fadeIn 0.4s ease-out; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    /* --- UI Elements PRO MAX --- */
+    .title-neon { 
+        font-size: 2.8rem; margin: 10px 0; font-weight: 900; text-align: center;
+        background: linear-gradient(to right, #00f2fe, #4facfe, #00f2fe);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.6));
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+        line-height: 1.5 !important;
+    }
+    .subtitle { color: #ccc; margin-bottom: 20px; font-size: 1.2rem; text-align: center; font-weight: 500; letter-spacing: 1px; }
+    
+    .cover-image { width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 15px 50px rgba(0, 242, 254, 0.5); border: 3px solid rgba(0, 242, 254, 0.8); margin-bottom: 20px; transition: transform 0.3s; }
+    .cover-image:hover { transform: scale(1.02); }
+
+    .btn {
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); color: white; border: none;
+        padding: 14px 30px; font-size: 1.2rem; font-weight: 900; border-radius: 50px; margin: 10px; cursor: pointer;
+        box-shadow: 0 10px 25px rgba(0, 242, 254, 0.5); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-transform: uppercase; letter-spacing: 1px;
+    }
+    .btn:hover { box-shadow: 0 15px 35px rgba(0, 242, 254, 0.7); transform: translateY(-3px); }
+    .btn:active { transform: scale(0.92); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
+    
+    .btn-secondary { background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); box-shadow: 0 10px 25px rgba(255, 65, 108, 0.5); }
+    .btn-secondary:hover { box-shadow: 0 15px 35px rgba(255, 65, 108, 0.7); }
+    
+    .btn-special { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); box-shadow: 0 10px 25px rgba(253, 160, 133, 0.5); color: #000; }
+
+    .grid-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 750px; width: 100%; margin-bottom: 20px; }
+    .grid-btn { 
+        flex: 1 1 calc(33% - 15px); min-width: 130px; padding: 15px 10px; font-size: 1.2rem;
+        background: rgba(255,255,255,0.05); border: 2px solid rgba(0,242,254,0.3); border-radius: 15px; color: #fff; font-weight: bold;
+        box-shadow: inset 0 0 10px rgba(0,242,254,0.05); cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);
+    }
+    .grid-btn:hover, .grid-btn:active { background: rgba(0,242,254,0.2); border-color: #00f2fe; box-shadow: 0 0 20px rgba(0,242,254,0.8); transform: translateY(-3px);}
+
+    /* --- Tug of War Game Area --- */
+    #game-area { flex-direction: row; justify-content: space-between; align-items: stretch; padding: 0; overflow: hidden; background: transparent;}
+    
+    #center-zone { position: absolute; left: 50%; top: 0; height: 100%; width: 4px; background: rgba(255,255,255,0.1); transform: translateX(-50%); z-index: 1; border-left: 2px dashed rgba(255,255,255,0.4); }
+    
+    /* Animated Rope PRO MAX */
+    #rope { 
+        position: absolute; top: 50%; left: 0; width: 100%; height: 22px; 
+        background: repeating-linear-gradient(45deg, #d4af37, #d4af37 10px, #a67c00 10px, #a67c00 20px); 
+        transform: translateY(-50%); box-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 0 15px #d4af37; z-index: 2; 
+        transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 15px; border: 1px solid #fff;
+    }
+
+    /* Animated Knot & Characters */
+    #knot { 
+        position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; 
+        background: radial-gradient(circle, #ff4b2b 0%, #8a0000 100%); border-radius: 50%; border: 4px solid #fff; 
+        transform: translate(-50%, -50%); box-shadow: 0 0 40px #ff4b2b, inset 0 0 15px #fff; 
+        transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 3;
+        display: flex; justify-content: space-between; align-items: center; padding: 0 50px;
+    }
+    
+    .puller { font-size: 3.5rem; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); position: absolute; }
+    #puller1 { left: -70px; transform: scaleX(-1) rotate(-15deg); } 
+    #puller2 { right: -70px; transform: rotate(-15deg); } 
+
+    .player-side { width: 50%; height: 100%; padding: 15px 25px; display: flex; flex-direction: column; justify-content: space-between; z-index: 5; }
+    #player1-side { background: linear-gradient(90deg, rgba(0, 242, 254, 0.1) 0%, transparent 100%); }
+    #player2-side { background: linear-gradient(-90deg, rgba(255, 65, 108, 0.1) 0%, transparent 100%); }
+    
+    .player-header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    background: rgba(0,0,0,0.7); padding: 10px 15px; border-radius: 15px; 
+    backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); 
+    position: relative; z-index: 100; margin-top: 5px; 
+}
+
+.score-badge { 
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); 
+    color: #000; padding: 8px 20px; border-radius: 20px; 
+    font-weight: 900; font-size: 1.3rem; 
+    box-shadow: 0 0 15px rgba(253, 160, 133, 0.8); 
+    border: 2px solid #fff; letter-spacing: 1px; 
+}
+
+    /* Question Boxes PRO MAX */
+    .q-box { 
+        background: rgba(15, 15, 25, 0.85); border: 2px solid; padding: 20px; 
+        border-radius: 20px; font-size: 1.4rem; font-weight: 900; text-align: center; 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.8); z-index: 10; margin-bottom: 10px; backdrop-filter: blur(10px);
+    }
+  #qbox-center { 
+    position: absolute; 
+    top: 90px; /* આનાથી બોક્સ સ્કોરની નીચે આવી જશે */
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 90%; 
+    max-width: 800px; 
+    background: rgba(0, 0, 0, 0.95); /* બેકગ્રાઉન્ડ ડાર્ક કર્યું જેથી લખાણ સ્પષ્ટ વંચાય */
+    border-color: #ffeb3b; 
+    box-shadow: 0 0 30px rgba(255, 235, 59, 0.6); 
+    color: #ffeb3b; 
+    display: none; 
+    z-index: 50; 
+    padding: 15px; 
+    border-radius: 15px; 
+}
+    #qbox-p1 { border-color: #00f2fe; box-shadow: 0 0 25px rgba(0, 242, 254, 0.3); color: #00f2fe; display: none; margin-top: 10px; }
+    #qbox-p2 { border-color: #ff416c; box-shadow: 0 0 25px rgba(255, 65, 108, 0.3); color: #ff416c; display: none; margin-top: 10px; }
+
+    .options-grid { display: flex; flex-direction: column; gap: 10px; margin-top: auto; margin-bottom: 15px;}
+    .opt-btn { 
+        background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.3); 
+        color: #fff; padding: 15px; border-radius: 12px; font-size: 1.2rem; 
+        cursor: pointer; backdrop-filter: blur(5px); font-weight: bold; transition: all 0.2s; 
+        text-align: left; padding-left: 20px; position: relative; overflow: hidden;
+    }
+    .opt-btn:hover { background: rgba(255,255,255,0.2); border-color: #fff; transform: translateX(5px); }
+    .opt-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
+
+    /* Flash Effects */
+    .flash-green { animation: flashGreen 0.5s ease; }
+    .flash-red { animation: flashRed 0.5s ease; }
+    @keyframes flashGreen { 0% { background-color: rgba(0,255,0,0.6); box-shadow: inset 0 0 100px rgba(0,255,0,0.8); } 100% { background-color: transparent; } }
+    @keyframes flashRed { 0% { background-color: rgba(255,0,0,0.6); box-shadow: inset 0 0 100px rgba(255,0,0,0.8); } 100% { background-color: transparent; } }
+
+    #exit-btn { position: absolute; top: 10px; right: 10px; background: #ff4b2b; color: #fff; border: 2px solid #fff; padding: 8px 20px; border-radius: 10px; cursor: pointer; z-index: 1000; display: none; font-weight: bold; box-shadow: 0 0 15px rgba(255, 75, 43, 0.8); transition: 0.3s; text-transform: uppercase; }
+    #exit-btn:hover { background: #fff; color: #ff4b2b; }
+    #game-container.fullscreen-mode #exit-btn { display: block; }
+    
+    .loader { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #00f2fe; border-bottom: 5px solid #ff416c; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 30px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+</style>
+</head>
+  <span><!--more--></span>
+<body>
+<div class="ad-container" style="width: 100%; min-height: 55px; display: flex; justify-content: center; overflow: hidden; background: transparent;">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1628441013593322" crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:100%;height:55px;max-width:100%;"
+         data-ad-client="ca-pub-1628441013593322"
+         data-ad-slot="1454627676"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+
+<div id="game-container">
+    
+    <div id="ad-wrapper">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1628441013593322" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-pub-1628441013593322" data-ad-slot="1454627676"></ins>
+        <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+    </div>
+
+    <button id="exit-btn" onclick="playClick(); exitFullscreenMode()">❌ EXIT</button>
+
+    <div id="main-menu" class="screen active">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZAMJ_Jmgr2t6fl4D8o07Ma5hTooJzdD9iOxHme5zoGzWjpGFXYtrps6Iuxw3u6jp1U7wasSCNha7NKABrQU-VWJP1zav9Q94PCln4AQhlFADlaDPt3rScAO7wd5HtFr1Qf1WgquSoaMvg53nOFI8r23xZLvlh4jQd4-Z60l1gwhdiJl8FsJVQI-5qBDzp/s320/1000605511.png" alt="Cover" class="cover-image">
+        <h1 class="title-neon">જ્ઞાનની રસ્સાખેંચ <span style="color:#ffeb3b;">PRO MAX</span></h1>
+        <p class="subtitle">તમારું ધોરણ પસંદ કરો અને યુદ્ધ શરૂ કરો!</p>
+       <button class="btn" onclick="playClick(); enterFullscreenMode(); showScreen('std-select')">PLAY NOW 🎮</button>
+    </div>
+
+    <div id="std-select" class="screen">
+        <h1 class="title-neon">ધોરણ પસંદ કરો</h1>
+        <div class="grid-container" id="std-grid"></div>
+        <button class="btn btn-secondary" onclick="playClick(); showScreen('main-menu')">Back</button>
+    </div>
+
+    <div id="std10-mode" class="screen">
+        <h1 class="title-neon">ધોરણ 10 - મોડ પસંદ કરો</h1>
+        <button class="btn" onclick="playClick(); goToQuestionMode(10, 'dynamic')">🧮 સ્માર્ટ ગણિત (Auto Generate)</button>
+        <button class="btn" onclick="playClick(); showScreen('subject-select')">📚 પાઠ્યપુસ્તક (MCQ Database)</button>
+        <button class="btn btn-special" onclick="playClick(); loadMixDatabase()">🔥 મિક્સ મહાસંગ્રામ</button>
+        <button class="btn btn-secondary" onclick="playClick(); showScreen('std-select')">Back</button>
+    </div>
+
+    <div id="subject-select" class="screen">
+        <h1 class="title-neon">વિષય પસંદ કરો</h1>
+        <div class="grid-container">
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('std10-maths-mcq.js', 'ગણિત')">ગણિત</button>
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('std10-sci-mcq.js', 'વિજ્ઞાન')">વિજ્ઞાન</button>
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('std10-ss-mcq.js', 'સા.વિજ્ઞાન')">સા.વિજ્ઞાન</button>
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('Std10_Eng_MCQ.js', 'અંગ્રેજી')">અંગ્રેજી</button>
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('std10-guj-mcq.js', 'ગુજરાતી')">ગુજરાતી</button>
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('Std10_Hindi_MCQ.js', 'હિન્દી')">હિન્દી</button>
+            <button class="grid-btn" onclick="playClick(); loadSubjectDB('std10-sanskrit-mcq.js', 'સંસ્કૃત')">સંસ્કૃત</button>
+        </div>
+        <button class="btn btn-secondary" onclick="playClick(); showScreen('std10-mode')">Back</button>
+    </div>
+
+    <div id="chapter-select" class="screen">
+        <h1 class="title-neon" id="selected-sub-title">ચેપ્ટર પસંદ કરો</h1>
+        <div class="grid-container" id="chapter-grid"></div>
+        <button class="btn btn-secondary" onclick="playClick(); showScreen('subject-select')">Back</button>
+    </div>
+
+    <div id="q-mode-select" class="screen">
+        <h1 class="title-neon">પ્રશ્નની સ્ટાઇલ પસંદ કરો</h1>
+        <p class="subtitle">બંને પ્લેયરને એક જ પ્રશ્ન આપવો છે કે અલગ-અલગ?</p>
+        <button class="btn" onclick="playClick(); startGame('same')" style="padding: 20px; font-size: 1.4rem;">🎯 બંને માટે એક જ પ્રશ્ન</button>
+        <button class="btn btn-special" onclick="playClick(); startGame('different')" style="padding: 20px; font-size: 1.4rem;">⚔️ બંને માટે અલગ-અલગ પ્રશ્ન</button>
+        <button class="btn btn-secondary" onclick="playClick(); showScreen('std-select')">Back</button>
+    </div>
+
+    <div id="loading-screen" class="screen">
+        <h1 class="title-neon">ડેટા લોડ થઈ રહ્યો છે...</h1>
+        <div class="loader"></div>
+    </div>
+
+    <div id="game-area" class="screen">
+        <div id="center-zone"></div>
+        <div id="rope"></div>
+        
+        <div id="knot">
+            <div class="puller" id="puller1">🧑‍🎓</div>
+            <div class="puller" id="puller2">🥷</div>
+        </div>
+        
+        <div class="q-box" id="qbox-center">પ્રશ્ન...</div>
+
+        <div class="player-side" id="player1-side">
+            <div class="player-header">
+                <div class="player-name" id="p1-name">P1 (Blue)</div>
+                <div class="score-badge" id="p1-score">Score: 0</div>
+            </div>
+            <div class="q-box" id="qbox-p1">P1 પ્રશ્ન...</div>
+            <div class="options-grid" id="p1-options"></div>
+        </div>
+
+        <div class="player-side" id="player2-side">
+            <div class="player-header">
+                <div class="score-badge" id="p2-score">Score: 0</div>
+                <div class="player-name" id="p2-name">P2 (Red)</div>
+            </div>
+            <div class="q-box" id="qbox-p2" style="text-align: right;">P2 પ્રશ્ન...</div>
+            <div class="options-grid" id="p2-options"></div>
+        </div>
+    </div>
+
+    <div id="win-screen" class="screen" style="justify-content: center;">
+        <h1 class="title-neon" id="win-text" style="color:#ffeb3b; font-size: 4rem; text-shadow: 0 0 30px #ffeb3b;">Winner!</h1>
+        <button class="btn" onclick="playClick(); showScreen('main-menu'); exitFullscreenMode();" style="margin-top: 30px; font-size: 1.5rem;">Main Menu 🏠</button>
+    </div>
+
+</div>
+
+<script>
+// --- AUDIO SYSTEM (Pro Max Sounds without external files) ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTone(freq, type, duration, vol=0.1) {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    let osc = audioCtx.createOscillator();
+    let gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+}
+
+function playClick() { playTone(600, 'sine', 0.1, 0.05); }
+function playCorrect() { 
+    playTone(800, 'triangle', 0.1, 0.1); 
+    setTimeout(()=>playTone(1200, 'triangle', 0.2, 0.1), 100); 
+}
+function playWrong() { playTone(300, 'sawtooth', 0.3, 0.1); }
+function playWin() { 
+    playTone(523.25, 'sine', 0.2, 0.2); // C5
+    setTimeout(()=>playTone(659.25, 'sine', 0.2, 0.2), 150); // E5
+    setTimeout(()=>playTone(783.99, 'sine', 0.4, 0.2), 300); // G5
+    setTimeout(()=>playTone(1046.50, 'sine', 0.6, 0.2), 450); // C6
+}
+
+// --- UI Navigation ---
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+}
+
+// ફુલસ્ક્રીન અને ઓટોમેટિક લેન્ડસ્કેપ મોડ
+async function enterFullscreenMode() {
+    let elem = document.getElementById('game-container');
+    if (elem.requestFullscreen) await elem.requestFullscreen();
+    else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
+    
+    elem.classList.add('fullscreen-mode');
+    document.body.classList.add('fullscreen-active');
+    
+    // મોબાઈલને આડો (Landscape) લોક કરવાનો કોડ
+    try {
+        if(screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock("landscape");
+        }
+    } catch (error) {
+        console.log("Orientation lock not supported or blocked.");
+    }
+}
+
+function exitFullscreenMode() {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    document.getElementById('game-container').classList.remove('fullscreen-mode');
+    document.body.classList.remove('fullscreen-active');
+    try { if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch(e){}
+}
+
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+        document.getElementById('game-container').classList.remove('fullscreen-mode');
+        document.body.classList.remove('fullscreen-active');
+    }
+});
+
+// --- Generate Standard Buttons ---
+const stdGrid = document.getElementById('std-grid');
+for (let i = 1; i <= 10; i++) {
+    let btn = document.createElement('button');
+    btn.className = 'grid-btn'; 
+    btn.innerHTML = `ધોરણ ${i}`;
+    btn.onclick = () => {
+        playClick();
+        if(i === 10) showScreen('std10-mode');
+        else goToQuestionMode(i, 'dynamic');
+    };
+    stdGrid.appendChild(btn);
+}
+
+// --- Global State ---
+let currentGameMode = ''; 
+let playingStd = 1;
+let currentDBQuestions = [];
+let gameActive = false;
+let ropePosition = 50;
+let questionStyle = 'same'; 
+
+let p1CurrentQ = {};
+let p2CurrentQ = {};
+let p1Score = 0;
+let p2Score = 0;
+
+// --- Flow Logic ---
+function goToQuestionMode(std, mode) {
+    playingStd = std;
+    currentGameMode = mode;
+    showScreen('q-mode-select');
+}
+
+function startGame(style) {
+    if(audioCtx.state === 'suspended') audioCtx.resume(); // Ensure audio plays
+    questionStyle = style; 
+    initGameArea();
+}
+
+// --- DYNAMIC MATH ENGINE ---
+function generateMathQuestion(std) {
+    let patternsAvailable = [];
+    if(std <= 3) patternsAvailable = [0, 1, 2, 4]; 
+    else if(std <= 5) patternsAvailable = [0, 1, 2, 3, 4, 11, 12]; 
+    else if(std <= 8) patternsAvailable = [2, 3, 5, 6, 7, 9, 10, 13, 14]; 
+    else patternsAvailable = [5, 6, 7, 8, 9, 10, 13, 14]; 
+
+    let pattern = patternsAvailable[Math.floor(Math.random() * patternsAvailable.length)];
+    let q = "", ans = 0, options = [];
+    let numScale = std * 10; 
+    let a = Math.floor(Math.random() * numScale) + 1; let b = Math.floor(Math.random() * numScale) + 1; let c = Math.floor(Math.random() * 10) + 2;
+
+    switch(pattern) {
+        case 0: q = `${a} + ${b} = ?`; ans = a + b; break;
+        case 1: if(a < b) [a, b] = [b, a]; q = `${a} - ${b} = ?`; ans = a - b; break;
+        case 2: a = Math.floor(Math.random() * (std * 3)) + 2; b = Math.floor(Math.random() * (std * 2)) + 2; q = `${a} × ${b} = ?`; ans = a * b; break;
+        case 3: a = Math.floor(Math.random() * 10) + 2; b = Math.floor(Math.random() * 10) + 2; ans = a; q = `${a * b} ÷ ${b} = ?`; break;
+        case 4: ans = b; q = `${a} + ? = ${a + b}`; break;
+        case 5: a = Math.floor(Math.random() * 20) + 1; b = Math.floor(Math.random() * 10) + 1; c = Math.floor(Math.random() * 10) + 1; q = `${a} + ${b} × ${c} = ?`; ans = a + (b * c); break;
+        case 6: a = Math.floor(Math.random() * 15) + 2; q = `${a} નો વર્ગ (Square)?`; ans = a * a; break;
+        case 7: a = Math.floor(Math.random() * 15) + 2; q = `√${a * a} = ?`; ans = a; break;
+        case 8: a = Math.floor(Math.random() * 9) + 2; q = `${a} નો ઘન (Cube)?`; ans = a * a * a; break;
+        case 9: a = (Math.floor(Math.random() * 9) + 1) * 10; b = (Math.floor(Math.random() * 10) + 1) * 50; q = `${b} ના ${a}% કેટલા?`; ans = (b * a) / 100; break;
+        case 10: a = Math.floor(Math.random() * 10) + 2; ans = Math.floor(Math.random() * 15) + 2; q = `જો ${a}x = ${a * ans}, તો x = ?`; break;
+        case 11: a = Math.floor(Math.random() * 15) + 2; q = `ચોરસની લંબાઈ ${a}, પરિમિતિ?`; ans = 4 * a; break;
+        case 12: a = Math.floor(Math.random() * 15) + 2; b = Math.floor(Math.random() * 10) + 2; q = `લંબચોરસ (લંબાઈ ${a}, પહોળાઈ ${b}) ક્ષેત્રફળ?`; ans = a * b; break;
+        case 13: a = Math.floor(Math.random() * 20) + 5; b = Math.floor(Math.random() * 20) + 5; c = Math.floor(Math.random() * 20) + 5; ans = Math.round((a + b + c) / 3); q = `${a}, ${b}, ${c} ની સરેરાશ?`; break;
+        case 14: a = Math.floor(Math.random() * 10) + 1; b = Math.floor(Math.random() * 10) + 1; q = `જો x=${a}, y=${b}, તો x²+y = ?`; ans = (a*a) + b; break;
+    }
+
+    options.push(ans.toString());
+    while(options.length < 4) {
+        let wrong = ans + (Math.floor(Math.random() * 20) - 10);
+        if(wrong !== ans && !options.includes(wrong.toString()) && wrong >= 0) options.push(wrong.toString());
+    }
+    options.sort(() => Math.random() - 0.5); 
+    return { q: q, options: options, ans: ans.toString() };
+}
+
+// --- GITHUB DATABASE LOADER ---
+const GITHUB_BASE_URL = "https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-data@main/";
+
+function loadSubjectDB(fileName, subName) {
+    showScreen('loading-screen');
+    if(window.njQuestionsDatabase) window.njQuestionsDatabase = null;
+    let script = document.createElement('script'); script.src = GITHUB_BASE_URL + fileName;
+    script.onload = () => {
+        if(window.njQuestionsDatabase && window.njQuestionsDatabase.length > 0) {
+            currentDBQuestions = window.njQuestionsDatabase; generateChapterMenu(subName);
+        } else { alert("ડેટાબેઝ ખાલી છે!"); showScreen('subject-select'); }
+    };
+    script.onerror = () => { alert("ઈન્ટરનેટ કનેક્શન તપાસો."); showScreen('subject-select'); };
+    document.body.appendChild(script);
+}
+
+function generateChapterMenu(subName) {
+    document.getElementById('selected-sub-title').innerHTML = `${subName} - ચેપ્ટર પસંદ કરો`;
+    let chapterGrid = document.getElementById('chapter-grid'); chapterGrid.innerHTML = '';
+    let uniqueChapters = [...new Set(currentDBQuestions.map(item => item.chapter))];
+
+    let btnMix = document.createElement('button'); btnMix.className = 'grid-btn'; btnMix.style.background = 'rgba(255, 65, 108, 0.3)';
+    btnMix.innerHTML = "બધા ચેપ્ટર મિક્સ 🔀"; btnMix.onclick = () => { playClick(); prepDbGame("ALL"); }; chapterGrid.appendChild(btnMix);
+
+    uniqueChapters.forEach(ch => {
+        let btn = document.createElement('button'); btn.className = 'grid-btn'; btn.innerHTML = `ચેપ્ટર ${ch}`;
+        btn.onclick = () => { playClick(); prepDbGame(ch); }; chapterGrid.appendChild(btn);
+    });
+    showScreen('chapter-select');
+}
+
+function prepDbGame(chapter) {
+    if(chapter !== "ALL") currentDBQuestions = currentDBQuestions.filter(item => item.chapter == chapter);
+    goToQuestionMode(10, 'database');
+}
+
+function loadMixDatabase() {
+    showScreen('loading-screen');
+    let files = ['Std10_Eng_MCQ.js', 'Std10_Hindi_MCQ.js', 'std10-ss-mcq.js', 'std10-sci-mcq.js', 'std10-sanskrit-mcq.js', 'std10-maths-mcq.js', 'std10-guj-mcq.js'];
+    currentDBQuestions = []; let loadedCount = 0;
+    files.forEach(file => {
+        let script = document.createElement('script'); script.src = GITHUB_BASE_URL + file;
+        script.onload = () => {
+            if(window.njQuestionsDatabase) { currentDBQuestions = currentDBQuestions.concat(window.njQuestionsDatabase); window.njQuestionsDatabase = null; }
+            loadedCount++; if(loadedCount === files.length) goToQuestionMode(10, 'database');
+        };
+        script.onerror = () => { loadedCount++; }; document.body.appendChild(script);
+    });
+}
+
+// --- TUG OF WAR - ADVANCED ENGINE ---
+const knot = document.getElementById('knot');
+const qBoxCenter = document.getElementById('qbox-center');
+const qBoxP1 = document.getElementById('qbox-p1');
+const qBoxP2 = document.getElementById('qbox-p2');
+const p1Options = document.getElementById('p1-options');
+const p2Options = document.getElementById('p2-options');
+
+function initGameArea() {
+    enterFullscreenMode();
+    showScreen('game-area');
+    ropePosition = 50; p1Score = 0; p2Score = 0;
+    document.getElementById('p1-score').innerHTML = 'Score: 0';
+    document.getElementById('p2-score').innerHTML = 'Score: 0';
+    updateRopeVisual();
+    gameActive = true;
+    
+    if(questionStyle === 'same') {
+        qBoxCenter.style.display = 'block'; qBoxP1.style.display = 'none'; qBoxP2.style.display = 'none';
+        loadSameQuestion();
+    } else {
+        qBoxCenter.style.display = 'none'; qBoxP1.style.display = 'block'; qBoxP2.style.display = 'block';
+        loadPlayerQuestion(1); loadPlayerQuestion(2);
+    }
+}
+
+function loadSameQuestion() {
+    if (!gameActive) return;
+    p1CurrentQ = getNewQuestion(); p2CurrentQ = p1CurrentQ; 
+    qBoxCenter.innerHTML = p1CurrentQ.q;
+    
+    let shuffledOptions = [...p1CurrentQ.options].sort(() => Math.random() - 0.5);
+    p1Options.innerHTML = ''; p2Options.innerHTML = '';
+
+    shuffledOptions.forEach(opt => {
+        let btn1 = document.createElement('button'); btn1.className = 'opt-btn'; btn1.innerHTML = opt;
+        btn1.onclick = () => handleSameAnswer(1, opt); p1Options.appendChild(btn1);
+
+        let btn2 = document.createElement('button'); btn2.className = 'opt-btn'; btn2.innerHTML = opt;
+        btn2.onclick = () => handleSameAnswer(2, opt); p2Options.appendChild(btn2);
+    });
+}
+
+  // માસ્ટર ચેકિંગ ફંક્શન (જવાબમાંથી સ્પેસ અને ટેગ કાઢીને ચોક્કસ મેચ કરશે)
+function isAnswerMatch(selected, correct) {
+    if (selected == null || correct == null) return false;
+    
+    function cleanText(text) {
+        let temp = document.createElement("div");
+        temp.innerHTML = String(text);
+        let textContent = temp.textContent || temp.innerText || "";
+        return textContent.replace(/\s+/g, '').toLowerCase();
+    }
+
+    return cleanText(selected) === cleanText(correct);
+}
+  
+function handleSameAnswer(playerNum, selectedAnswer) {
+    if (!gameActive) return;
+    
+    let targetQ = p1CurrentQ;
+    let correctAnsText = "";
+    
+    // ડેટાબેઝનો જવાબ (નંબર) હોય તો વિકલ્પમાંથી ટેક્સ્ટ લેશે, નહીંતર સીધું ટેક્સ્ટ લેશે
+    let ansValue = targetQ.ans !== undefined ? targetQ.ans : targetQ.answer;
+    
+    if (typeof ansValue === 'number') {
+        correctAnsText = targetQ.options[ansValue];
+    } else {
+        correctAnsText = ansValue;
+    }
+
+    let isCorrect = isAnswerMatch(selectedAnswer, correctAnsText);
+    
+    applyRopePhysics(playerNum, isCorrect);
+    if(gameActive) loadSameQuestion(); 
+}
+
+function loadPlayerQuestion(playerNum) {
+    if (!gameActive) return;
+    let newQ = getNewQuestion();
+    let optionsBox = playerNum === 1 ? p1Options : p2Options;
+    let qBox = playerNum === 1 ? qBoxP1 : qBoxP2;
+    
+    if(playerNum === 1) p1CurrentQ = newQ; else p2CurrentQ = newQ;
+    
+    qBox.innerHTML = newQ.q;
+    let shuffledOptions = [...newQ.options].sort(() => Math.random() - 0.5);
+    optionsBox.innerHTML = '';
+
+    shuffledOptions.forEach(opt => {
+        let btn = document.createElement('button'); btn.className = 'opt-btn'; btn.innerHTML = opt;
+        btn.onclick = () => handleDiffAnswer(playerNum, opt); optionsBox.appendChild(btn);
+    });
+}
+
+function handleDiffAnswer(playerNum, selectedAnswer) {
+    if (!gameActive) return;
+    
+    let targetQ = playerNum === 1 ? p1CurrentQ : p2CurrentQ;
+    let correctAnsText = "";
+    
+    // ડેટાબેઝનો જવાબ (નંબર) હોય તો વિકલ્પમાંથી ટેક્સ્ટ લેશે, નહીંતર સીધું ટેક્સ્ટ લેશે
+    let ansValue = targetQ.ans !== undefined ? targetQ.ans : targetQ.answer;
+    
+    if (typeof ansValue === 'number') {
+        correctAnsText = targetQ.options[ansValue];
+    } else {
+        correctAnsText = ansValue;
+    }
+
+    let isCorrect = isAnswerMatch(selectedAnswer, correctAnsText);
+    
+    applyRopePhysics(playerNum, isCorrect);
+    if(gameActive) loadPlayerQuestion(playerNum); 
+}
+
+function getNewQuestion() {
+    if (currentGameMode === 'dynamic') return generateMathQuestion(playingStd);
+    else {
+        if(currentDBQuestions.length === 0) { endGame("પ્રશ્નો પૂરા થઈ ગયા! ડ્રો!"); return {q:"End", options:[], ans:""}; }
+        return currentDBQuestions[Math.floor(Math.random() * currentDBQuestions.length)];
+    }
+}
+
+function applyRopePhysics(playerNum, isCorrect) {
+    let sideElement = document.getElementById(playerNum === 1 ? 'player1-side' : 'player2-side');
+    
+    if (isCorrect) {
+        playCorrect();
+        if (playerNum === 1) { ropePosition -= 12; p1Score += 10; }
+        if (playerNum === 2) { ropePosition += 12; p2Score += 10; }
+        sideElement.classList.add('flash-green');
+    } else {
+        playWrong();
+        if (playerNum === 1) ropePosition += 8;
+        if (playerNum === 2) ropePosition -= 8;
+        sideElement.classList.add('flash-red');
+    }
+    
+    setTimeout(() => { sideElement.classList.remove('flash-green', 'flash-red'); }, 500);
+
+    document.getElementById('p1-score').innerHTML = 'Score: ' + p1Score;
+    document.getElementById('p2-score').innerHTML = 'Score: ' + p2Score;
+
+    let pullEffect = playerNum === 1 ? "translateX(-25px)" : "translateX(25px)";
+    document.getElementById('rope').style.transform = `translateY(-50%) ${pullEffect}`;
+    setTimeout(() => { document.getElementById('rope').style.transform = `translateY(-50%)`; }, 200);
+
+    updateRopeVisual();
+    checkWinCondition();
+}
+
+function updateRopeVisual() {
+    knot.style.left = ropePosition + "%";
+}
+
+function checkWinCondition() {
+    if (ropePosition <= 5) endGame("P1 (Blue) Wins! 🎉");
+    else if (ropePosition >= 95) endGame("P2 (Red) Wins! 🎉");
+}
+
+function endGame(message) {
+    gameActive = false;
+    playWin();
+    document.getElementById('win-text').innerHTML = message;
+    showScreen('win-screen');
+}
+</script>
+</body>
+</html>
