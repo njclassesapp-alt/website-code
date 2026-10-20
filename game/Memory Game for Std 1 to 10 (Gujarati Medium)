@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Memory Trainer Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@600;800&display=swap');
+
+        :root {
+            --primary: #4a148c;
+            --secondary: #7c43bd;
+            --accent: #00e5ff;
+            --bg-dark: #12122a;
+            --success: #00e676;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%;
+            background-color: var(--bg-dark);
+            font-family: 'Hind Vadodara', sans-serif;
+            overflow-y: auto; /* Allow scrolling on main page */
+        }
+
+        /* --- 3D Game Container --- */
+        #gameWrapper {
+            position: relative;
+            width: 100%; max-width: 600px;
+            height: 80vh; min-height: 500px; max-height: 700px;
+            margin: 20px auto;
+            background: radial-gradient(circle at top, #2a2a4a, #0a0a1a);
+            border-radius: 20px;
+            border: 4px solid var(--accent);
+            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* --- Pseudo-Fullscreen (Keep Status Bar) --- */
+        .fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            z-index: 99999 !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            border: none !important;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(10, 10, 26, 0.95);
+            color: white; text-align: center;
+            z-index: 100;
+            padding: 20px; box-sizing: border-box;
+            transition: opacity 0.4s ease;
+            overflow-y: auto;
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 32px; font-weight: 800;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        /* --- Top Bar --- */
+        #topBar {
+            position: absolute; top: 0; left: 0; width: 100%;
+            padding: 15px 20px; box-sizing: border-box;
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            z-index: 50;
+        }
+
+        .stats-badge {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--accent);
+            padding: 8px 15px; border-radius: 20px;
+            color: var(--accent); font-weight: bold; font-size: 16px;
+            box-shadow: 0 0 10px rgba(0,229,255,0.2);
+        }
+
+        .exit-btn {
+            background: #ff1744; color: white; border: none;
+            padding: 8px 15px; border-radius: 20px; font-weight: bold;
+            cursor: pointer; display: none;
+            box-shadow: 0 0 10px rgba(255, 23, 68, 0.5);
+        }
+
+        /* --- Buttons --- */
+        .btn-3d {
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+            color: white; border: none;
+            padding: 15px 40px; font-size: 22px; font-weight: bold;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.3);
+            transition: all 0.2s; margin-top: 20px;
+            border: 2px solid #b388ff;
+        }
+        .btn-3d:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.1);
+        }
+
+        /* --- 3D Grid & Cards --- */
+        #gameArea {
+            position: absolute; top: 70px; left: 0; width: 100%; height: calc(100% - 70px);
+            display: flex; justify-content: center; align-items: center; padding: 10px; box-sizing: border-box;
+        }
+
+        .grid-container {
+            display: grid; gap: 10px; width: 100%; max-width: 500px;
+            justify-content: center; align-content: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            background-color: transparent; aspect-ratio: 1 / 1;
+            cursor: pointer; -webkit-tap-highlight-color: transparent;
+        }
+
+        .card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card.matched .card-inner {
+            transform: rotateY(180deg) scale(0.95);
+            animation: glowPulse 1.5s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 10px var(--success), inset 0 0 20px rgba(0,230,118,0.5); }
+            to { box-shadow: 0 0 25px var(--success), inset 0 0 40px rgba(0,230,118,0.8); }
+        }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 15px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+        }
+
+        /* 3D Front (Question Mark) */
+        .card-front {
+            background: linear-gradient(135deg, #311b92, #512da8);
+            border: 2px solid #7c43bd; color: rgba(255,255,255,0.5); font-size: 30px;
+            transform: translateZ(5px);
+        }
+
+        /* 3D Back (Emoji) */
+        .card-back {
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            transform: rotateY(180deg) translateZ(5px);
+            font-size: 35px; border: 3px solid var(--accent);
+        }
+
+        /* Intro Info */
+        .intro-box {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px;
+            border-left: 4px solid var(--accent); text-align: left; width: 90%; max-width: 400px;
+            margin-bottom: 15px;
+        }
+        .intro-img { width: 100%; max-width: 250px; border-radius: 15px; border: 2px solid var(--accent); margin-bottom: 15px;}
+        
+        .level-text { font-size: 24px; color: #ffd740; font-weight: bold; margin-bottom: 10px;}
+
+    </style>
+</head>
+<body>
+
+<div class="separator" style="clear: both; text-align: center;">
+    <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj8GqBhir2StS90GMYP42GqDQ-xPT0o7IVevbV49KJTqFIa1xTXDdaKON1UA8ndQNoBipplPSO5TcklC9ybXsMGTpRvbxN2KVeqI2F2g8MyGJ2YogEWfBeJgukvuu3657po8JvSfgVYxPlB8SMDMRqdbIb-28RyIlMlZD4FGdgJD4hQEEm3ZGQZcZ7QCHWh/s320/1000557152.png" style="display: block; padding: 1em 0; text-align: center;">
+        <img alt="" border="0" width="320" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj8GqBhir2StS90GMYP42GqDQ-xPT0o7IVevbV49KJTqFIa1xTXDdaKON1UA8ndQNoBipplPSO5TcklC9ybXsMGTpRvbxN2KVeqI2F2g8MyGJ2YogEWfBeJgukvuu3657po8JvSfgVYxPlB8SMDMRqdbIb-28RyIlMlZD4FGdgJD4hQEEm3ZGQZcZ7QCHWh/s320/1000557152.png" class="intro-img"/>
+    </a>
+</div>
+  <span><!--more--></span>
+<div id="gameWrapper">
+    <div id="topBar">
+        <div class="stats-badge">Lvl: <span id="levelDisplay">1</span> | 🔄 <span id="movesDisplay">0</span></div>
+        <button id="exitBtn" class="exit-btn" onclick="exitFullscreen()">Exit ❌</button>
+    </div>
+
+    <div id="introScreen" class="screen">
+        <h1>🧠 મેમરી પાવર 3D</h1>
+        <div class="intro-box">
+            <h3 style="color:var(--accent); margin:0 0 10px 0;">🎮 નિયમો:</h3>
+            <ul style="margin:0; padding-left:20px; color:#ddd; font-size:15px; line-height:1.5;">
+                <li>બે કાર્ડ ખોલો અને જોડી બનાવો.</li>
+                <li>જેમ લેવલ પાર કરશો, ગેમ અઘરી થશે!</li>
+                <li>ઓછી ચાલમાં પૂરું કરો.</li>
+            </ul>
+        </div>
+        <button class="btn-3d" onclick="openFullscreenAndStart()">Play Now ▶️</button>
+    </div>
+
+    <div id="levelUpScreen" class="screen" style="display: none;">
+        <h1>🎉 Excellent! 🎉</h1>
+        <div class="level-text">Level <span id="completedLevel">1</span> Completed!</div>
+        <div class="intro-box" style="text-align:center;">
+            <p><strong>ચાલ (Moves):</strong> <span id="finalMoves">0</span></p>
+            <p style="color:#aaa; font-size:14px;">હવે તૈયાર થઈ જાઓ અઘરા લેવલ માટે!</p>
+        </div>
+        <button class="btn-3d" onclick="startNextLevel()">Next Level 🚀</button>
+    </div>
+
+    <div id="winScreen" class="screen" style="display: none;">
+        <h1 style="color: #00e676;">🏆 YOU ARE A GENIUS!</h1>
+        <p>તમે બધા લેવલ પાર કરી લીધા છે!</p>
+        <button class="btn-3d" onclick="resetFullGame()">ફરીથી રમો 🔄</button>
+    </div>
+
+    <div id="gameArea" style="display: none;">
+        <div class="grid-container" id="gridContainer"></div>
+    </div>
+</div>
+<script>
+    const wrapper = document.getElementById('gameWrapper');
+    const exitBtn = document.getElementById('exitBtn');
+    const gridContainer = document.getElementById('gridContainer');
+    const introScreen = document.getElementById('introScreen');
+    const levelUpScreen = document.getElementById('levelUpScreen');
+    const winScreen = document.getElementById('winScreen');
+    const gameArea = document.getElementById('gameArea');
+    const levelDisplay = document.getElementById('levelDisplay');
+    const movesDisplay = document.getElementById('movesDisplay');
+
+    // બહુ બધા Emojis નો ડેટાબેઝ
+    const allEmojis = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🐤','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋','🐌','🐞','🐜','🦟','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🐊','🐅','🐆','🦓','🦍','🦧','🐘','🦛','🦏','🐪','🐫','🦒','🦘','🐃','🐂','🐄','🐎','🐖','🐏','🐑','🦙','🐐','🦌','🐕','🐩','🦮','🐕‍🦺','🐈','🐓','🦃','🦚','🦜','🦢','🦩','🕊️','🐇','🦝','🦨','🦡','🦦','🦥','🐁','🐀','🐿️','🦔'];
+
+    let level = 1;
+    let maxLevel = 10;
+    let moves = 0;
+    let matchedPairs = 0;
+    let totalPairs = 0;
+    let flippedCards = [];
+    let isLocked = false;
+
+    // --- Audio System ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+    
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSound(type) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'flip') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+            osc.start(now); osc.stop(now + 0.1);
+        } else if (type === 'match') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now);
+            osc.frequency.setValueAtTime(600, now + 0.1); osc.frequency.setValueAtTime(800, now + 0.2);
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        } else if (type === 'error') {
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now);
+            osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'win') {
+            osc.type = 'square'; osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(900, now + 0.5);
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+            osc.start(now); osc.stop(now + 0.5);
+        }
+    }
+
+    // --- Pseudo-Fullscreen (Keep Status Bar) ---
+    function openFullscreenAndStart() {
+        initAudio();
+        wrapper.classList.add('fullscreen-mode');
+        document.body.style.overflow = 'hidden'; // પોસ્ટનું સ્ક્રોલ બંધ કરો
+        exitBtn.style.display = 'block';
+        
+        introScreen.style.display = 'none';
+        startGame();
+    }
+
+    function exitFullscreen() {
+        wrapper.classList.remove('fullscreen-mode');
+        document.body.style.overflow = 'auto'; // પોસ્ટનું સ્ક્રોલ ચાલુ કરો
+        exitBtn.style.display = 'none';
+        
+        // Reset everything to intro
+        gameArea.style.display = 'none';
+        levelUpScreen.style.display = 'none';
+        winScreen.style.display = 'none';
+        introScreen.style.display = 'flex';
+        level = 1;
+    }
+
+    // --- Game Logic ---
+    function startGame() {
+        moves = 0;
+        matchedPairs = 0;
+        flippedCards = [];
+        isLocked = false;
+        
+        movesDisplay.innerText = moves;
+        levelDisplay.innerText = level;
+        
+        gameArea.style.display = 'flex';
+        setupGrid();
+    }
+
+    function startNextLevel() {
+        levelUpScreen.style.display = 'none';
+        level++;
+        startGame();
+    }
+
+    function resetFullGame() {
+        winScreen.style.display = 'none';
+        level = 1;
+        startGame();
+    }
+
+    function setupGrid() {
+        gridContainer.innerHTML = '';
+        
+        // લેવલ મુજબ કાર્ડની સંખ્યા વધશે (લેવલ 1 = 4 જોડી, લેવલ 2 = 6 જોડી...)
+        totalPairs = 3 + level; 
+        if (totalPairs > 18) totalPairs = 18; // Max 36 cards
+        
+        // Random Emojis સિલેક્ટ કરો
+        let shuffledEmojis = [...allEmojis].sort(() => 0.5 - Math.random());
+        let selectedEmojis = shuffledEmojis.slice(0, totalPairs);
+        
+        // ડબલ કરો અને મિક્સ કરો
+        let cardsArray = [...selectedEmojis, ...selectedEmojis].sort(() => 0.5 - Math.random());
+        
+        // Grid Columns નક્કી કરો (મોબાઈલમાં સારી રીતે દેખાય તે માટે)
+        let cols = 4;
+        if (cardsArray.length > 16) cols = 5;
+        if (cardsArray.length > 25) cols = 6;
+        gridContainer.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+        // HTML માં કાર્ડ બનાવો
+        cardsArray.forEach((icon, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.icon = icon;
+            
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front">?</div>
+                    <div class="card-back">${icon}</div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => flipCard(card));
+            gridContainer.appendChild(card);
+        });
+    }
+
+    function flipCard(card) {
+        if (isLocked) return;
+        if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+        playSound('flip');
+        card.classList.add('flipped');
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            moves++;
+            movesDisplay.innerText = moves;
+            checkForMatch();
+        }
+    }
+
+    function checkForMatch() {
+        let card1 = flippedCards[0];
+        let card2 = flippedCards[1];
+
+        if (card1.dataset.icon === card2.dataset.icon) {
+            // Match Found!
+            playSound('match');
+            card1.classList.add('matched');
+            card2.classList.add('matched');
+            matchedPairs++;
+            flippedCards = [];
+
+            if (matchedPairs === totalPairs) {
+                setTimeout(endLevel, 800);
+            }
+        } else {
+            // No Match
+            isLocked = true;
+            playSound('error');
+            setTimeout(() => {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                flippedCards = [];
+                isLocked = false;
+            }, 1000); // 1 સેકન્ડ પછી પાછા ફરશે
+        }
+    }
+
+    function endLevel() {
+        playSound('win');
+        gameArea.style.display = 'none';
+        
+        if (level >= maxLevel) {
+            winScreen.style.display = 'flex';
+        } else {
+            document.getElementById('completedLevel').innerText = level;
+            document.getElementById('finalMoves').innerText = moves;
+            levelUpScreen.style.display = 'flex';
+        }
+    }
+
+</script>
+</body>
+</html>
+
