@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maths Logic: Find Missing Number</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2962ff; /* Blue */
+            --secondary: #448aff;
+            --accent: #ff6d00; /* Orange */
+            --bg: #e3f2fd;
+            --white: #ffffff;
+            --text: #37474f;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .app-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #bbdefb;
+            min-height: 80vh;
+        }
+
+        /* HEADER */
+        .top-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 30px 20px 40px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        .title-text { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: 1px; }
+        
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: -20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 3px solid white;
+        }
+
+        /* CONTENT */
+        .content-area { flex: 1; padding: 25px; overflow-y: auto; }
+        .screen { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .screen.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* INTRO CARDS */
+        .info-box {
+            background: #f1f8e9;
+            border-left: 5px solid #66bb6a;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .info-title { font-weight: 700; color: #2e7d32; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .info-list { margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.6; }
+
+        /* GAME UI */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #f5f5f5;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .question-box {
+            background: #fff3e0;
+            border: 2px dashed var(--accent);
+            padding: 30px 10px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .sequence-display {
+            font-size: 28px;
+            font-weight: 800;
+            color: #333;
+            letter-spacing: 2px;
+            word-spacing: 5px;
+        }
+        
+        .missing-box {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            border: 3px solid var(--primary);
+            border-radius: 8px;
+            color: var(--primary);
+            background: white;
+        }
+
+        /* OPTIONS GRID */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-option:active { transform: scale(0.96); }
+        .btn-option.correct { background: #4caf50; color: white; border-color: #4caf50; }
+        .btn-option.wrong { background: #f44336; color: white; border-color: #f44336; }
+
+        /* CONTROLS */
+        select {
+            width: 100%; padding: 15px; font-size: 16px;
+            border: 2px solid #ddd; border-radius: 12px;
+            outline: none; margin-bottom: 20px; background: white;
+            font-family: 'Noto Sans Gujarati', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--primary); color: white; border: none;
+            width: 100%; padding: 16px; font-size: 18px;
+            border-radius: 50px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(41, 98, 255, 0.3);
+            transition: 0.2s;
+        }
+        .btn-primary:active { transform: translateY(2px); }
+
+        /* RESULT */
+        .score-circle {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: var(--primary); color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 40px; font-weight: 800;
+            margin: 20px auto; border: 6px solid #e3f2fd;
+        }
+
+        @media (max-width: 380px) {
+            .sequence-display { font-size: 22px; }
+            .btn-option { padding: 12px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="top-header">
+        <div class="title-text">Maths Logic</div>
+        <div style="font-size: 14px; opacity: 0.9;">Brain Trainer Game</div>
+    </div>
+    
+    <div style="text-align: center;">
+        <div class="badge">🔢 શ્રેણી પૂરી કરો</div>
+    </div>
+
+    <div class="content-area">
+
+        <div id="screen-intro" class="screen active">
+            <div class="info-box">
+                <div class="info-title">🎮 આ ગેમમાં શું કરવાનું છે?</div>
+                <ul class="info-list">
+                    <li>તમારી સ્ક્રીન પર નંબરની એક પેટર્ન આવશે. (જેમ કે: 2, 4, 6, __)</li>
+                    <li>એક નંબર ખૂટતો હશે.</li>
+                    <li>તમારે લોજિક લગાવીને સાચો નંબર શોધવાનો છે.</li>
+                </ul>
+            </div>
+
+            <div class="info-box" style="background: #fff3e0; border-color: #ff9800;">
+                <div class="info-title" style="color: #ef6c00;">🧠 ફાયદાઓ</div>
+                <ul class="info-list">
+                    <li>તાર્કિક શક્તિ (Logic) વધશે.</li>
+                    <li>ગણિતમાં ગણતરી ઝડપી બનશે.</li>
+                    <li>મગજ એકદમ શાર્પ થશે.</li>
+                </ul>
+            </div>
+          <span><!--more--></span>
+            <button class="btn-primary" onclick="switchScreen('screen-level')">આગળ વધો 👉</button>
+        </div>
+<div class="separator" style="clear: both;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVtSgmehHdx9KHN6bdzEqOWt94lll6622MsK3RUr5kswI3ejXWM9MapasSpFUjwUmcLjYN3n_e6x4E3G9YYD1eKPijNJCyKeUEFZsurA0uuNepF6YdzTbn7S9UXr0l5fnPL_ga3SGl8imaODW3PLi9UHTJv2EjBMQ0EjOMZigwYp01TWiZGVhZhaPS97Hr/s2752/1000557289.png" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" width="320" data-original-height="1536" data-original-width="2752" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVtSgmehHdx9KHN6bdzEqOWt94lll6622MsK3RUr5kswI3ejXWM9MapasSpFUjwUmcLjYN3n_e6x4E3G9YYD1eKPijNJCyKeUEFZsurA0uuNepF6YdzTbn7S9UXr0l5fnPL_ga3SGl8imaODW3PLi9UHTJv2EjBMQ0EjOMZigwYp01TWiZGVhZhaPS97Hr/s320/1000557289.png"/></a></div> <span><!--more--></span>
+        <div id="screen-level" class="screen">
+            <h3 style="text-align: center; color: var(--text);">ધોરણ પસંદ કરો</h3>
+            <p style="text-align: center; color: #777; margin-bottom: 20px;">
+                જે ધોરણ પસંદ કરશો, તે મુજબના પ્રશ્નો આવશે.
+            </p>
+            
+            <select id="std-select">
+                <option value="1">ધોરણ 1 (સરળ સરવાળા)</option>
+                <option value="2">ધોરણ 2 (બાદબાકી પેટર્ન)</option>
+                <option value="3">ધોરણ 3 (ગુણાકાર/ઘડિયા)</option>
+                <option value="4">ધોરણ 4 (મોટી સંખ્યા)</option>
+                <option value="5">ધોરણ 5 (મિશ્ર પેટર્ન)</option>
+                <option value="6">ધોરણ 6 (વર્ગ/Square)</option>
+                <option value="7">ધોરણ 7 (ઘન/Cube)</option>
+                <option value="8">ધોરણ 8 (અઘરી શ્રેણી)</option>
+                <option value="9">ધોરણ 9 (Logic Pro)</option>
+                <option value="10">ધોરણ 10 (Master Mind)</option>
+            </select>
+
+            <button class="btn-primary" onclick="startGame()">ગેમ સ્ટાર્ટ કરો ▶️</button>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <div class="stats-bar">
+                <span id="level-display">Std 1</span>
+                <span id="q-count">Q: 1/10</span>
+                <span id="score-display">Score: 0</span>
+            </div>
+
+            <div class="question-box">
+                <p style="color: #777; font-size: 14px; margin-top: 0;">નીચેની શ્રેણી પૂર્ણ કરો:</p>
+                <div class="sequence-display" id="seq-text">Loading...</div>
+            </div>
+
+            <div class="options-grid" id="options-container">
+                </div>
+            
+            <div id="feedback-msg" style="text-align: center; margin-top: 15px; font-weight: bold; height: 20px;"></div>
+        </div>
+
+        <div id="screen-result" class="screen" style="text-align: center;">
+            <h2 style="color: var(--primary);">🎉 પરિણામ 🎉</h2>
+            <p style="color: #666;">તમારો ફાઇનલ સ્કોર</p>
+            
+            <div class="score-circle" id="final-score">0/10</div>
+            
+            <h3 id="result-comment" style="color: #333;">Good Job!</h3>
+            
+            <button class="btn-primary" onclick="location.reload()">ફરીથી રમો 🔄</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- GAME ENGINE ---
+    let currentStd = 1;
+    let score = 0;
+    let qIndex = 0;
+    let totalQ = 10;
+    let correctAnswer = 0;
+    let isLocked = false;
+
+    function switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function startGame() {
+        currentStd = parseInt(document.getElementById('std-select').value);
+        score = 0;
+        qIndex = 0;
+        document.getElementById('level-display').innerText = `Std ${currentStd}`;
+        document.getElementById('score-display').innerText = `Score: 0`;
+        switchScreen('screen-game');
+        generateQuestion();
+    }
+
+    // --- MAGIC LOGIC GENERATOR ---
+    // This function creates infinite patterns based on grade
+    function generateQuestion() {
+        isLocked = false;
+        document.getElementById('feedback-msg').innerText = "";
+        qIndex++;
+        
+        if(qIndex > totalQ) {
+            endGame();
+            return;
+        }
+        
+        document.getElementById('q-count').innerText = `Q: ${qIndex}/${totalQ}`;
+
+        // Generate Logic based on Std
+        let seq = [];
+        let rule = ""; 
+        let startNum = Math.floor(Math.random() * 20) + 1; // Random start
+        let diff = Math.floor(Math.random() * 5) + 1; // Random gap
+
+        // --- Difficulty Logic ---
+        if (currentStd <= 2) {
+            // Addition / Subtraction
+            if(Math.random() > 0.5) diff = diff; else diff = -diff; // +/-
+            if(startNum < 10) startNum += 10; // Avoid negative
+            for(let i=0; i<5; i++) seq.push(startNum + (i * diff));
+        } 
+        else if (currentStd <= 5) {
+            // Multiplication / Bigger Gaps
+            startNum = Math.floor(Math.random() * 10) + 2;
+            if(Math.random() > 0.5) {
+                // Table logic (e.g. 5, 10, 15)
+                for(let i=1; i<=5; i++) seq.push(startNum * i);
+            } else {
+                // Big jumps
+                diff = Math.floor(Math.random() * 10) + 5;
+                for(let i=0; i<5; i++) seq.push(startNum + (i * diff));
+            }
+        }
+        else if (currentStd <= 7) {
+            // Squares / Mixed
+            if(Math.random() > 0.5) {
+                // Squares: 1, 4, 9...
+                startNum = Math.floor(Math.random() * 5) + 1;
+                for(let i=0; i<5; i++) seq.push((startNum+i)*(startNum+i));
+            } else {
+                // Double step: +2, +4, +6...
+                let curr = startNum;
+                for(let i=0; i<5; i++) {
+                    seq.push(curr);
+                    curr += (i+1)*2; 
+                }
+            }
+        }
+        else {
+            // Std 8-10: Hard Logic
+            let type = Math.floor(Math.random() * 3);
+            if(type === 0) {
+                // Cubes: 1, 8, 27...
+                startNum = Math.floor(Math.random() * 3) + 1;
+                for(let i=0; i<5; i++) seq.push((startNum+i)**3);
+            } else if (type === 1) {
+                // Fibonacci-style: 1, 2, 3, 5, 8
+                seq = [startNum, startNum+diff];
+                for(let i=2; i<5; i++) seq.push(seq[i-1] + seq[i-2]);
+            } else {
+                // x2 + 1 Logic
+                for(let i=0; i<5; i++) seq.push((startNum+i)*2 + 1);
+            }
+        }
+
+        // Hide one number (Usually the 4th one)
+        let missingIndex = 3; 
+        correctAnswer = seq[missingIndex];
+        seq[missingIndex] = '<span class="missing-box">?</span>';
+
+        // Update UI
+        document.getElementById('seq-text').innerHTML = seq.join(" , ");
+
+        // Generate Options (1 correct + 3 wrong)
+        generateOptions(correctAnswer);
+    }
+
+    function generateOptions(ans) {
+        let options = new Set();
+        options.add(ans);
+
+        while(options.size < 4) {
+            // Generate close distractors (ans +/- random)
+            let distractor = ans + (Math.floor(Math.random() * 10) - 5);
+            if(distractor > 0 && distractor !== ans) options.add(distractor);
+        }
+
+        // Convert Set to Array and Shuffle
+        let optArray = Array.from(options).sort(() => Math.random() - 0.5);
+
+        let html = '';
+        optArray.forEach(num => {
+            html += `<button class="btn-option" onclick="checkAns(this, ${num})">${num}</button>`;
+        });
+        document.getElementById('options-container').innerHTML = html;
+    }
+
+    function checkAns(btn, userVal) {
+        if(isLocked) return;
+        isLocked = true;
+
+        if(userVal === correctAnswer) {
+            score++;
+            btn.classList.add('correct');
+            document.getElementById('score-display').innerText = `Score: ${score}`;
+            document.getElementById('feedback-msg').innerHTML = "<span style='color:green'>✅ સાચું! (Correct)</span>";
+        } else {
+            btn.classList.add('wrong');
+            // Highlight correct one
+            document.querySelectorAll('.btn-option').forEach(b => {
+                if(parseInt(b.innerText) === correctAnswer) b.classList.add('correct');
+            });
+            document.getElementById('feedback-msg').innerHTML = "<span style='color:red'>❌ ખોટું! (Wrong)</span>";
+        }
+
+        setTimeout(generateQuestion, 1500);
+    }
+
+    function endGame() {
+        switchScreen('screen-result');
+        document.getElementById('final-score').innerText = `${score}/${totalQ}`;
+        
+        let msg = "Keep Practicing!";
+        if(score === 10) msg = "🥇 Genius! અદ્ભુત!";
+        else if(score >= 7) msg = "🥈 Very Good!";
+        else if(score >= 4) msg = "🥉 Good Attempt!";
+        
+        document.getElementById('result-comment').innerText = msg;
+    }
+</script>
+
+</body>
+</html>
