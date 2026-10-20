@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Time Master: ઘડિયાળ શીખો</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;800&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2084776488291335" crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --primary: #4A148C;
+            --secondary: #7C4DFF;
+            --accent: #00E676;
+            --bg: #F3E5F5;
+            --white: #FFFFFF;
+            --text: #333333;
+            --wrong: #FF1744;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+        }
+
+        /* હોમ સ્ક્રીન */
+        #home-screen {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--white);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            display: block; 
+        }
+
+        .header-img-container { text-align: center; margin-bottom: 20px; }
+        .header-img-container img { max-width: 100%; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+
+        h1 { color: var(--primary); text-align: center; font-size: 28px; margin-bottom: 5px; font-weight: 800;}
+        .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; }
+
+        .info-card {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 6px solid var(--secondary);
+        }
+
+        .info-card h3 { margin: 0 0 10px 0; color: var(--primary); }
+        .info-card ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8; color: #444; }
+
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 600; margin-bottom: 10px; color: var(--primary); }
+        select {
+            width: 100%; padding: 15px; font-size: 16px; border-radius: 12px;
+            border: 2px solid #ce93d8; outline: none; background: #fff;
+            font-family: inherit; font-weight: 600; color: var(--primary);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white; border: none; width: 100%; padding: 18px;
+            font-size: 20px; border-radius: 50px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(124, 77, 255, 0.4);
+            transition: transform 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-play:active { transform: scale(0.95); }
+
+        /* એડ્સ કન્ટેનર */
+        .ad-container { text-align: center; margin: 20px 0; min-height: 50px; background: #f9f9f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+        /* ફૂલ-સ્ક્રીન ગેમપ્લે એરિયા */
+        #game-screen {
+            display: none;
+            background: #121212;
+            color: white;
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            padding-bottom: 70px; /* નીચેની એડ માટે જગ્યા */
+            position: relative;
+        }
+
+        #game-screen:-webkit-full-screen { display: flex; }
+        #game-screen:-ms-fullscreen { display: flex; }
+        #game-screen:fullscreen { display: flex; }
+
+        /* ગેમ ચાલુ હોય ત્યારે નીચેની એડ */
+        .game-bottom-ad {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+        }
+
+        .game-header {
+            width: 100%; max-width: 400px; display: flex; justify-content: space-between;
+            margin-bottom: 20px; font-size: 18px; font-weight: bold; color: #b388ff;
+        }
+
+        .clock-container {
+            width: 260px; height: 260px; background: white; border-radius: 50%;
+            box-shadow: 0 0 30px rgba(124, 77, 255, 0.5); border: 10px solid #2c2c2c;
+            margin-bottom: 30px; position: relative;
+        }
+        canvas { width: 100%; height: 100%; display: block; }
+
+        .question-text { font-size: 22px; font-weight: 600; margin-bottom: 15px; color: #e0e0e0; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 400px; }
+        
+        .opt-btn {
+            background: #2c2c2c; color: white; border: 2px solid #444;
+            padding: 16px; font-size: 24px; font-weight: 800; border-radius: 16px;
+            cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .opt-btn:active { transform: scale(0.95); }
+        .opt-btn.correct { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 20px rgba(0,230,118,0.5); }
+        .opt-btn.wrong { background: var(--wrong); border-color: var(--wrong); color: white; box-shadow: 0 0 20px rgba(255,23,68,0.5); }
+
+        #feedback-text { height: 30px; margin-top: 15px; font-size: 20px; font-weight: bold; }
+
+        /* રિઝલ્ટ સ્ક્રીન */
+        #result-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column;
+            justify-content: center; align-items: center; color: white; text-align: center; padding: 20px;
+        }
+        .trophy { font-size: 80px; margin-bottom: 10px; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+        .score-big { font-size: 60px; font-weight: 800; color: var(--accent); margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div id="home-screen">
+        <div class="header-img-container">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhc4chM9Ygz91AB9dEMqn_0LZvIXDSC2kwTJKZtBqfRn8d_agMzowiVRNZgpewaPZrOXQIBRalezwkUu7W4ckdP1VfOWChvHNckVfgV-Xb7jHToN6Y5lC9PsfW_N5O_Us7BN25uYLAR4D7ZTmmAJMIgoTll7EKleSBaFG_Llc66ik7URvSzRIdAktaeshb1/s320/1000557296.png" alt="Learn Clock">
+        </div>
+
+        <h1>Time Master</h1>
+        <div class="subtitle">ઘડિયાળ જોતા શીખો, રમતા રમતા!</div>
+
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-app-pub-2084776488291335"
+                 data-ad-slot="3663370534"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <div class="info-card">
+            <h3>🎮 કેવી રીતે રમવું?</h3>
+            <ul>
+                <li>"પ્લે" બટન દબાવતા ગેમ <b>ફૂલ સ્ક્રીન</b> માં શરૂ થશે.</li>
+                <li>ઘડિયાળમાં સમય જુઓ અને સાચો વિકલ્પ પસંદ કરો.</li>
+                <li>હેડફોનનો ઉપયોગ કરો જેથી સાઉન્ડ ઇફેક્ટની મજા આવે!</li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="std-select">📚 બાળકનું ધોરણ પસંદ કરો:</label>
+            <select id="std-select">
+                <option value="1">ધોરણ 1 (પૂરા કલાક દા.ત. 2:00)</option>
+                <option value="2">ધોરણ 2 (અડધો કલાક દા.ત. 2:30)</option>
+                <option value="3">ધોરણ 3 (પા/પોણો કલાક દા.ત. 2:15, 2:45)</option>
+                <option value="4">ધોરણ 4 (મિનિટ દા.ત. 2:05, 2:20)</option>
+            </select>
+        </div>
+
+        <button class="btn-play" onclick="initGame()">▶️ ગેમ શરૂ કરો (Play Now)</button>
+    </div>
+
+    <div id="game-screen">
+        <div class="game-header">
+            <span id="q-counter">પ્રશ્ન: 1/10</span>
+            <span id="score-display">સ્કોર: 0</span>
+        </div>
+
+        <div class="clock-container">
+            <canvas id="clockCanvas" width="260" height="260"></canvas>
+        </div>
+
+        <div class="question-text">કેટલા વાગ્યા છે?</div>
+
+        <div class="options-grid" id="options-container"></div>
+
+        <div id="feedback-text"></div>
+
+        <div class="game-bottom-ad">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:50px"
+                 data-ad-client="ca-app-pub-2084776488291335"
+                 data-ad-slot="8193312913"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </div>
+
+    <div id="result-screen">
+        <div class="trophy">🏆</div>
+        <h1 style="color: white; margin-bottom: 0;">Game Over!</h1>
+        <p style="font-size: 20px; color: #aaa; margin-top: 5px;">તમારું પરિણામ</p>
+        
+        <div class="score-big"><span id="final-score">0</span> / 10</div>
+        
+        <h2 id="result-msg" style="color: var(--accent); margin-bottom: 30px;">અદ્ભુત રમત!</h2>
+
+        <div class="ad-container" style="background: transparent; margin-bottom: 30px;">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:50px"
+                 data-ad-client="ca-app-pub-2084776488291335"
+                 data-ad-slot="8193312913"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <button class="btn-play" style="max-width: 300px;" onclick="playAgain()">🔄 ફરીથી રમો</button>
+    </div>
+
+<script>
+    // --- સાઉન્ડ ઇફેક્ટ્સ ---
+    const sfxCorrect = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+    const sfxWrong = new Audio('https://assets.mixkit.co/active_storage/sfx/2802/2802-preview.mp3'); // નોર્મલ બઝર
+    const sfxWin = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+    const sfxClick = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
+
+    let currentStd = 1;
+    let score = 0;
+    let qIndex = 0;
+    const totalQ = 10;
+    let correctTime = { h: 0, m: 0 };
+    let isLocked = false;
+    
+    const gameScreen = document.getElementById('game-screen');
+    const homeScreen = document.getElementById('home-screen');
+    const resultScreen = document.getElementById('result-screen');
+    
+    const canvas = document.getElementById("clockCanvas");
+    const ctx = canvas.getContext("2d");
+    const radius = canvas.height / 2;
+    ctx.translate(radius, radius);
+    const radiusScale = radius * 0.90;
+
+    function initGame() {
+        sfxClick.play();
+        currentStd = parseInt(document.getElementById('std-select').value);
+        
+        if (gameScreen.requestFullscreen) {
+            gameScreen.requestFullscreen().catch(err => console.log(err));
+        } else if (gameScreen.webkitRequestFullscreen) {
+            gameScreen.webkitRequestFullscreen();
+        }
+
+        homeScreen.style.display = 'none';
+        gameScreen.style.display = 'flex'; 
+        
+        score = 0;
+        qIndex = 0;
+        
+        document.getElementById('score-display').innerHTML = "સ્કોર: 0";
+        nextQuestion();
+    }
+
+    function drawClock(hour, minute) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        drawFace(ctx, radiusScale);
+        drawNumbers(ctx, radiusScale);
+        drawTime(ctx, radiusScale, hour, minute);
+        
+        ctx.beginPath();
+        ctx.arc(0, 0, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = '#121212';
+        ctx.fill();
+    }
+
+    function drawFace(ctx, radius) {
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+    }
+
+    function drawNumbers(ctx, radius) {
+        ctx.font = 'bold 24px Poppins';
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#333";
+        for(let num = 1; num < 13; num++){
+            let ang = num * Math.PI / 6;
+            ctx.rotate(ang);
+            ctx.translate(0, -radius * 0.82);
+            ctx.rotate(-ang);
+            ctx.fillText(num.toString(), 0, 0);
+            ctx.rotate(ang);
+            ctx.translate(0, radius * 0.82);
+            ctx.rotate(-ang);
+        }
+    }
+
+    function drawTime(ctx, radius, hour, minute){
+        let pos = (hour*Math.PI/6) + (minute*Math.PI/(6*60));
+        drawHand(ctx, pos, radius*0.55, 9, "#333"); 
+        
+        pos = (minute*Math.PI/30);
+        drawHand(ctx, pos, radius*0.80, 5, "#FF1744"); 
+    }
+
+    function drawHand(ctx, pos, length, width, color) {
+        ctx.beginPath();
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = color;
+        ctx.moveTo(0,0);
+        ctx.rotate(pos);
+        ctx.lineTo(0, -length);
+        ctx.stroke();
+        ctx.rotate(-pos);
+    }
+
+    function nextQuestion() {
+        if(qIndex >= totalQ) {
+            endGame();
+            return;
+        }
+        qIndex++;
+        isLocked = false;
+        
+        document.getElementById('q-counter').innerHTML = "પ્રશ્ન: " + qIndex + "/" + totalQ;
+        document.getElementById('feedback-text').innerHTML = "";
+
+        let h = Math.floor(Math.random() * 12) + 1;
+        let m = 0;
+
+        if (currentStd === 1) m = 0; 
+        else if (currentStd === 2) m = Math.random() < 0.5 ? 0 : 30; 
+        else if (currentStd === 3) {
+            let parts = [0, 15, 30, 45];
+            m = parts[Math.floor(Math.random() * parts.length)];
+        } else m = Math.floor(Math.random() * 12) * 5;
+
+        correctTime = { h, m };
+        drawClock(h, m);
+        generateOptions(h, m);
+    }
+
+    function generateOptions(h, m) {
+        let correctStr = formatTime(h, m);
+        let options = new Set();
+        options.add(correctStr);
+
+        while(options.size < 4) {
+            let wrongH = Math.floor(Math.random() * 12) + 1;
+            let wrongM = m;
+            
+            if(Math.random() > 0.5) {
+                if(currentStd === 1) wrongM = 0;
+                else if (currentStd === 2) wrongM = Math.random() < 0.5 ? 0 : 30;
+                else wrongM = Math.floor(Math.random() * 12) * 5;
+            }
+            
+            let wrongStr = formatTime(wrongH, wrongM);
+            if(wrongStr !== correctStr) options.add(wrongStr);
+        }
+
+        let optArray = Array.from(options).sort(() => Math.random() - 0.5);
+        
+        let html = '';
+        optArray.forEach(opt => {
+            html += `<button class="opt-btn" onclick="checkAnswer(this, '${opt}')">${opt}</button>`;
+        });
+        document.getElementById('options-container').innerHTML = html;
+    }
+
+    function formatTime(h, m) {
+        return `${h}:${m.toString().padStart(2, '0')}`;
+    }
+
+    function checkAnswer(btn, value) {
+        if(isLocked) return;
+        isLocked = true;
+
+        let correctStr = formatTime(correctTime.h, correctTime.m);
+        const feedbackObj = document.getElementById('feedback-text');
+
+        if(value === correctStr) {
+            sfxCorrect.play();
+            score++;
+            document.getElementById('score-display').innerHTML = "સ્કોર: " + score;
+            btn.classList.add('correct');
+            feedbackObj.innerHTML = "<span style='color:#00E676'>✅ સાચો જવાબ!</span>";
+        } else {
+            sfxWrong.play();
+            btn.classList.add('wrong');
+            document.querySelectorAll('.opt-btn').forEach(b => {
+                if(b.innerText === correctStr) b.classList.add('correct');
+            });
+            feedbackObj.innerHTML = "<span style='color:#FF1744'>❌ ખોટો જવાબ!</span>";
+        }
+
+        setTimeout(nextQuestion, 1500);
+    }
+
+    function endGame() {
+        sfxWin.play();
+        gameScreen.style.display = 'none';
+        resultScreen.style.display = 'flex';
+        
+        document.getElementById('final-score').innerHTML = score;
+        let msg = "";
+        if(score === 10) msg = "જીનીયસ! તમે એકદમ સાચા છો 🌟";
+        else if(score >= 7) msg = "ખૂબ સરસ પ્રયાસ! 👍";
+        else msg = "વધુ પ્રેક્ટિસની જરૂર છે! 📚";
+        
+        document.getElementById('result-msg').innerHTML = msg;
+    }
+
+    // ૧૦૦% કામ કરતું પ્લે અગેઇન બટન ફંક્શન
+    function playAgain() {
+        sfxClick.play();
+        
+        // થોડી સેકન્ડ રાહ જોઈને સીધું જ આખું પેજ રિફ્રેશ કરી દેશે 
+        // જેથી બધી જ સેટિંગ્સ અને ફૂલ સ્ક્રીન જાતે જ નોર્મલ થઈ જાય.
+        setTimeout(() => {
+            window.location.reload();
+        }, 300);
+    }
+</script>
+</body>
+</html>
