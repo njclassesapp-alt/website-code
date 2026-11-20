@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>જ્ઞાનની રસ્સાખેંચ PRO MAX — NJ Classes</title>
+<style>
+  :root {
+    --bg-dark: #070b19;
+    --card-bg: rgba(16, 24, 48, 0.86);
+    --blue-main: #00e5ff;
+    --blue-deep: #0066ff;
+    --red-main: #ff3d68;
+    --red-deep: #c9184a;
+    --gold: #ffd166;
+    --green: #06d6a0;
+    --text-muted: #94a3b8;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    background: linear-gradient(-45deg, #060918, #0f172a, #131b3a, #091526);
+    background-size: 400% 400%;
+    animation: bgShift 16s ease infinite;
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- Top Status & Controls Bar --- */
+  #top-bar {
+    height: 48px;
+    min-height: 48px;
+    padding: 0 12px;
+    background: rgba(7, 11, 25, 0.92);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    z-index: 500;
+    backdrop-filter: blur(12px);
+  }
+
+  .brand-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 800;
+    font-size: 0.92rem;
+    color: var(--blue-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .wallet-pill {
+    background: linear-gradient(135deg, rgba(255, 209, 102, 0.18), rgba(245, 158, 11, 0.18));
+    border: 1px solid rgba(255, 209, 102, 0.55);
+    color: var(--gold);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .icon-pill-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .icon-pill-btn:active { transform: scale(0.94); }
+  .icon-pill-btn.danger {
+    background: rgba(255, 61, 104, 0.2);
+    border-color: rgba(255, 61, 104, 0.6);
+    color: #ff8fa3;
+  }
+
+  /* --- Main Viewport --- */
+  #game-container {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: calc(100dvh - 48px);
+    overflow: hidden;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .screen.active {
+    display: flex;
+    animation: screenPop 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes screenPop {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* --- Typography & Hero --- */
+  .hero-badge {
+    background: rgba(0, 229, 255, 0.14);
+    border: 1px solid rgba(0, 229, 255, 0.45);
+    color: var(--blue-main);
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+  }
+
+  .title-neon {
+    font-size: clamp(1.55rem, 4vw, 2.5rem);
+    margin: 4px 0 8px;
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(90deg, #00e5ff, #ffffff, #ffd166, #ff3d68);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: bgShift 6s linear infinite;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    margin: 0 0 16px;
+    font-size: 0.96rem;
+    text-align: center;
+    max-width: 620px;
+    line-height: 1.45;
+  }
+
+  /* --- Hero Tug Preview SVG --- */
+  .hero-arena-preview {
+    width: 100%;
+    max-width: 480px;
+    background: radial-gradient(circle at center, rgba(0, 229, 255, 0.12), rgba(255, 61, 104, 0.08), rgba(15, 23, 42, 0.6));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  /* --- Buttons & Mode Cards --- */
+  .mode-cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+    width: 100%;
+    max-width: 760px;
+    margin-bottom: 14px;
+  }
+
+  .mode-card {
+    background: var(--card-bg);
+    border: 1.5px solid rgba(0, 229, 255, 0.35);
+    border-radius: 20px;
+    padding: 18px;
+    text-align: left;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .mode-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--blue-main);
+    box-shadow: 0 14px 34px rgba(0, 229, 255, 0.28);
+  }
+  .mode-card:active { transform: scale(0.97); }
+  .mode-card.online {
+    border-color: rgba(255, 209, 102, 0.55);
+    background: linear-gradient(145deg, rgba(30, 27, 75, 0.9), rgba(49, 16, 47, 0.85));
+  }
+  .mode-card.online:hover {
+    border-color: var(--gold);
+    box-shadow: 0 14px 34px rgba(255, 209, 102, 0.3);
+  }
+
+  .mode-card-title {
+    font-size: 1.15rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .mode-card-desc {
+    font-size: 0.86rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #00e5ff 0%, #0077ff 100%);
+    color: #fff;
+    border: none;
+    padding: 13px 26px;
+    font-size: 1.02rem;
+    font-weight: 800;
+    border-radius: 999px;
+    margin: 6px;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0, 229, 255, 0.35);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0, 229, 255, 0.5); }
+  .btn:active { transform: scale(0.95); }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: none;
+  }
+  .btn-danger {
+    background: linear-gradient(135deg, #ff3d68 0%, #c9184a 100%);
+    box-shadow: 0 8px 22px rgba(255, 61, 104, 0.38);
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%);
+    color: #0f172a;
+    box-shadow: 0 8px 22px rgba(245, 158, 11, 0.4);
+  }
+  .btn-green {
+    background: linear-gradient(135deg, #06d6a0 0%, #059669 100%);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(6, 214, 160, 0.4);
+  }
+
+  /* --- Grids (Standards, Subjects, Chapters) --- */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: 12px;
+    max-width: 860px;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .grid-btn {
+    padding: 14px 12px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(0, 229, 255, 0.28);
+    border-radius: 16px;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 4px;
+    min-height: 68px;
+  }
+  .grid-btn small {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--blue-main);
+  }
+  .grid-btn:hover, .grid-btn:active {
+    background: rgba(0, 229, 255, 0.18);
+    border-color: var(--blue-main);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 229, 255, 0.25);
+  }
+
+  /* Stream Filter Pills for Std 11 & 12 */
+  .stream-tabs {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 5px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .stream-tab {
+    padding: 8px 18px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #cbd5e1;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .stream-tab.active {
+    background: linear-gradient(135deg, #00e5ff, #0077ff);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 229, 255, 0.35);
+  }
+
+  /* --- Online Lobby Card --- */
+  .lobby-box {
+    width: 100%;
+    max-width: 560px;
+    background: var(--card-bg);
+    border: 1.5px solid rgba(255, 209, 102, 0.4);
+    border-radius: 22px;
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+  }
+
+  .stake-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .stake-chip {
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 209, 102, 0.35);
+    background: rgba(255, 209, 102, 0.08);
+    color: var(--gold);
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .stake-chip.active {
+    background: var(--gold);
+    color: #0f172a;
+    border-color: #fff;
+    box-shadow: 0 0 16px rgba(255, 209, 102, 0.6);
+  }
+
+  .room-code-display {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: var(--gold);
+    background: rgba(0, 0, 0, 0.45);
+    border: 2px dashed rgba(255, 209, 102, 0.7);
+    border-radius: 16px;
+    padding: 12px 20px;
+    text-align: center;
+    margin: 12px 0;
+  }
+
+  .code-input {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: 2px solid rgba(0, 229, 255, 0.45);
+    background: rgba(7, 11, 25, 0.85);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .code-input:focus { border-color: var(--gold); }
+
+  /* --- TUG OF WAR ARENA (Ultra Smooth SVG + Physics) --- */
+  #game-area {
+    padding: 0;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.06), transparent 70%);
+  }
+  #game-area.active { display: flex; }
+
+  /* Top Tug-of-War Visual Stage */
+  #tug-stage {
+    position: relative;
+    width: 100%;
+    height: 175px;
+    min-height: 155px;
+    background: linear-gradient(180deg, rgba(10, 16, 36, 0.95) 0%, rgba(15, 23, 42, 0.78) 100%);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Blue & Red Territory Glow */
+  .territory-blue {
+    position: absolute;
+    left: 0; top: 0; bottom: 0; width: 50%;
+    background: linear-gradient(90deg, rgba(0, 229, 255, 0.18), transparent);
+    pointer-events: none;
+  }
+  .territory-red {
+    position: absolute;
+    right: 0; top: 0; bottom: 0; width: 50%;
+    background: linear-gradient(-90deg, rgba(255, 61, 104, 0.18), transparent);
+    pointer-events: none;
+  }
+
+  /* Win Zones & Center Line */
+  .win-zone-left {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 10%;
+    background: repeating-linear-gradient(45deg, rgba(0, 229, 255, 0.25), rgba(0, 229, 255, 0.25) 8px, transparent 8px, transparent 16px);
+    border-right: 2px solid var(--blue-main);
+  }
+  .win-zone-right {
+    position: absolute; right: 0; top: 0; bottom: 0; width: 10%;
+    background: repeating-linear-gradient(-45deg, rgba(255, 61, 104, 0.25), rgba(255, 61, 104, 0.25) 8px, transparent 8px, transparent 16px);
+    border-left: 2px solid var(--red-main);
+  }
+  #center-line {
+    position: absolute; left: 50%; top: 10px; bottom: 10px; width: 3px;
+    transform: translateX(-50%);
+    border-left: 2px dashed rgba(255, 209, 102, 0.65);
+    z-index: 2;
+  }
+
+  /* Score HUD inside Stage */
+  .arena-hud {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    gap: 8px;
+  }
+  .hud-player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(7, 11, 25, 0.8);
+    padding: 5px 12px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(0, 229, 255, 0.5);
+    font-weight: 800;
+    font-size: 0.88rem;
+  }
+  .hud-player.p2 {
+    border-color: rgba(255, 61, 104, 0.55);
+  }
+  .hud-score {
+    background: var(--gold);
+    color: #0f172a;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 900;
+  }
+  .hud-center-info {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* Ground Track */
+  .ground-line {
+    position: absolute;
+    bottom: 14px;
+    left: 4%;
+    right: 4%;
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--blue-main), rgba(255,255,255,0.25), var(--red-main));
+    z-index: 1;
+  }
+
+  /* Moving Tug Rig (Rope + Flag + Blue & Red Pullers) */
+  #tug-rig {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+    height: 112px;
+    transition: left 0.42s cubic-bezier(0.22, 1.4, 0.36, 1);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  @keyframes pullStrainLeft {
+    0%, 100% { transform: rotate(-10deg) translateY(0px); }
+    50% { transform: rotate(-16deg) translateY(-2px); }
+  }
+  @keyframes pullStrainRight {
+    0%, 100% { transform: rotate(10deg) translateY(0px); }
+    50% { transform: rotate(16deg) translateY(-2px); }
+  }
+  @keyframes flagWave {
+    0%, 100% { transform: rotate(-6deg) scaleY(1); }
+    50% { transform: rotate(8deg) scaleY(0.92); }
+  }
+
+  .char-blue-group {
+    transform-origin: 65px 96px;
+    animation: pullStrainLeft 0.75s ease-in-out infinite;
+  }
+  .char-red-group {
+    transform-origin: 275px 96px;
+    animation: pullStrainRight 0.75s ease-in-out infinite 0.35s;
+  }
+  .center-flag-group {
+    transform-origin: 170px 62px;
+    animation: flagWave 0.6s ease-in-out infinite;
+  }
+
+  /* Dust Burst Particle */
+  .dust-burst {
+    position: absolute;
+    bottom: 16px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.75);
+    pointer-events: none;
+    animation: dustFade 0.55s ease-out forwards;
+    z-index: 15;
+  }
+  @keyframes dustFade {
+    0% { opacity: 0.9; transform: scale(0.5) translateY(0); }
+    100% { opacity: 0; transform: scale(2.2) translateY(-18px); }
+  }
+
+  /* --- Question & Options Deck --- */
+  #battle-deck {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px 12px;
+    gap: 10px;
+    overflow-y: auto;
+  }
+
+  #qbox-center {
+    background: rgba(15, 23, 42, 0.92);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-size: clamp(1rem, 2.5vw, 1.28rem);
+    font-weight: 800;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    display: none;
+  }
+
+  .split-players {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    min-height: 0;
+  }
+
+  /* Single-player Online Mode uses full width comfortably */
+  .split-players.single-online {
+    grid-template-columns: 1fr;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 680px) {
+    .split-players:not(.single-online) {
+      grid-template-columns: 1fr;
+      overflow-y: auto;
+    }
+    #tug-stage { height: 148px; min-height: 148px; }
+  }
+
+  .player-panel {
+    background: rgba(15, 23, 42, 0.78);
+    border: 1.5px solid rgba(0, 229, 255, 0.35);
+    border-radius: 18px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background 0.25s;
+  }
+  .player-panel.p2 {
+    border-color: rgba(255, 61, 104, 0.4);
+  }
+
+  .panel-q {
+    background: rgba(7, 11, 25, 0.85);
+    border-left: 4px solid var(--blue-main);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #e0f2fe;
+    line-height: 1.4;
+  }
+  .player-panel.p2 .panel-q {
+    border-left-color: var(--red-main);
+    color: #ffe4e6;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: auto;
+  }
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .opt-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    padding: 11px 14px;
+    border-radius: 12px;
+    font-size: 0.96rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.16s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .opt-btn:hover {
+    background: rgba(0, 229, 255, 0.18);
+    border-color: var(--blue-main);
+  }
+  .player-panel.p2 .opt-btn:hover {
+    background: rgba(255, 61, 104, 0.18);
+    border-color: var(--red-main);
+  }
+  .opt-btn:active { transform: scale(0.96); }
+
+  .opt-tag {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.14);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .flash-green { animation: flashG 0.45s ease; }
+  .flash-red { animation: flashR 0.45s ease; }
+  @keyframes flashG { 0% { background: rgba(6, 214, 160, 0.45); } 100% { background: rgba(15, 23, 42, 0.78); } }
+  @keyframes flashR { 0% { background: rgba(255, 61, 104, 0.45); } 100% { background: rgba(15, 23, 42, 0.78); } }
+
+  /* Loader & Toast */
+  .loader {
+    border: 4px solid rgba(255,255,255,0.12);
+    border-top: 4px solid var(--blue-main);
+    border-right: 4px solid var(--red-main);
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    animation: spin 0.9s linear infinite;
+    margin: 24px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #toast {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(15, 23, 42, 0.96);
+    border: 1.5px solid var(--gold);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    white-space: nowrap;
+    max-width: 92vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Top Compact HUD Bar -->
+<div id="top-bar">
+  <div class="brand-pill">⚡ જ્ઞાનની રસ્સાખેંચ <span style="color:var(--gold);">PRO MAX</span></div>
+  <div class="top-actions">
+    <div class="wallet-pill" id="wallet-display" title="તમારા ઉપલબ્ધ પોઈન્ટ્સ">🪙 <span id="user-points">50</span> Pts</div>
+    <button class="icon-pill-btn" id="fs-btn" onclick="playClick(); toggleFullscreen()">⛶ Full</button>
+    <button class="icon-pill-btn danger" id="quit-match-btn" style="display:none;" onclick="playClick(); quitCurrentMatch()">✖ Exit</button>
+  </div>
+</div>
+
+<div id="game-container">
+
+  <!-- 1. MAIN MENU -->
+  <div id="main-menu" class="screen active">
+    <div class="hero-badge">NJ CLASSES • LIVE ARENA</div>
+    <h1 class="title-neon">જ્ઞાનની રસ્સાખેંચ PRO MAX</h1>
+    <p class="subtitle">સાચા જવાબ આપો, દોરડું ખેંચો અને વિજેતા બનો! ધોરણ 1 થી 12 ના તમામ MCQ ડેટાબેઝ સાથે કનેક્ટેડ.</p>
+
+    <!-- Animated SVG Tug-of-War Preview -->
+    <div class="hero-arena-preview">
+      <svg viewBox="0 0 420 110" width="100%" height="96">
+        <defs>
+          <linearGradient id="ropeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffd166"/>
+            <stop offset="50%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#ffd166"/>
+          </linearGradient>
+        </defs>
+        <line x1="210" y1="8" x2="210" y2="102" stroke="rgba(255,209,102,0.5)" stroke-width="2" stroke-dasharray="5,5"/>
+        <line x1="20" y1="98" x2="400" y2="98" stroke="rgba(255,255,255,0.25)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Braided Rope -->
+        <line x1="65" y1="64" x2="355" y2="64" stroke="url(#ropeGrad)" stroke-width="7" stroke-linecap="round"/>
+        <line x1="65" y1="64" x2="355" y2="64" stroke="#78350f" stroke-width="7" stroke-dasharray="6,8" stroke-linecap="round"/>
+        <!-- Center Red Flag -->
+        <g class="center-flag-group" style="transform-origin:210px 64px;">
+          <circle cx="210" cy="64" r="6" fill="#fff"/>
+          <polygon points="210,64 224,78 210,90" fill="#ff3d68"/>
+        </g>
+        <!-- Blue Team Character (Left) -->
+        <g class="char-blue-group" style="transform-origin:85px 96px;">
+          <circle cx="82" cy="30" r="13" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
+          <path d="M74 26 Q82 16 92 24" fill="#0284c7"/>
+          <line x1="82" y1="43" x2="72" y2="70" stroke="#00e5ff" stroke-width="9" stroke-linecap="round"/>
+          <line x1="72" y1="70" x2="56" y2="95" stroke="#0284c7" stroke-width="7" stroke-linecap="round"/>
+          <line x1="72" y1="70" x2="88" y2="95" stroke="#00e5ff" stroke-width="7" stroke-linecap="round"/>
+          <line x1="80" y1="50" x2="108" y2="63" stroke="#7dd3fc" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="108" cy="63" r="5" fill="#fde68a"/>
+        </g>
+        <!-- Red Team Character (Right) -->
+        <g class="char-red-group" style="transform-origin:335px 96px;">
+          <circle cx="338" cy="30" r="13" fill="#fb7185" stroke="#fff" stroke-width="2"/>
+          <path d="M328 24 Q338 16 346 26" fill="#e11d48"/>
+          <line x1="338" y1="43" x2="348" y2="70" stroke="#ff3d68" stroke-width="9" stroke-linecap="round"/>
+          <line x1="348" y1="70" x2="364" y2="95" stroke="#e11d48" stroke-width="7" stroke-linecap="round"/>
+          <line x1="348" y1="70" x2="332" y2="95" stroke="#ff3d68" stroke-width="7" stroke-linecap="round"/>
+          <line x1="340" y1="50" x2="312" y2="63" stroke="#fda4af" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="312" cy="63" r="5" fill="#fde68a"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="mode-cards-row">
+      <div class="mode-card" onclick="playClick(); openLocalSetup()">
+        <div class="mode-card-title">
+          <span>⚔️ 2 પ્લેયર લોકલ બેટલ</span>
+          <span style="font-size:0.78rem; color:var(--blue-main);">FREE</span>
+        </div>
+        <div class="mode-card-desc">એક જ મોબાઈલ કે કોમ્પ્યુટર પર સામસામે 2 વિદ્યાર્થીઓ (Blue vs Red) રમી શકે.</div>
+      </div>
+
+      <div class="mode-card online" onclick="playClick(); openOnlineLobby()">
+        <div class="mode-card-title">
+          <span>🌐 ઓનલાઇન મિત્ર સાથે રમો</span>
+          <span style="font-size:0.78rem; color:var(--gold);">🪙 5 Pts → 10 Pts</span>
+        </div>
+        <div class="mode-card-desc">લૂડોની જેમ રૂમ કોડ/લિંક શેર કરો! બંને 5-5 પોઈન્ટ લગાવો અને જીતનારને 10 પોઈન્ટ મળશે.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. STANDARD SELECT -->
+  <div id="std-select" class="screen">
+    <h1 class="title-neon">ધોરણ પસંદ કરો</h1>
+    <p class="subtitle" id="std-select-sub">તમારું ધોરણ પસંદ કરો (STD 1 થી 12)</p>
+    <div class="grid-container" id="std-grid"></div>
+    <button class="btn btn-secondary" onclick="playClick(); showScreen('main-menu')">← પાછા જાઓ</button>
+  </div>
+
+  <!-- 3. MODE SELECT FOR CHOSEN STANDARD -->
+  <div id="std-mode-select" class="screen">
+    <h1 class="title-neon" id="std-mode-title">ધોરણ 10 - મોડ પસંદ કરો</h1>
+    <p class="subtitle">સ્માર્ટ ગણિત અથવા પાઠ્યપુસ્તકના પ્રકરણ મુજબ MCQ ડેટાબેઝ પસંદ કરો</p>
+
+    <div class="mode-cards-row">
+      <div class="mode-card" onclick="playClick(); startDynamicMathMode()">
+        <div class="mode-card-title"><span>🧮 સ્માર્ટ ગણિત (Normal Mode)</span></div>
+        <div class="mode-card-desc">ધોરણ મુજબ ઓટોમેટિક ગણિતના ઝડપી પ્રશ્નો (અનલિમિટેડ પ્રેક્ટિસ).</div>
+      </div>
+
+      <div class="mode-card" id="btn-textbook-mode" onclick="playClick(); openSubjectSelect()" style="border-color: rgba(6, 214, 160, 0.55);">
+        <div class="mode-card-title">
+          <span>📚 પાઠ્યપુસ્તક (MCQ Database)</span>
+          <span style="font-size:0.75rem; color:var(--green);">CHAPTER-WISE</span>
+        </div>
+        <div class="mode-card-desc">વિષય અને પ્રકરણ પસંદ કરીને પાઠ્યપુસ્તકના અસલી MCQ સાથે રમો.</div>
+      </div>
+
+      <div class="mode-card online" id="btn-mix-mode" onclick="playClick(); loadAllSubjectsMix()">
+        <div class="mode-card-title"><span>🔥 મિક્સ મહાસંગ્રામ</span></div>
+        <div class="mode-card-desc">આ ધોરણના તમામ વિષયોના મિક્સ MCQ પ્રશ્નોનો મહામુકાબલો!</div>
+      </div>
+    </div>
+
+    <button class="btn btn-secondary" onclick="playClick(); showScreen('std-select')">← ધોરણ બદલો</button>
+  </div>
+
+  <!-- 4. SUBJECT SELECT (With Science / Commerce / Arts Tabs for Std 11 & 12) -->
+  <div id="subject-select" class="screen">
+    <h1 class="title-neon" id="subject-screen-title">વિષય પસંદ કરો</h1>
+    <div class="stream-tabs" id="stream-tabs" style="display:none;">
+      <button class="stream-tab active" data-stream="science" onclick="switchStream('science')">સાયન્સ</button>
+      <button class="stream-tab" data-stream="commerce" onclick="switchStream('commerce')">કોમર્સ</button>
+      <button class="stream-tab" data-stream="arts" onclick="switchStream('arts')">આર્ટ્સ</button>
+    </div>
+    <div class="grid-container" id="subject-grid"></div>
+    <button class="btn btn-secondary" onclick="playClick(); showScreen('std-mode-select')">← પાછા જાઓ</button>
+  </div>
+
+  <!-- 5. CHAPTER SELECT -->
+  <div id="chapter-select" class="screen">
+    <h1 class="title-neon" id="selected-sub-title">પ્રકરણ પસંદ કરો</h1>
+    <p class="subtitle">કોઈ એક પ્રકરણ પસંદ કરો અથવા બધા પ્રકરણ મિક્સ રમો</p>
+    <div class="grid-container" id="chapter-grid"></div>
+    <button class="btn btn-secondary" onclick="playClick(); showScreen('subject-select')">← વિષય બદલો</button>
+  </div>
+
+  <!-- 6. QUESTION STYLE SELECT (Local Mode) -->
+  <div id="q-mode-select" class="screen">
+    <h1 class="title-neon">પ્રશ્નની સ્ટાઇલ પસંદ કરો</h1>
+    <p class="subtitle">બંને પ્લેયરને એક જ પ્રશ્ન આપવો છે કે અલગ-અલગ?</p>
+    <div class="mode-cards-row">
+      <div class="mode-card" onclick="playClick(); launchLocalBattle('same')">
+        <div class="mode-card-title"><span>🎯 બંને માટે એક જ પ્રશ્ન</span></div>
+        <div class="mode-card-desc">વચ્ચે એક જ પ્રશ્ન આવશે — જે પહેલા સાચો જવાબ આપશે તે દોરડું ખેંચશે!</div>
+      </div>
+      <div class="mode-card online" onclick="playClick(); launchLocalBattle('different')">
+        <div class="mode-card-title"><span>⚔️ બંને માટે અલગ-અલગ પ્રશ્ન</span></div>
+        <div class="mode-card-desc">Blue અને Red બંને ખેલાડીઓને પોતાના અલગ પ્રશ્નો મળશે — ઝડપથી ઉકેલો!</div>
+      </div>
+    </div>
+    <button class="btn btn-secondary" onclick="playClick(); showScreen('std-mode-select')">← પાછા જાઓ</button>
+  </div>
+
+  <!-- 7. ONLINE 1v1 MULTIPLAYER LOBBY -->
+  <div id="online-lobby" class="screen">
+    <h1 class="title-neon">🌐 ઓનલાઇન 1v1 ચેલેન્જ</h1>
+    <p class="subtitle">મિત્ર સાથે લિંક/કોડ શેર કરો • બંને 5-5 પોઈન્ટ લગાવો અને જીતનારને 10 પોઈન્ટ મળશે!</p>
+
+    <!-- Create vs Join Tabs -->
+    <div class="stream-tabs">
+      <button class="stream-tab active" id="tab-create-room" onclick="switchLobbyTab('create')">➕ નવો રૂમ બનાવો</button>
+      <button class="stream-tab" id="tab-join-room" onclick="switchLobbyTab('join')">🔑 કોડથી જોડાઓ</button>
+    </div>
+
+    <!-- Create Room Panel -->
+    <div class="lobby-box" id="lobby-create-panel">
+      <div style="font-weight:800; color:var(--blue-main); margin-bottom:6px;">૧. એન્ટ્રી પોઈન્ટ્સ પસંદ કરો (Stake):</div>
+      <div class="stake-row">
+        <button class="stake-chip active" onclick="selectStake(5, this)">🪙 5 Pts (જીત: 10)</button>
+        <button class="stake-chip" onclick="selectStake(10, this)">🪙 10 Pts (જીત: 20)</button>
+        <button class="stake-chip" onclick="selectStake(20, this)">🪙 20 Pts (જીત: 40)</button>
+      </div>
+
+      <div style="font-weight:800; color:var(--blue-main); margin:10px 0 6px;">૨. પ્રશ્ન વિષય પસંદ કરો:</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+        <select id="online-std-select" class="code-input" style="font-size:0.95rem; letter-spacing:0; text-transform:none; flex:1;" onchange="populateOnlineSubjects()">
+        </select>
+        <select id="online-sub-select" class="code-input" style="font-size:0.95rem; letter-spacing:0; text-transform:none; flex:1;">
+          <option value="math_auto">🧮 સ્માર્ટ ગણિત (Auto)</option>
+        </select>
+      </div>
+
+      <div id="create-room-action" style="text-align:center;">
+        <button class="btn btn-gold" onclick="playClick(); createOnlineRoom()" style="width:100%;">🚀 રૂમ બનાવો અને 5 પોઈન્ટ લગાવો</button>
+      </div>
+
+      <!-- Waiting for Friend Box -->
+      <div id="waiting-room-box" style="display:none; text-align:center; margin-top:12px;">
+        <div style="color:var(--green); font-weight:800; font-size:0.92rem;">✅ રૂમ તૈયાર છે! નીચેનો કોડ અથવા લિંક મિત્રને મોકલો:</div>
+        <div class="room-code-display" id="created-room-code">NJ0000</div>
+        <div style="font-size:0.84rem; color:#cbd5e1; margin-bottom:10px;">
+          મિત્ર તેના મોબાઈલમાં <b>જ્ઞાનની રસ્સાખેંચ → ઓનલાઇન મિત્ર સાથે રમો → કોડથી જોડાઓ</b> માં આ કોડ નાખશે એટલે તરત મેચ શરૂ થશે!
+        </div>
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-green" onclick="playClick(); shareRoomInvite()">📲 WhatsApp / લિંક શેર કરો</button>
+          <button class="btn btn-secondary" onclick="playClick(); copyRoomCode()">📋 કોડ કોપી કરો</button>
+          <button class="btn btn-danger" onclick="playClick(); cancelCreatedRoom()">✖ રદ કરો (પોઈન્ટ પાછા)</button>
+        </div>
+        <div class="loader" style="width:36px; height:36px; margin:14px auto 4px;"></div>
+        <div style="font-size:0.82rem; color:var(--gold);">મિત્ર જોડાય તેની રાહ જોવાઈ રહી છે...</div>
+      </div>
+    </div>
+
+    <!-- Join Room Panel -->
+    <div class="lobby-box" id="lobby-join-panel" style="display:none; text-align:center;">
+      <div style="font-weight:800; color:var(--gold); margin-bottom:8px;">મિત્રએ મોકલેલો 6-અંકનો રૂમ કોડ નાખો:</div>
+      <input type="text" id="join-code-input" class="code-input" maxlength="8" placeholder="દા.ત. NJ4829">
+      <div style="font-size:0.84rem; color:#cbd5e1; margin-bottom:12px;">
+        જોડાવા પર તમારા ખાતામાંથી મિત્ર જેટલા જ (5) પોઈન્ટ કપાશે અને જીતનારને બંનેના મળીને 10 પોઈન્ટ મળશે!
+      </div>
+      <button class="btn btn-green" onclick="playClick(); joinOnlineRoom()" style="width:100%;">⚔️ પોઈન્ટ લગાવીને મેચમાં જોડાઓ</button>
+    </div>
+
+    <button class="btn btn-secondary" onclick="playClick(); showScreen('main-menu')">← મુખ્ય મેનુ</button>
+  </div>
+
+  <!-- 8. LOADING SCREEN -->
+  <div id="loading-screen" class="screen" style="justify-content:center;">
+    <h1 class="title-neon" id="loading-title">પ્રશ્નો લોડ થઈ રહ્યા છે...</h1>
+    <div class="loader"></div>
+  </div>
+
+  <!-- 9. LIVE TUG-OF-WAR GAME ARENA -->
+  <div id="game-area" class="screen">
+    <div id="tug-stage">
+      <div class="territory-blue"></div>
+      <div class="territory-red"></div>
+      <div class="win-zone-left"></div>
+      <div class="win-zone-right"></div>
+      <div id="center-line"></div>
+      <div class="ground-line"></div>
+
+      <!-- HUD -->
+      <div class="arena-hud">
+        <div class="hud-player p1">
+          <span id="p1-name">🔵 Blue</span>
+          <span class="hud-score" id="p1-score">0</span>
+        </div>
+        <div class="hud-center-info" id="arena-match-badge">⚔️ LIVE</div>
+        <div class="hud-player p2">
+          <span class="hud-score" id="p2-score">0</span>
+          <span id="p2-name">🔴 Red</span>
+        </div>
+      </div>
+
+      <!-- Animated SVG Rope & Pulling Characters -->
+      <div id="tug-rig">
+        <svg viewBox="0 0 340 112" width="100%" height="100%">
+          <!-- Main Rope -->
+          <line x1="25" y1="68" x2="315" y2="68" stroke="#ffd166" stroke-width="7" stroke-linecap="round"/>
+          <line x1="25" y1="68" x2="315" y2="68" stroke="#92400e" stroke-width="7" stroke-dasharray="6,8" stroke-linecap="round"/>
+          <!-- Center Knot & Flag -->
+          <g class="center-flag-group">
+            <circle cx="170" cy="68" r="7" fill="#ffffff" stroke="#ff3d68" stroke-width="2.5"/>
+            <polygon points="170,68 184,84 170,96" fill="#ff3d68"/>
+          </g>
+          <!-- Player 1 Blue Puller -->
+          <g class="char-blue-group">
+            <circle cx="62" cy="30" r="13" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+            <path d="M53 26 Q62 15 73 24" fill="#0284c7"/>
+            <!-- Torso leaning back -->
+            <line x1="62" y1="43" x2="52" y2="73" stroke="#00e5ff" stroke-width="9" stroke-linecap="round"/>
+            <!-- Legs braced -->
+            <line x1="52" y1="73" x2="34" y2="100" stroke="#0284c7" stroke-width="7" stroke-linecap="round"/>
+            <line x1="52" y1="73" x2="70" y2="100" stroke="#00e5ff" stroke-width="7" stroke-linecap="round"/>
+            <!-- Arms pulling rope -->
+            <line x1="60" y1="52" x2="92" y2="67" stroke="#7dd3fc" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="92" cy="67" r="5" fill="#fde68a"/>
+          </g>
+          <!-- Player 2 Red Puller -->
+          <g class="char-red-group">
+            <circle cx="278" cy="30" r="13" fill="#fb7185" stroke="#ffffff" stroke-width="2"/>
+            <path d="M267 24 Q278 15 287 26" fill="#e11d48"/>
+            <!-- Torso leaning back -->
+            <line x1="278" y1="43" x2="288" y2="73" stroke="#ff3d68" stroke-width="9" stroke-linecap="round"/>
+            <!-- Legs braced -->
+            <line x1="288" y1="73" x2="306" y2="100" stroke="#e11d48" stroke-width="7" stroke-linecap="round"/>
+            <line x1="288" y1="73" x2="270" y2="100" stroke="#ff3d68" stroke-width="7" stroke-linecap="round"/>
+            <!-- Arms pulling rope -->
+            <line x1="280" y1="52" x2="248" y2="67" stroke="#fda4af" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="248" cy="67" r="5" fill="#fde68a"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Battle Questions & Options Deck -->
+    <div id="battle-deck">
+      <div id="qbox-center">પ્રશ્ન લોડ થઈ રહ્યો છે...</div>
+
+      <div class="split-players" id="split-players-container">
+        <!-- Player 1 Side -->
+        <div class="player-panel p1" id="player1-side">
+          <div class="panel-q" id="qbox-p1">🔵 Blue પ્રશ્ન...</div>
+          <div class="options-grid" id="p1-options"></div>
+        </div>
+
+        <!-- Player 2 Side (Hidden in Online 1v1 mode because P2 plays on their own phone) -->
+        <div class="player-panel p2" id="player2-side">
+          <div class="panel-q" id="qbox-p2">🔴 Red પ્રશ્ન...</div>
+          <div class="options-grid" id="p2-options"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. WINNER SCREEN -->
+  <div id="win-screen" class="screen" style="justify-content:center; text-align:center;">
+    <div class="hero-badge" id="win-reward-badge">🏆 VICTORY</div>
+    <h1 class="title-neon" id="win-text" style="font-size:clamp(2rem, 5vw, 3.2rem);">વિજેતા!</h1>
+    <p class="subtitle" id="win-subtext">શાનદાર પ્રદર્શન!</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+      <button class="btn" onclick="playClick(); returnToMainMenu()">🏠 મુખ્ય મેનુ</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast">સંદેશ</div>
+
+<script>
+// ============================================================================
+// 1. APP & FIREBASE CONFIGURATION (Connects directly to NJ Classes DB & GitHub)
+// ============================================================================
+const RTDB_URL = (window.NJ_RTDB_URL || "https://nj-classes-default-rtdb.firebaseio.com").replace(/\/$/, "");
+const CDN_DATA_BASE = "https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-classes-data@main/";
+const CDN_AI_BASE = "https://cdn.jsdelivr.net/gh/njclassesapp-alt/NJClassesAIData@main/";
+const CDN_PAPER_BASE = "https://cdn.jsdelivr.net/gh/njclassesapp-alt/nj-Paper-data@main/";
+
+// User Profile & Points Wallet (Synced with App Bridge or Local Storage)
+const params = new URLSearchParams(window.location.search);
+let currentUser = {
+  uid: (window.NJ_USER && window.NJ_USER.uid) || params.get("uid") || localStorage.getItem("nj_guest_uid") || ("guest_" + Math.random().toString(36).slice(2, 9)),
+  name: (window.NJ_USER && window.NJ_USER.name) || params.get("name") || "વિદ્યાર્થી",
+  email: (window.NJ_USER && window.NJ_USER.email) || params.get("email") || "",
+  points: Number((window.NJ_USER && window.NJ_USER.points) || params.get("points") || localStorage.getItem("nj_game_points") || 50)
+};
+localStorage.setItem("nj_guest_uid", currentUser.uid);
+updateWalletUI();
+
+function updateWalletUI() {
+  document.getElementById("user-points").textContent = currentUser.points;
+  localStorage.setItem("nj_game_points", String(currentUser.points));
+  if (window.NJGameBridge && window.NJGameBridge.postMessage) {
+    try { window.NJGameBridge.postMessage(JSON.stringify({ type: "points_update", points: currentUser.points })); } catch (_) {}
+  }
+}
+
+async function syncPointsWithServer(delta) {
+  currentUser.points = Math.max(0, currentUser.points + delta);
+  updateWalletUI();
+  if (currentUser.uid && !currentUser.uid.startsWith("guest_")) {
+    try {
+      await fetch(`${RTDB_URL}/paper_generator_points/${encodeURIComponent(currentUser.uid)}.json`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentUser.points)
+      });
+    } catch (_) {}
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+// ============================================================================
+// 2. SOUND EFFECTS (Web Audio API — Zero External Audio Files Needed)
+// ============================================================================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, type, duration, vol = 0.08) {
+  try {
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (_) {}
+}
+function playClick() { playTone(620, "sine", 0.08, 0.05); }
+function playCorrect() { playTone(820, "triangle", 0.09, 0.1); setTimeout(() => playTone(1240, "triangle", 0.16, 0.1), 85); }
+function playWrong() { playTone(260, "sawtooth", 0.25, 0.09); }
+function playWin() {
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, idx) => setTimeout(() => playTone(f, "sine", 0.28, 0.14), idx * 130));
+}
+
+// ============================================================================
+// 3. CURRICULUM & MCQ CATALOG (Connects to App's Live Test / Curriculum DB)
+// ============================================================================
+const BUILTIN_MCQ_CATALOG = {
+  8: [
+    { id: "std8_maths", title: "ગણિત", stream: "general", url: CDN_DATA_BASE + "std8-maths-mcq.js" },
+    { id: "std8_sci", title: "વિજ્ઞાન", stream: "general", url: CDN_DATA_BASE + "std8-sci-mcq.js" },
+    { id: "std8_ss", title: "સામાજિક વિજ્ઞાન", stream: "general", url: CDN_DATA_BASE + "std8-ss-mcq.js" },
+    { id: "std8_guj", title: "ગુજરાતી", stream: "general", url: CDN_DATA_BASE + "std8-guj-mcq.js" },
+    { id: "std8_eng", title: "અંગ્રેજી", stream: "general", url: CDN_DATA_BASE + "std8-eng-mcq.js" },
+    { id: "std8_hindi", title: "હિન્દી", stream: "general", url: CDN_DATA_BASE + "std8-hindi-mcq.js" },
+    { id: "std8_sanskrit", title: "સંસ્કૃત", stream: "general", url: CDN_DATA_BASE + "std8-sanskrit-mcq.js" }
+  ],
+  9: [
+    { id: "std9_maths", title: "ગણિત", stream: "general", url: CDN_DATA_BASE + "std9-maths-mcq.js" },
+    { id: "std9_sci", title: "વિજ્ઞાન", stream: "general", url: CDN_DATA_BASE + "std9-sci-mcq.js" },
+    { id: "std9_ss", title: "સામાજિક વિજ્ઞાન", stream: "general", url: CDN_DATA_BASE + "std9-ss-mcq.js" },
+    { id: "std9_guj", title: "ગુજરાતી", stream: "general", url: CDN_DATA_BASE + "std9-guj-mcq.js" },
+    { id: "std9_eng", title: "અંગ્રેજી", stream: "general", url: CDN_DATA_BASE + "std9-eng-mcq.js" },
+    { id: "std9_hindi", title: "હિન્દી", stream: "general", url: CDN_DATA_BASE + "std9-hindi-mcq.js" },
+    { id: "std9_sanskrit", title: "સંસ્કૃત", stream: "general", url: CDN_DATA_BASE + "std9-sanskrit-mcq.js" }
+  ],
+  10: [
+    { id: "std10_maths", title: "ગણિત", stream: "general", url: CDN_DATA_BASE + "std10-maths-mcq.js" },
+    { id: "std10_sci", title: "વિજ્ઞાન", stream: "general", url: CDN_DATA_BASE + "std10-sci-mcq.js" },
+    { id: "std10_ss", title: "સામાજિક વિજ્ઞાન", stream: "general", url: CDN_DATA_BASE + "std10-ss-mcq.js" },
+    { id: "std10_eng", title: "અંગ્રેજી", stream: "general", url: CDN_DATA_BASE + "Std10_Eng_MCQ.js" },
+    { id: "std10_guj", title: "ગુજરાતી", stream: "general", url: CDN_DATA_BASE + "std10-guj-mcq.js" },
+    { id: "std10_hindi", title: "હિન્દી", stream: "general", url: CDN_DATA_BASE + "Std10_Hindi_MCQ.js" },
+    { id: "std10_sanskrit", title: "સંસ્કૃત", stream: "general", url: CDN_DATA_BASE + "std10-sanskrit-mcq.js" }
+  ],
+  11: [
+    { id: "std11_maths", title: "ગણિત (11 Sci)", stream: "science", url: CDN_DATA_BASE + "std11-maths-mcq.js" },
+    { id: "std11_phy", title: "ભૌતિક વિજ્ઞાન", stream: "science", url: CDN_DATA_BASE + "std11-physics-mcq.js" },
+    { id: "std11_chem", title: "રસાયણ વિજ્ઞાન", stream: "science", url: CDN_DATA_BASE + "std11-chemistry-mcq.js" },
+    { id: "std11_bio", title: "જીવ વિજ્ઞાન", stream: "science", url: CDN_DATA_BASE + "std11-biology-mcq.js" }
+  ],
+  12: [
+    { id: "std12_maths", title: "ગણિત (12 Sci)", stream: "science", url: CDN_DATA_BASE + "std12-maths-mcq.js" },
+    { id: "std12_phy", title: "ભૌતિક વિજ્ઞાન", stream: "science", url: CDN_DATA_BASE + "std12-physics-mcq.js" },
+    { id: "std12_chem", title: "રસાયણ વિજ્ઞાન", stream: "science", url: CDN_DATA_BASE + "std12-chemistry-mcq.js" },
+    { id: "std12_bio", title: "જીવ વિજ્ઞાન", stream: "science", url: CDN_DATA_BASE + "std12-biology-mcq.js" }
+  ]
+};
+
+let dynamicCatalogByStd = JSON.parse(JSON.stringify(BUILTIN_MCQ_CATALOG));
+let activeStandardsList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+// Sync live overrides & Admin-added MCQ links from Firebase Realtime Database
+async function syncCurriculumFromFirebase() {
+  try {
+    const res = await fetch(`${RTDB_URL}/curriculum_overrides.json`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data) return;
+
+    // Respect hidden standards if configured
+    if (data.standards) {
+      const hiddenStds = new Set();
+      Object.values(data.standards).forEach(st => {
+        if (st && (st.isVisible === false || st.isDeleted === true)) {
+          const num = parseInt(String(st.id || st.name || "").replace(/\D/g, ""), 10);
+          if (num) hiddenStds.add(num);
+        }
+      });
+      activeStandardsList = [1,2,3,4,5,6,7,8,9,10,11,12].filter(n => !hiddenStds.has(n));
+    }
+
+    // Merge Admin-configured MCQ section URLs across all standards
+    if (data.sections) {
+      Object.values(data.sections).forEach(sec => {
+        if (!sec || sec.isVisible === false || !sec.databaseUrl) return;
+        const titleLow = String(sec.title || sec.variableName || "").toLowerCase();
+        if (!titleLow.includes("mcq") && !titleLow.includes("વિકલ્પ")) return;
+        const stdNum = parseInt(String(sec.standardId || "").replace(/\D/g, ""), 10);
+        if (!stdNum) return;
+        if (!dynamicCatalogByStd[stdNum]) dynamicCatalogByStd[stdNum] = [];
+        const subName = sec.subjectTitle || sec.subjectId || "વિષય";
+        const exists = dynamicCatalogByStd[stdNum].find(s => s.url === sec.databaseUrl);
+        if (!exists) {
+          dynamicCatalogByStd[stdNum].push({
+            id: sec.subjectId || ("dyn_" + Math.random().toString(36).slice(2, 7)),
+            title: subName,
+            stream: sec.stream || (stdNum >= 11 ? "science" : "general"),
+            url: sec.databaseUrl
+          });
+        }
+      });
+    }
+    buildStandardsGrid();
+  } catch (_) {}
+}
+
+// ============================================================================
+// 4. NAVIGATION & STANDARD / SUBJECT / CHAPTER FLOW
+// ============================================================================
+let selectedStd = 10;
+let selectedStream = "science";
+let selectedSubjectObj = null;
+let currentGameMode = "dynamic"; // 'dynamic' | 'database'
+let currentDBQuestions = [];
+let allSubjectQuestions = [];
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.getElementById("quit-match-btn").style.display = (id === "game-area") ? "inline-flex" : "none";
+}
+
+function toggleFullscreen() {
+  const el = document.documentElement;
+  if (!document.fullscreenElement) {
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  }
+}
+
+function buildStandardsGrid() {
+  const grid = document.getElementById("std-grid");
+  grid.innerHTML = "";
+  activeStandardsList.forEach(std => {
+    const hasMcq = (dynamicCatalogByStd[std] && dynamicCatalogByStd[std].length > 0);
+    const btn = document.createElement("button");
+    btn.className = "grid-btn";
+    btn.innerHTML = `<span>ધોરણ ${std}</span><small>${hasMcq ? "📚 પાઠ્યપુસ્તક + ગણિત" : "🧮 સ્માર્ટ ગણિત"}</small>`;
+    btn.onclick = () => {
+      playClick();
+      selectedStd = std;
+      openStdModeScreen(std);
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function openLocalSetup() {
+  buildStandardsGrid();
+  showScreen("std-select");
+}
+
+function openStdModeScreen(std) {
+  document.getElementById("std-mode-title").textContent = `ધોરણ ${std} - મોડ પસંદ કરો`;
+  const subjects = dynamicCatalogByStd[std] || [];
+  const hasMcq = subjects.length > 0;
+  document.getElementById("btn-textbook-mode").style.display = hasMcq ? "flex" : "none";
+  document.getElementById("btn-mix-mode").style.display = hasMcq ? "flex" : "none";
+  showScreen("std-mode-select");
+}
+
+function startDynamicMathMode() {
+  currentGameMode = "dynamic";
+  showScreen("q-mode-select");
+}
+
+function openSubjectSelect() {
+  const subjects = dynamicCatalogByStd[selectedStd] || [];
+  document.getElementById("subject-screen-title").textContent = `ધોરણ ${selectedStd} - વિષય પસંદ કરો`;
+  const streamTabs = document.getElementById("stream-tabs");
+  if (selectedStd === 11 || selectedStd === 12) {
+    streamTabs.style.display = "flex";
+    switchStream(selectedStream);
+  } else {
+    streamTabs.style.display = "none";
+    renderSubjectsGrid(subjects);
+  }
+  showScreen("subject-select");
+}
+
+function switchStream(stream) {
+  selectedStream = stream;
+  document.querySelectorAll("#stream-tabs .stream-tab").forEach(b => {
+    b.classList.toggle("active", b.dataset.stream === stream);
+  });
+  const allSubs = dynamicCatalogByStd[selectedStd] || [];
+  const filtered = allSubs.filter(s => (s.stream || "science") === stream);
+  renderSubjectsGrid(filtered);
+}
+
+function renderSubjectsGrid(list) {
+  const grid = document.getElementById("subject-grid");
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:20px;">આ પ્રવાહ માટે હજુ MCQ ડેટાબેઝ ઉમેરાયેલ નથી.</div>`;
+    return;
+  }
+  list.forEach(sub => {
+    const btn = document.createElement("button");
+    btn.className = "grid-btn";
+    btn.innerHTML = `<span>${sub.title}</span><small>પાઠ્યપુસ્તક MCQ</small>`;
+    btn.onclick = () => {
+      playClick();
+      selectedSubjectObj = sub;
+      loadSubjectMcqFile(sub);
+    };
+    grid.appendChild(btn);
+  });
+}
+
+// ============================================================================
+// 5. UNIVERSAL JS / JSON MCQ DATABASE PARSER (Supports All GitHub Repo Formats)
+// ============================================================================
+async function fetchQuestionsFromUrl(url) {
+  const cleanUrl = url.replace("github.com/", "raw.githubusercontent.com/").replace("/blob/", "/");
+  const res = await fetch(cleanUrl);
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const rawText = await res.text();
+
+  // Try direct JSON first
+  try {
+    const parsed = JSON.parse(rawText);
+    return normalizeQuestionsArray(parsed);
+  } catch (_) {}
+
+  // Execute/Extract JS variable safely
+  window.njQuestionsDatabase = null;
+  try {
+    const fn = new Function(rawText + "; return (typeof njQuestionsDatabase !== 'undefined' ? njQuestionsDatabase : window.njQuestionsDatabase);");
+    const result = fn();
+    if (result) return normalizeQuestionsArray(result);
+  } catch (_) {}
+
+  // Fallback regex array/object extraction
+  const arrMatch = rawText.match(/=\s*(\[[\s\S]*\])\s*;?\s*$/);
+  if (arrMatch) {
+    const parsedArr = new Function("return " + arrMatch[1])();
+    return normalizeQuestionsArray(parsedArr);
+  }
+  return [];
+}
+
+function normalizeQuestionsArray(raw) {
+  let list = [];
+  if (Array.isArray(raw)) {
+    list = raw;
+  } else if (raw && typeof raw === "object") {
+    Object.entries(raw).forEach(([key, val]) => {
+      if (Array.isArray(val)) {
+        const chNum = parseInt(key.replace(/\D/g, ""), 10) || 1;
+        val.forEach(item => list.push({ ...item, chapter: item.chapter || chNum }));
+      }
+    });
+  }
+  return list.filter(q => q && (q.q || q.question) && Array.isArray(q.options) && q.options.length >= 2).map(q => ({
+    q: q.q || q.question,
+    options: q.options,
+    ans: q.ans !== undefined ? q.ans : q.answer,
+    chapter: q.chapter || q.ch || 1
+  }));
+}
+
+async function loadSubjectMcqFile(sub) {
+  document.getElementById("loading-title").textContent = `${sub.title} ના પ્રકરણો લોડ થઈ રહ્યા છે...`;
+  showScreen("loading-screen");
+  try {
+    const questions = await fetchQuestionsFromUrl(sub.url);
+    if (!questions.length) {
+      showToast("આ વિષયમાં MCQ પ્રશ્નો મળ્યા નથી!");
+      showScreen("subject-select");
+      return;
+    }
+    allSubjectQuestions = questions;
+    buildChapterMenu(sub.title, questions);
+  } catch (e) {
+    showToast("ડેટા લોડ થઈ શક્યો નથી. ઈન્ટરનેટ તપાસો.");
+    showScreen("subject-select");
+  }
+}
+
+function buildChapterMenu(subTitle, questions) {
+  document.getElementById("selected-sub-title").textContent = `${subTitle} - પ્રકરણ પસંદ કરો`;
+  const grid = document.getElementById("chapter-grid");
+  grid.innerHTML = "";
+
+  const mixBtn = document.createElement("button");
+  mixBtn.className = "grid-btn";
+  mixBtn.style.borderColor = "var(--gold)";
+  mixBtn.innerHTML = `<span>🔀 બધા પ્રકરણ મિક્સ</span><small>${questions.length} પ્રશ્નો</small>`;
+  mixBtn.onclick = () => {
+    playClick();
+    currentDBQuestions = [...allSubjectQuestions];
+    currentGameMode = "database";
+    showScreen("q-mode-select");
+  };
+  grid.appendChild(mixBtn);
+
+  const chapters = [...new Set(questions.map(q => q.chapter))].sort((a, b) => Number(a) - Number(b));
+  chapters.forEach(ch => {
+    const chCount = questions.filter(q => String(q.chapter) === String(ch)).length;
+    const btn = document.createElement("button");
+    btn.className = "grid-btn";
+    btn.innerHTML = `<span>પ્રકરણ ${ch}</span><small>${chCount} MCQ</small>`;
+    btn.onclick = () => {
+      playClick();
+      currentDBQuestions = allSubjectQuestions.filter(q => String(q.chapter) === String(ch));
+      currentGameMode = "database";
+      showScreen("q-mode-select");
+    };
+    grid.appendChild(btn);
+  });
+  showScreen("chapter-select");
+}
+
+async function loadAllSubjectsMix() {
+  const subs = dynamicCatalogByStd[selectedStd] || [];
+  if (!subs.length) return;
+  document.getElementById("loading-title").textContent = `ધોરણ ${selectedStd} મિક્સ મહાસંગ્રામ લોડ થઈ રહ્યો છે...`;
+  showScreen("loading-screen");
+  let merged = [];
+  await Promise.all(subs.map(async s => {
+    try {
+      const qs = await fetchQuestionsFromUrl(s.url);
+      merged = merged.concat(qs);
+    } catch (_) {}
+  }));
+  if (!merged.length) {
+    showToast("પ્રશ્નો લોડ થઈ શક્યા નથી!");
+    showScreen("std-mode-select");
+    return;
+  }
+  currentDBQuestions = merged;
+  currentGameMode = "database";
+  showScreen("q-mode-select");
+}
+
+// ============================================================================
+// 6. SMART DYNAMIC MATH ENGINE (Grades 1 to 12)
+// ============================================================================
+function generateMathQuestion(std) {
+  let patterns = [0, 1, 2, 4];
+  if (std >= 4 && std <= 5) patterns = [0, 1, 2, 3, 4, 11, 12];
+  else if (std >= 6 && std <= 8) patterns = [2, 3, 5, 6, 7, 9, 10, 13, 14];
+  else if (std >= 9) patterns = [5, 6, 7, 8, 9, 10, 13, 14];
+
+  const p = patterns[Math.floor(Math.random() * patterns.length)];
+  const scale = std * 10;
+  let a = Math.floor(Math.random() * scale) + 2;
+  let b = Math.floor(Math.random() * scale) + 2;
+  let c = Math.floor(Math.random() * 10) + 2;
+  let q = "", ans = 0;
+
+  switch (p) {
+    case 0: q = `${a} + ${b} = ?`; ans = a + b; break;
+    case 1: if (a < b) [a, b] = [b, a]; q = `${a} - ${b} = ?`; ans = a - b; break;
+    case 2: a = Math.floor(Math.random() * (std * 2 + 4)) + 2; b = Math.floor(Math.random() * 12) + 2; q = `${a} × ${b} = ?`; ans = a * b; break;
+    case 3: a = Math.floor(Math.random() * 12) + 2; b = Math.floor(Math.random() * 10) + 2; ans = a; q = `${a * b} ÷ ${b} = ?`; break;
+    case 4: ans = b; q = `${a} + ? = ${a + b}`; break;
+    case 5: a = Math.floor(Math.random() * 20) + 1; b = Math.floor(Math.random() * 10) + 1; c = Math.floor(Math.random() * 9) + 2; q = `${a} + ${b} × ${c} = ?`; ans = a + (b * c); break;
+    case 6: a = Math.floor(Math.random() * 18) + 2; q = `${a} નો વર્ગ (${a}²) = ?`; ans = a * a; break;
+    case 7: a = Math.floor(Math.random() * 18) + 2; q = `√${a * a} = ?`; ans = a; break;
+    case 8: a = Math.floor(Math.random() * 10) + 2; q = `${a} નો ઘન (${a}³) = ?`; ans = a * a * a; break;
+    case 9: a = (Math.floor(Math.random() * 9) + 1) * 10; b = (Math.floor(Math.random() * 10) + 1) * 50; q = `${b} ના ${a}% = ?`; ans = (b * a) / 100; break;
+    case 10: a = Math.floor(Math.random() * 10) + 2; ans = Math.floor(Math.random() * 15) + 2; q = `જો ${a}x = ${a * ans}, તો x = ?`; break;
+    case 11: a = Math.floor(Math.random() * 15) + 2; q = `ચોરસની બાજુ ${a}, પરિમિતિ = ?`; ans = 4 * a; break;
+    case 12: a = Math.floor(Math.random() * 15) + 2; b = Math.floor(Math.random() * 10) + 2; q = `લંબચોરસ (${a} × ${b}) ક્ષેત્રફળ = ?`; ans = a * b; break;
+    case 13: a = Math.floor(Math.random() * 20) + 5; b = Math.floor(Math.random() * 20) + 5; c = Math.floor(Math.random() * 20) + 5; ans = Math.round((a + b + c) / 3); q = `${a}, ${b}, ${c} ની સરેરાશ ≈ ?`; break;
+    case 14: a = Math.floor(Math.random() * 9) + 1; b = Math.floor(Math.random() * 10) + 1; q = `જો x=${a}, y=${b}, તો x² + y = ?`; ans = (a * a) + b; break;
+  }
+
+  const opts = [String(ans)];
+  while (opts.length < 4) {
+    const wrong = ans + (Math.floor(Math.random() * 18) - 9);
+    if (wrong !== ans && wrong >= 0 && !opts.includes(String(wrong))) opts.push(String(wrong));
+  }
+  opts.sort(() => Math.random() - 0.5);
+  return { q, options: opts, ans: String(ans) };
+}
+
+// ============================================================================
+// 7. LUDO-STYLE ONLINE 1v1 MULTIPLAYER ENGINE (Point Betting + Live Sync)
+// ============================================================================
+let selectedStake = 5;
+let activeRoomCode = null;
+let onlineRole = null; // 'p1' | 'p2'
+let onlinePollTimer = null;
+let isOnlineMatch = false;
+
+function openOnlineLobby() {
+  const stdSel = document.getElementById("online-std-select");
+  stdSel.innerHTML = "";
+  activeStandardsList.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = `ધોરણ ${s}`;
+    if (s === 10) opt.selected = true;
+    stdSel.appendChild(opt);
+  });
+  populateOnlineSubjects();
+  showScreen("online-lobby");
+}
+
+function populateOnlineSubjects() {
+  const std = Number(document.getElementById("online-std-select").value || 10);
+  const subSel = document.getElementById("online-sub-select");
+  subSel.innerHTML = `<option value="math_auto">🧮 સ્માર્ટ ગણિત (Auto)</option>`;
+  (dynamicCatalogByStd[std] || []).forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.url;
+    opt.textContent = `📚 ${s.title}`;
+    subSel.appendChild(opt);
+  });
+}
+
+function switchLobbyTab(tab) {
+  document.getElementById("tab-create-room").classList.toggle("active", tab === "create");
+  document.getElementById("tab-join-room").classList.toggle("active", tab === "join");
+  document.getElementById("lobby-create-panel").style.display = (tab === "create") ? "block" : "none";
+  document.getElementById("lobby-join-panel").style.display = (tab === "join") ? "block" : "none";
+}
+
+function selectStake(pts, btnEl) {
+  selectedStake = pts;
+  document.querySelectorAll(".stake-chip").forEach(c => c.classList.remove("active"));
+  btnEl.classList.add("active");
+}
+
+async function createOnlineRoom() {
+  if (currentUser.points < selectedStake) {
+    showToast(`તમારી પાસે પૂરતા ${selectedStake} પોઈન્ટ નથી!`);
+    return;
+  }
+  const std = Number(document.getElementById("online-std-select").value || 10);
+  const subVal = document.getElementById("online-sub-select").value;
+  const code = "NJ" + Math.floor(1000 + Math.random() * 9000);
+
+  await syncPointsWithServer(-selectedStake);
+  activeRoomCode = code;
+  onlineRole = "p1";
+
+  const roomPayload = {
+    code,
+    status: "waiting",
+    std,
+    subUrl: subVal,
+    stake: selectedStake,
+    prizePool: selectedStake * 2,
+    ropePosition: 50,
+    p1: { uid: currentUser.uid, name: currentUser.name, score: 0 },
+    p2: null,
+    winner: null,
+    createdAt: Date.now()
+  };
+
+  try {
+    await fetch(`${RTDB_URL}/online_tug_rooms/${code}.json`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(roomPayload)
+    });
+  } catch (e) {
+    showToast("નેટવર્ક એરર! ફરી પ્રયત્ન કરો.");
+    await syncPointsWithServer(selectedStake);
+    return;
+  }
+
+  document.getElementById("create-room-action").style.display = "none";
+  document.getElementById("waiting-room-box").style.display = "block";
+  document.getElementById("created-room-code").textContent = code;
+
+  clearInterval(onlinePollTimer);
+  onlinePollTimer = setInterval(async () => {
+    try {
+      const r = await fetch(`${RTDB_URL}/online_tug_rooms/${code}.json`);
+      const room = await r.json();
+      if (!room) return;
+      if (room.status === "playing" && room.p2) {
+        clearInterval(onlinePollTimer);
+        startOnlineBattle(room);
+      }
+    } catch (_) {}
+  }, 1500);
+}
+
+async function cancelCreatedRoom() {
+  clearInterval(onlinePollTimer);
+  if (activeRoomCode) {
+    try { await fetch(`${RTDB_URL}/online_tug_rooms/${activeRoomCode}.json`, { method: "DELETE" }); } catch (_) {}
+    await syncPointsWithServer(selectedStake);
+    activeRoomCode = null;
+  }
+  document.getElementById("create-room-action").style.display = "block";
+  document.getElementById("waiting-room-box").style.display = "none";
+  showToast("રૂમ રદ કર્યો — તમારા પોઈન્ટ પાછા જમા થઈ ગયા!");
+}
+
+function getShareableInviteText() {
+  const baseUrl = window.location.href.split("?")[0];
+  const joinUrl = `${baseUrl}?room=${activeRoomCode}`;
+  return `⚔️ *જ્ઞાનની રસ્સાખેંચ PRO MAX ચેલેન્જ!*\n\nહું તને ઓનલાઇન 1v1 જ્ઞાન યુદ્ધ માટે ચેલેન્જ આપું છું!\n🔑 *રૂમ કોડ:* ${activeRoomCode}\n🪙 *એન્ટ્રી:* ${selectedStake} પોઈન્ટ (જીતનારને ${selectedStake * 2} પોઈન્ટ!)\n\n👇 નીચેની લિંક ખોલો અથવા એપમાં રૂમ કોડ નાખો:\n${joinUrl}`;
+}
+
+function shareRoomInvite() {
+  const text = getShareableInviteText();
+  if (navigator.share) {
+    navigator.share({ title: "જ્ઞાનની રસ્સાખેંચ ચેલેન્જ", text }).catch(() => {});
+  } else {
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  }
+}
+
+function copyRoomCode() {
+  if (!activeRoomCode) return;
+  navigator.clipboard?.writeText(activeRoomCode);
+  showToast(`રૂમ કોડ ${activeRoomCode} કોપી થઈ ગયો!`);
+}
+
+async function joinOnlineRoom() {
+  const code = document.getElementById("join-code-input").value.trim().toUpperCase();
+  if (code.length < 4) {
+    showToast("કૃપા કરીને સાચો રૂમ કોડ દાખલ કરો!");
+    return;
+  }
+  try {
+    const r = await fetch(`${RTDB_URL}/online_tug_rooms/${code}.json`);
+    const room = await r.json();
+    if (!room || room.status !== "waiting") {
+      showToast("આ રૂમ કોડ મળ્યો નથી અથવા મેચ શરૂ થઈ ગઈ છે!");
+      return;
+    }
+    const stake = Number(room.stake || 5);
+    if (currentUser.points < stake) {
+      showToast(`જોડાવા માટે ${stake} પોઈન્ટ જરૂરી છે!`);
+      return;
+    }
+
+    await syncPointsWithServer(-stake);
+    activeRoomCode = code;
+    onlineRole = "p2";
+    selectedStake = stake;
+
+    const updated = {
+      status: "playing",
+      p2: { uid: currentUser.uid, name: currentUser.name, score: 0 }
+    };
+    await fetch(`${RTDB_URL}/online_tug_rooms/${code}.json`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated)
+    });
+    room.status = "playing";
+    room.p2 = updated.p2;
+    startOnlineBattle(room);
+  } catch (_) {
+    showToast("રૂમમાં જોડાતી વખતે એરર આવી!");
+  }
+}
+
+async function startOnlineBattle(room) {
+  isOnlineMatch = true;
+  selectedStd = Number(room.std || 10);
+  selectedStake = Number(room.stake || 5);
+
+  if (room.subUrl && room.subUrl !== "math_auto") {
+    try {
+      const qs = await fetchQuestionsFromUrl(room.subUrl);
+      if (qs.length) {
+        currentDBQuestions = qs;
+        currentGameMode = "database";
+      } else {
+        currentGameMode = "dynamic";
+      }
+    } catch (_) {
+      currentGameMode = "dynamic";
+    }
+  } else {
+    currentGameMode = "dynamic";
+  }
+
+  initArena({
+    online: true,
+    p1Name: `🔵 ${room.p1?.name || "Player 1"}`,
+    p2Name: `🔴 ${room.p2?.name || "Player 2"}`,
+    badge: `🏆 POOL: ${room.prizePool || selectedStake * 2} Pts`
+  });
+
+  // Start Live Room Sync Loop (Updates rope & checks winner across both phones)
+  clearInterval(onlinePollTimer);
+  onlinePollTimer = setInterval(async () => {
+    if (!gameActive || !activeRoomCode) return;
+    try {
+      const r = await fetch(`${RTDB_URL}/online_tug_rooms/${activeRoomCode}.json`);
+      const latest = await r.json();
+      if (!latest) return;
+      ropePosition = Number(latest.ropePosition ?? 50);
+      p1Score = Number(latest.p1?.score ?? 0);
+      p2Score = Number(latest.p2?.score ?? 0);
+      document.getElementById("p1-score").textContent = p1Score;
+      document.getElementById("p2-score").textContent = p2Score;
+      updateRopeVisual();
+
+      if (latest.winner || ropePosition <= 10 || ropePosition >= 90) {
+        const winSide = latest.winner || (ropePosition <= 10 ? "p1" : "p2");
+        finishOnlineMatch(winSide, latest);
+      }
+    } catch (_) {}
+  }, 900);
+}
+
+// ============================================================================
+// 8. CORE TUG-OF-WAR ENGINE (Smooth Physics + Dust Particles + Keyboard)
+// ============================================================================
+let gameActive = false;
+let ropePosition = 50; // 10 = P1 wins, 90 = P2 wins
+let questionStyle = "same";
+let p1CurrentQ = {};
+let p2CurrentQ = {};
+let p1Score = 0;
+let p2Score = 0;
+
+function launchLocalBattle(style) {
+  isOnlineMatch = false;
+  questionStyle = style;
+  initArena({
+    online: false,
+    p1Name: "🔵 Blue (P1)",
+    p2Name: "🔴 Red (P2)",
+    badge: style === "same" ? "🎯 SAME QUESTION" : "⚔️ 1v1 SPLIT"
+  });
+}
+
+function initArena({ online, p1Name, p2Name, badge }) {
+  showScreen("game-area");
+  ropePosition = 50;
+  p1Score = 0;
+  p2Score = 0;
+  gameActive = true;
+
+  document.getElementById("p1-name").textContent = p1Name;
+  document.getElementById("p2-name").textContent = p2Name;
+  document.getElementById("p1-score").textContent = "0";
+  document.getElementById("p2-score").textContent = "0";
+  document.getElementById("arena-match-badge").textContent = badge;
+  updateRopeVisual();
+
+  const splitContainer = document.getElementById("split-players-container");
+  const p1Panel = document.getElementById("player1-side");
+  const p2Panel = document.getElementById("player2-side");
+  const qCenter = document.getElementById("qbox-center");
+
+  if (online) {
+    // Each online player gets full-screen comfortable controls on their own phone
+    splitContainer.classList.add("single-online");
+    qCenter.style.display = "none";
+    if (onlineRole === "p1") {
+      p1Panel.style.display = "flex";
+      p2Panel.style.display = "none";
+      loadSinglePanelQuestion(1);
+    } else {
+      p1Panel.style.display = "none";
+      p2Panel.style.display = "flex";
+      loadSinglePanelQuestion(2);
+    }
+  } else {
+    splitContainer.classList.remove("single-online");
+    p1Panel.style.display = "flex";
+    p2Panel.style.display = "flex";
+    if (questionStyle === "same") {
+      qCenter.style.display = "block";
+      document.getElementById("qbox-p1").style.display = "none";
+      document.getElementById("qbox-p2").style.display = "none";
+      loadSameQuestion();
+    } else {
+      qCenter.style.display = "none";
+      document.getElementById("qbox-p1").style.display = "block";
+      document.getElementById("qbox-p2").style.display = "block";
+      loadSinglePanelQuestion(1);
+      loadSinglePanelQuestion(2);
+    }
+  }
+}
+
+function getNextQuestion() {
+  if (currentGameMode === "database" && currentDBQuestions.length > 0) {
+    return currentDBQuestions[Math.floor(Math.random() * currentDBQuestions.length)];
+  }
+  return generateMathQuestion(selectedStd);
+}
+
+function loadSameQuestion() {
+  if (!gameActive) return;
+  p1CurrentQ = getNextQuestion();
+  p2CurrentQ = p1CurrentQ;
+  document.getElementById("qbox-center").innerHTML = p1CurrentQ.q;
+
+  const opts = [...p1CurrentQ.options].sort(() => Math.random() - 0.5);
+  renderOptionButtons("p1-options", opts, opt => handleAnswer(1, opt));
+  renderOptionButtons("p2-options", opts, opt => handleAnswer(2, opt));
+}
+
+function loadSinglePanelQuestion(playerNum) {
+  if (!gameActive) return;
+  const qObj = getNextQuestion();
+  if (playerNum === 1) p1CurrentQ = qObj;
+  else p2CurrentQ = qObj;
+
+  const qBox = document.getElementById(playerNum === 1 ? "qbox-p1" : "qbox-p2");
+  qBox.style.display = "block";
+  qBox.innerHTML = qObj.q;
+
+  const opts = [...qObj.options].sort(() => Math.random() - 0.5);
+  renderOptionButtons(playerNum === 1 ? "p1-options" : "p2-options", opts, opt => handleAnswer(playerNum, opt));
+}
+
+function renderOptionButtons(containerId, opts, onPick) {
+  const box = document.getElementById(containerId);
+  box.innerHTML = "";
+  const letters = ["A", "B", "C", "D"];
+  opts.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "opt-btn";
+    btn.innerHTML = `<span class="opt-tag">${letters[i] || "•"}</span><span>${opt}</span>`;
+    btn.onclick = () => onPick(opt);
+    box.appendChild(btn);
+  });
+}
+
+function isAnswerMatch(selected, qObj) {
+  let ansVal = qObj.ans !== undefined ? qObj.ans : qObj.answer;
+  if (typeof ansVal === "number" && Array.isArray(qObj.options)) ansVal = qObj.options[ansVal];
+  const clean = s => {
+    const d = document.createElement("div");
+    d.innerHTML = String(s ?? "");
+    return (d.textContent || "").replace(/\s+/g, "").toLowerCase();
+  };
+  return clean(selected) === clean(ansVal);
+}
+
+async function handleAnswer(playerNum, selectedOpt) {
+  if (!gameActive) return;
+  const qObj = playerNum === 1 ? p1CurrentQ : p2CurrentQ;
+  const correct = isAnswerMatch(selectedOpt, qObj);
+  const panel = document.getElementById(playerNum === 1 ? "player1-side" : "player2-side");
+
+  if (correct) {
+    playCorrect();
+    spawnDustBurst();
+    if (playerNum === 1) { ropePosition = Math.max(10, ropePosition - 10); p1Score += 10; }
+    else { ropePosition = Math.min(90, ropePosition + 10); p2Score += 10; }
+    panel.classList.remove("flash-green");
+    void panel.offsetWidth;
+    panel.classList.add("flash-green");
+  } else {
+    playWrong();
+    if (playerNum === 1) ropePosition = Math.min(90, ropePosition + 6);
+    else ropePosition = Math.max(10, ropePosition - 6);
+    panel.classList.remove("flash-red");
+    void panel.offsetWidth;
+    panel.classList.add("flash-red");
+  }
+
+  document.getElementById("p1-score").textContent = p1Score;
+  document.getElementById("p2-score").textContent = p2Score;
+  updateRopeVisual();
+
+  // Sync to Firebase if Online 1v1 Match
+  if (isOnlineMatch && activeRoomCode) {
+    const winSide = ropePosition <= 10 ? "p1" : (ropePosition >= 90 ? "p2" : null);
+    const patchData = {
+      ropePosition,
+      [`${playerNum === 1 ? "p1" : "p2"}/score`]: playerNum === 1 ? p1Score : p2Score
+    };
+    if (winSide) {
+      patchData.winner = winSide;
+      patchData.status = "finished";
+    }
+    try {
+      await fetch(`${RTDB_URL}/online_tug_rooms/${activeRoomCode}.json`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patchData)
+      });
+    } catch (_) {}
+    if (winSide) {
+      finishOnlineMatch(winSide);
+      return;
+    }
+    loadSinglePanelQuestion(playerNum);
+    return;
+  }
+
+  // Local Mode Win Check
+  if (ropePosition <= 10) {
+    endLocalMatch("🔵 Blue ટીમ વિજેતા બની! 🎉", `અંતિમ સ્કોર: Blue ${p1Score} - ${p2Score} Red`);
+    return;
+  }
+  if (ropePosition >= 90) {
+    endLocalMatch("🔴 Red ટીમ વિજેતા બની! 🎉", `અંતિમ સ્કોર: Blue ${p1Score} - ${p2Score} Red`);
+    return;
+  }
+
+  if (questionStyle === "same") loadSameQuestion();
+  else loadSinglePanelQuestion(playerNum);
+}
+
+function updateRopeVisual() {
+  document.getElementById("tug-rig").style.left = ropePosition + "%";
+}
+
+function spawnDustBurst() {
+  const stage = document.getElementById("tug-stage");
+  const d = document.createElement("div");
+  d.className = "dust-burst";
+  d.style.left = `calc(${ropePosition}% + ${(Math.random() * 60 - 30)}px)`;
+  stage.appendChild(d);
+  setTimeout(() => d.remove(), 560);
+}
+
+function endLocalMatch(title, sub) {
+  gameActive = false;
+  playWin();
+  document.getElementById("win-reward-badge").textContent = "🏆 LOCAL VICTORY";
+  document.getElementById("win-text").textContent = title;
+  document.getElementById("win-subtext").textContent = sub;
+  showScreen("win-screen");
+}
+
+async function finishOnlineMatch(winSide) {
+  if (!gameActive) return;
+  gameActive = false;
+  clearInterval(onlinePollTimer);
+  const iWon = (winSide === onlineRole);
+  const prize = selectedStake * 2;
+
+  if (iWon) {
+    playWin();
+    await syncPointsWithServer(prize);
+    document.getElementById("win-reward-badge").textContent = `🪙 +${prize} POINTS WON!`;
+    document.getElementById("win-text").textContent = "🎉 તમે જીતી ગયા!";
+    document.getElementById("win-subtext").textContent = `તમારા ખાતામાં ${prize} પોઈન્ટ્સ જમા થઈ ગયા છે!`;
+  } else {
+    playWrong();
+    document.getElementById("win-reward-badge").textContent = "⚔️ MATCH OVER";
+    document.getElementById("win-text").textContent = "મિત્ર જીતી ગયો!";
+    document.getElementById("win-subtext").textContent = "ફરી ચેલેન્જ આપીને બદલો લો!";
+  }
+  activeRoomCode = null;
+  showScreen("win-screen");
+}
+
+function quitCurrentMatch() {
+  gameActive = false;
+  clearInterval(onlinePollTimer);
+  activeRoomCode = null;
+  isOnlineMatch = false;
+  showScreen("main-menu");
+}
+
+function returnToMainMenu() {
+  gameActive = false;
+  clearInterval(onlinePollTimer);
+  showScreen("main-menu");
+}
+
+// PC Keyboard Support (1-4 for P1, 7-0 for P2)
+document.addEventListener("keydown", e => {
+  if (!gameActive) return;
+  const p1Keys = { "1": 0, "2": 1, "3": 2, "4": 3, "a": 0, "s": 1, "d": 2, "f": 3 };
+  const p2Keys = { "7": 0, "8": 1, "9": 2, "0": 3, "j": 0, "k": 1, "l": 2, ";": 3 };
+  const k = e.key.toLowerCase();
+  if (k in p1Keys) {
+    const btns = document.querySelectorAll("#p1-options .opt-btn");
+    if (btns[p1Keys[k]]) btns[p1Keys[k]].click();
+  } else if (k in p2Keys) {
+    const btns = document.querySelectorAll("#p2-options .opt-btn");
+    if (btns[p2Keys[k]]) btns[p2Keys[k]].click();
+  }
+});
+
+// Auto-Detect Shared Invite Room Link (?room=NJXXXX)
+window.addEventListener("DOMContentLoaded", () => {
+  syncCurriculumFromFirebase();
+  const inviteRoom = params.get("room");
+  if (inviteRoom) {
+    openOnlineLobby();
+    switchLobbyTab("join");
+    document.getElementById("join-code-input").value = inviteRoom.toUpperCase();
+    showToast(`રૂમ ${inviteRoom.toUpperCase()} મળ્યો! જોડાવા પર ક્લિક કરો.`);
+  }
+});
+</script>
+</body>
+</html>
