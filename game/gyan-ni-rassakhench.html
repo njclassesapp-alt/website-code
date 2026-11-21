@@ -1627,18 +1627,37 @@ async function cancelCreatedRoom() {
 }
 
 function getShareableInviteText() {
-  const baseUrl = window.location.href.split("?")[0];
-  const joinUrl = `${baseUrl}?room=${activeRoomCode}`;
-  return `⚔️ *જ્ઞાનની રસ્સાખેંચ PRO MAX ચેલેન્જ!*\n\nહું તને ઓનલાઇન 1v1 જ્ઞાન યુદ્ધ માટે ચેલેન્જ આપું છું!\n🔑 *રૂમ કોડ:* ${activeRoomCode}\n🪙 *એન્ટ્રી:* ${selectedStake} પોઈન્ટ (જીતનારને ${selectedStake * 2} પોઈન્ટ!)\n\n👇 નીચેની લિંક ખોલો અથવા એપમાં રૂમ કોડ નાખો:\n${joinUrl}`;
+  const joinUrl = `https://www.njclasses.in/p/pro-max-nj-classes-1v1-1v1.html?room=${activeRoomCode}`;
+  return `⚔️ *જ્ઞાનની રસ્સાખેંચ PRO MAX ચેલેન્જ!*\n\nહું તને ઓનલાઇન 1v1 જ્ઞાન યુદ્ધ માટે ચેલેન્જ આપું છું!\n🔑 *રૂમ કોડ:* ${activeRoomCode}\n🪙 *એન્ટ્રી:* ${selectedStake} પોઈન્ટ (જીતનારને ${selectedStake * 2} પોઈન્ટ!)\n\n👇 નીચેની લિંક પર ક્લિક કરી સીધા મેચમાં જોડાઓ:\n${joinUrl}`;
 }
 
 function shareRoomInvite() {
   const text = getShareableInviteText();
+  const joinUrl = `https://www.njclasses.in/p/pro-max-nj-classes-1v1-1v1.html?room=${activeRoomCode}`;
+  if (window.NJGameBridge && window.NJGameBridge.postMessage) {
+    try {
+      window.NJGameBridge.postMessage(JSON.stringify({
+        type: "share_invite",
+        roomCode: activeRoomCode,
+        url: joinUrl,
+        shareText: text
+      }));
+      return;
+    } catch (_) {}
+  }
   if (navigator.share) {
     navigator.share({ title: "જ્ઞાનની રસ્સાખેંચ ચેલેન્જ", text }).catch(() => {});
   } else {
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
   }
+}
+
+window.openSharedGameRoom = function(roomCode) {
+  if (!roomCode) return;
+  openOnlineLobby();
+  switchLobbyTab("join");
+  document.getElementById("join-code-input").value = String(roomCode).trim().toUpperCase();
+  showToast(`રૂમ ${String(roomCode).trim().toUpperCase()} મળ્યો! જોડાવા પર ક્લિક કરો.`);
 }
 
 function copyRoomCode() {
