@@ -1,0 +1,16 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.njclasses.app",
+      "sha256_cert_fingerprints": [
+        "E5:5E:55:F0:85:5F:35:3F:80:21:A6:B2:4B:14:8A:C2:70:5E:A7:69:89:97:AC:20:86:42:00:7E:35:A4:EE:65",
+        "53:8F:81:C9:08:3D:55:86:EE:C3:33:C6:0C:01:63:4A:A1:1A:48:28:3C:67:1E:AF:DA:DA:2D:6A:B1:C3:0F:8E",
+        "27:6F:BB:18:41:27:A4:C7:E1:0D:0F:83:20:5B:E1:63:A4:30:0A:27:4C:A8:19:1D:F4:3D:F3:3D:2D:FD:7F:61"
+      ]
+    }
+  }
+]
