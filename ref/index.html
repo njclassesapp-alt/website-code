@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NJ Classes — એપ ડાઉનલોડ કરો</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0B1220; color: #fff; padding: 20px; }
+    .card { width: 100%; max-width: 400px; background: #131E31; border: 1px solid #243552; border-radius: 20px; padding: 28px 22px; text-align: center; box-shadow: 0 12px 35px rgba(0,0,0,0.4); }
+    .badge { display: inline-block; background: rgba(245,158,11,0.15); color: #FBBF24; border: 1px solid rgba(245,158,11,0.4); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+    h1 { font-size: 22px; margin-bottom: 8px; }
+    p { font-size: 14px; color: #94A3B8; line-height: 1.5; margin-bottom: 18px; }
+    .code-box { background: #0B1220; border: 1.5px dashed #FBBF24; border-radius: 14px; padding: 14px; font-size: 26px; font-weight: 800; letter-spacing: 3px; color: #FBBF24; margin-bottom: 20px; }
+    .btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; margin-bottom: 10px; }
+    .btn-primary { background: linear-gradient(135deg, #2563EB, #0EA5E9); color: #fff; }
+    .btn-secondary { background: #1E293B; color: #E2E8F0; border: 1px solid #334155; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">NJ Classes રેફરલ ઇન્વાઇટ</div>
+    <h1>NJ Classes એપ ડાઉનલોડ કરો</h1>
+    <p>નીચેના બટનથી Play Store માંથી એપ ડાઉનલોડ કરો — તમારો રેફરલ કોડ આપોઆપ લાગી જશે!</p>
+    <div class="code-box" id="codeText">---</div>
+    <a id="playStoreBtn" class="btn btn-primary" href="#">Play Store માંથી એપ ડાઉનલોડ કરો</a>
+    <a id="openAppBtn" class="btn btn-secondary" href="#">એપ પહેલેથી છે? અહીંથી ખોલો</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = (params.get('code') || '').trim().toUpperCase();
+    document.getElementById('codeText').textContent = code || 'NJ CLASSES';
+
+    const referrerVal = encodeURIComponent('type=ref&code=' + code);
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.njclasses.app&referrer=' + referrerVal;
+    const intentUrl = 'intent://go.njclasses.in/ref?code=' + encodeURIComponent(code) +
+      '#Intent;scheme=https;package=com.njclasses.app;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end';
+
+    document.getElementById('playStoreBtn').href = playStoreUrl;
+    document.getElementById('openAppBtn').href = intentUrl;
+
+    if (code) {
+      setTimeout(function () { window.location.href = playStoreUrl; }, 350);
+    }
+  </script>
+</body>
+</html>
