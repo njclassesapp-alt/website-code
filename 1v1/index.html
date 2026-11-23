@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NJ Classes — 1v1 ક્વિઝ ગેમ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0B1220; color: #fff; padding: 20px; }
+    .card { width: 100%; max-width: 400px; background: #131E31; border: 1px solid #243552; border-radius: 20px; padding: 28px 22px; text-align: center; box-shadow: 0 12px 35px rgba(0,0,0,0.4); }
+    .badge { display: inline-block; background: rgba(16,185,129,0.14); color: #34D399; border: 1px solid rgba(16,185,129,0.35); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+    h1 { font-size: 22px; margin-bottom: 8px; }
+    p { font-size: 14px; color: #94A3B8; line-height: 1.5; margin-bottom: 18px; }
+    .code-box { background: #0B1220; border: 1.5px dashed #34D399; border-radius: 14px; padding: 14px; font-size: 26px; font-weight: 800; letter-spacing: 3px; color: #34D399; margin-bottom: 20px; }
+    .btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; margin-bottom: 10px; }
+    .btn-primary { background: linear-gradient(135deg, #059669, #10B981); color: #fff; }
+    .btn-secondary { background: #1E293B; color: #E2E8F0; border: 1px solid #334155; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">NJ Classes 1v1 ગેમ</div>
+    <h1>1v1 રૂમમાં જોડાઓ</h1>
+    <p>નીચેના બટન પર ક્લિક કરતાં જ NJ Classes એપમાં રૂમ કોડ આપોઆપ લાગી જશે.</p>
+    <div class="code-box" id="codeText">---</div>
+    <a id="openAppBtn" class="btn btn-primary" href="#">એપમાં 1v1 ગેમ ખોલો</a>
+    <a id="playStoreBtn" class="btn btn-secondary" href="#">Play Store માંથી એપ ડાઉનલોડ કરો</a>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = (params.get('code') || '').trim().toUpperCase();
+    document.getElementById('codeText').textContent = code || 'NJ CLASSES';
+    const referrerVal = encodeURIComponent('type=1v1&code=' + code);
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.njclasses.app&referrer=' + referrerVal;
+    const intentUrl = 'intent://go.njclasses.in/1v1?code=' + encodeURIComponent(code) +
+      '#Intent;scheme=https;package=com.njclasses.app;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end';
+    document.getElementById('openAppBtn').href = intentUrl;
+    document.getElementById('playStoreBtn').href = playStoreUrl;
+    if (code) { setTimeout(function () { window.location.href = intentUrl; }, 350); }
+  </script>
+</body>
+</html>
